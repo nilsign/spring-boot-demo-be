@@ -15,7 +15,7 @@ public class CustomerEntity {
   private String lastName;
 
   @Getter @Setter
-  private String email;
+  public String email;
 
   public CustomerEntity(
       @JsonProperty("id") long id,
