@@ -1,31 +1,33 @@
 package com.nilsign.springbootdemo.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "customer")
 public class CustomerEntity {
+
   @Getter
-  private final long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
 
   @Getter @Setter
+  @Column(name="first_name")
   private String firstName;
 
   @Getter @Setter
+  @Column(name="last_name")
   private String lastName;
 
   @Getter @Setter
-  public String email;
-
-  public CustomerEntity(
-      @JsonProperty("id") long id,
-      @JsonProperty("firstName") String firstName,
-      @JsonProperty("lastName") String lastName,
-      @JsonProperty("email") String email) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-  }
+  @Column(name="email")
+  private String email;
 }

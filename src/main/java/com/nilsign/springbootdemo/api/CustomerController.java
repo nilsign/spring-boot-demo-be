@@ -3,7 +3,14 @@ package com.nilsign.springbootdemo.api;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
 import com.nilsign.springbootdemo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,31 +28,32 @@ public class CustomerController {
     this.customerService = customerService;
   }
 
-  @PostMapping
-  public Optional<CustomerEntity> insertCustomer(
-      @NotNull @Valid @RequestBody CustomerEntity customer) {
-    return customerService.insertCustomer(customer);
-  }
-
   @GetMapping
-  public List<CustomerEntity> getAllCustomers() {
-    return customerService.getAllCustomers();
+  public List<CustomerEntity> findAll() {
+    return customerService.findAll();
   }
 
   @GetMapping(path = "{id}")
-  public Optional<CustomerEntity> getCustomerById(@NotNull @PathVariable long id) {
-    return customerService.getCustomerById(id);
+  public Optional<CustomerEntity> getById(
+      @NotNull @PathVariable long id) {
+    return customerService.findById(id);
   }
 
-  @PutMapping(path = "{id}")
-  public Optional<CustomerEntity> updateCustomer(
-      @NotNull @PathVariable("id") long id,
+  @PostMapping
+  public Optional<CustomerEntity> insert(
       @NotNull @Valid @RequestBody CustomerEntity customer) {
-    return customerService.updateCustomer(id, customer);
+    return customerService.save(customer);
+  }
+
+  @PutMapping
+  public Optional<CustomerEntity> update(
+      @NotNull @Valid @RequestBody CustomerEntity customer) {
+    return customerService.save(customer);
   }
 
   @DeleteMapping(path = "{id}")
-  public Optional<CustomerEntity> deleteCustomerById(@NotNull @PathVariable("id") long id) {
-    return customerService.deleteCustomerById(id);
+  public void deleteById(
+      @NotNull @PathVariable("id") long id) {
+    customerService.deleteById(id);
   }
 }
