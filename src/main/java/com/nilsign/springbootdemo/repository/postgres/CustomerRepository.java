@@ -22,13 +22,11 @@ public class CustomerRepository implements CustomerDao {
   @Override
   public List<CustomerEntity> getAllCustomers() {
     final String sql = "SELECT id, firstName, lastName, email FROM Customers";
-    return jdbcTemplate.query(sql, (resultSet, i) -> {
-      return new CustomerEntity(
-          resultSet.getLong("id"),
-          resultSet.getString("firstName"),
-          resultSet.getString("lastName"),
-          resultSet.getString("email"));
-    });
+    return jdbcTemplate.query(sql, (resultSet, i) -> new CustomerEntity(
+        resultSet.getLong("id"),
+        resultSet.getString("firstName"),
+        resultSet.getString("lastName"),
+        resultSet.getString("email")));
   }
 
   @Override
