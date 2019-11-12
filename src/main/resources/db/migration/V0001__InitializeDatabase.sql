@@ -10,10 +10,10 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 -- Creates all initialize tables.
-CREATE TABLE tbl_customer (
+CREATE TABLE tbl_user (
     id BIGINT NOT NULL UNIQUE,
-    first_name VARCHAR(200) NOT NULL,
-    last_name VARCHAR(200) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
     email VARCHAR (320) UNIQUE NOT NULL);
 
 CREATE TABLE tbl_product (
@@ -30,10 +30,10 @@ CREATE TABLE tbl_address (
 
 CREATE TABLE tbl_order (
     id BIGINT NOT NULL UNIQUE,
-    fk_customer BIGINT NOT NULL REFERENCES tbl_customer(id),
+    fk_user BIGINT NOT NULL REFERENCES tbl_user(id),
     fk_invoice_address BIGINT NOT NULL REFERENCES tbl_address(id),
     fk_delivery_address BIGINT NOT NULL REFERENCES tbl_address(id),
     fk_product BIGINT NOT NULL REFERENCES tbl_product(id));
-CREATE INDEX idx_id_customer ON public.tbl_order (fk_customer);
+CREATE INDEX idx_id_user ON public.tbl_order (fk_user);
 CREATE INDEX idx_id_address ON tbl_order (fk_invoice_address, fk_delivery_address);
 CREATE INDEX idx_id_product ON tbl_order (fk_product);
