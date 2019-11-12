@@ -9,23 +9,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "tbl_customer")
-public class CustomerEntity {
+@Table(name = "tbl_product")
+public class ProductEntity {
+  @Getter
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
   @Getter @Setter
-  @Column(name="first_name")
-  private String firstName;
+  @Column(name="name")
+  private String name;
 
   @Getter @Setter
-  @Column(name="last_name")
-  private String lastName;
-
-  @Getter @Setter
-  @Column(name="email")
-  private String email;
+  @Column(name="price")
+  private BigDecimal price;
 }
