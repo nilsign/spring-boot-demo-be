@@ -10,23 +10,19 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_address")
 public class AddressEntity extends AbstractEntity {
-  @Getter
-  @Setter
-  @Column(name="address")
+  @Getter @Setter
+  @Column(name="address", nullable = false)
   private String address;
 
-  @Getter
-  @Setter
-  @Column(name="city")
+  @Getter @Setter
+  @Column(name="city", nullable = false)
   private String city;
 
-  @Getter
-  @Setter
-  @Column(name="zip")
+  @Getter @Setter
+  @Column(name="zip", nullable = false)
   private String zip;
 
-  @Getter
-  @Setter
-  @Column(name="country")
+  @Getter @Setter
+  @Column(name="country", nullable = false)
   private String country;
 }
