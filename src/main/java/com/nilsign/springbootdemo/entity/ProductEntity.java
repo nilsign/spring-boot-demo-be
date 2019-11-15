@@ -17,7 +17,7 @@ import java.util.StringJoiner;
 @Entity
 @Table(name = "tbl_product")
 public class ProductEntity extends AbstractEntity {
-  @Getter @Setter()
+  @Getter @Setter
   @Column(name="name", nullable = false)
   private String name;
 
