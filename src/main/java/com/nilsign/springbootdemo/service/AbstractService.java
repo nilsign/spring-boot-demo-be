@@ -8,22 +8,21 @@ import java.util.Optional;
 
 @Service
 public abstract class AbstractService<T1, T2>  {
-
-  abstract protected JpaRepository<T1, T2> getService();
+  abstract protected JpaRepository<T1, T2> getRepository();
 
   public Optional<T1> save(T1 entity) {
-    return Optional.of(getService().save(entity));
+    return Optional.of(getRepository().save(entity));
   }
 
   public List<T1> findAll() {
-    return getService().findAll();
+    return getRepository().findAll();
   }
 
   public Optional<T1> findById(T2 id) {
-    return getService().findById(id);
+    return getRepository().findById(id);
   }
 
   public void deleteById(T2 id) {
-    getService().deleteById(id);
+    getRepository().deleteById(id);
   }
 }

@@ -11,7 +11,7 @@ public class UserService extends AbstractService<UserEntity, Long> {
   private UserRepository userRepository;
 
   @Override
-  protected UserRepository getService() {
+  protected UserRepository getRepository() {
     return userRepository;
   }
 }

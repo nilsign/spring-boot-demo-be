@@ -11,7 +11,7 @@ public class ProductService extends AbstractService<ProductEntity, Long> {
   private ProductRepository productRepository;
 
   @Override
-  protected ProductRepository getService() {
+  protected ProductRepository getRepository() {
     return productRepository;
   }
 }
