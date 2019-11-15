@@ -13,4 +13,7 @@ public abstract class AbstractEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
+
+  @Override
+  public abstract String toString();
 }

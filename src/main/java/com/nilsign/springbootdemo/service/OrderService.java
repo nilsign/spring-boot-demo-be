@@ -11,7 +11,7 @@ public class OrderService extends AbstractService<OrderEntity, Long> {
   private OrderRepository orderRepository;
 
   @Override
-  protected OrderRepository getService() {
+  protected OrderRepository getRepository() {
     return orderRepository;
   }
 }

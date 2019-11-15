@@ -2,7 +2,6 @@ package com.nilsign.springbootdemo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,8 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.StringJoiner;
 
-@ToString
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends AbstractEntity {
@@ -70,4 +69,15 @@ public class OrderEntity extends AbstractEntity {
           referencedColumnName = "id",
           nullable = false))
   private List<ProductEntity> products;
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", "\n" + OrderEntity.class.getSimpleName() + "[", "\n]")
+        .add("\n\tid='" + super.getId() + "'")
+        .add("\n\tuser=" + user)
+        .add("\n\tinvoiceAddress=" + invoiceAddress)
+        .add("\n\tdeliveryAddress=" + deliveryAddress)
+        .add("\n\tproducts=" + (products == null ? null : products.size()))
+        .toString();
+  }
 }

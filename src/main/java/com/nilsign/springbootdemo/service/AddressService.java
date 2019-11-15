@@ -11,7 +11,7 @@ public class AddressService extends AbstractService<AddressEntity, Long> {
   private AddressRepository addressRepository;
 
   @Override
-  protected AddressRepository getService() {
+  protected AddressRepository getRepository() {
     return addressRepository;
   }
 }
