@@ -1,0 +1,27 @@
+package com.nilsign.springbootdemo.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
+
+@ToString
+@AllArgsConstructor
+public class OrderDto {
+  @Getter @Setter
+  private Long id;
+
+  @Getter @Setter
+  private UserDto user;
+
+  @Getter @Setter
+  private AddressDto invoiceAddress;
+
+  @Getter @Setter
+  private AddressDto deliveryAddress;
+
+  @Getter @Setter
+  private List<ProductDto> products;
+}
