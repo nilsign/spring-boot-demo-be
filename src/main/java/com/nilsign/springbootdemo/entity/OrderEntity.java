@@ -17,6 +17,7 @@ import java.util.StringJoiner;
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends AbstractEntity {
+  // Uni-directional many-to-one relation.
   @Getter @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
@@ -28,6 +29,7 @@ public class OrderEntity extends AbstractEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
+  // Uni-directional many-to-one relation.
   @Getter @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
@@ -39,6 +41,7 @@ public class OrderEntity extends AbstractEntity {
   @JoinColumn(name = "invoice_address_id", nullable = false)
   private AddressEntity invoiceAddress;
 
+  // Uni-directional delivery address.
   @Getter @Setter
   @ManyToOne(
     fetch = FetchType.EAGER,
@@ -50,6 +53,7 @@ public class OrderEntity extends AbstractEntity {
   @JoinColumn(name = "delivery_address_id", nullable = false)
   private AddressEntity deliveryAddress;
 
+  // Bi-directional many-to-many relation.
   @Getter @Setter
   @ManyToMany(
       fetch = FetchType.LAZY,

@@ -25,7 +25,8 @@ public class ProductEntity extends AbstractEntity {
   @Column(name="price", nullable = false)
   private BigDecimal price;
 
-  // TODO(nilsheumer): Find out why orders is not displayed in Postmans get response.
+  // TODO(nilsheumer): Find out whether this block/member variable can be completely omitted!
+  // Bi-directional many-to-many relation.
   @Getter @Setter
   @ManyToMany(
       mappedBy = "products",
