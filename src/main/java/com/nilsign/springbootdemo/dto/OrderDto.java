@@ -9,7 +9,7 @@ import java.util.List;
 
 @ToString
 @AllArgsConstructor
-public class OrderDto {
+public class OrderDto implements AbstractDto {
   @Getter @Setter
   private Long id;
 

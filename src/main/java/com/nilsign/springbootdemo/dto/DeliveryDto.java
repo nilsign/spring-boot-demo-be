@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-public class DeliveryDto {
+public class DeliveryDto implements AbstractDto {
   @Getter
   @Setter
   private Long id;

@@ -5,17 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
-
 @ToString
 @AllArgsConstructor
-public class ProductDto implements AbstractDto {
+public class RatingDto implements AbstractDto {
   @Getter @Setter
   private Long id;
 
   @Getter @Setter
-  private String name;
+  private UserDto user;
 
   @Getter @Setter
-  private BigDecimal price;
+  private float score;
+
+  @Getter @Setter
+  private String description;
 }
