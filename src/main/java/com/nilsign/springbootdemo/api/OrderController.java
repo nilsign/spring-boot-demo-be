@@ -34,7 +34,11 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
     OrderEntity entity = new OrderEntity();
     entity.setId(dto.getId());
     entity.setInvoiceAddress(AddressController.addressEntityFromDto(dto.getInvoiceAddress()));
-    entity.setDeliveryAddress(AddressController.addressEntityFromDto(dto.getDeliveryAddress()));
+    entity.setDeliveries(dto.getDeliveries()
+        .stream()
+        .map(DeliveryController::deliveryEntityFromDto)
+        .collect(Collectors.toList())
+    );
     entity.setUser(UserController.userEntityFromDto(dto.getUser()));
     entity.setProducts(dto.getProducts()
         .stream()
@@ -48,7 +52,10 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
         entity.getId(),
         UserController.userDtoFromEntity(entity.getUser()),
         AddressController.addressDtoFromEntity(entity.getInvoiceAddress()),
-        AddressController.addressDtoFromEntity(entity.getDeliveryAddress()),
+        entity.getDeliveries()
+            .stream()
+            .map(DeliveryController::deliveryDtoFromEntity)
+            .collect(Collectors.toList()),
         entity.getProducts()
             .stream()
             .map(ProductController::productDtoFromEntity)
