@@ -23,7 +23,6 @@ public class UserEntity extends AbstractEntity {
   @Column(name="email")
   private String email;
 
-
   @Override
   public String toString() {
     return new StringJoiner(", ", "\n" + UserEntity.class.getSimpleName() + "[", "\n]")
