@@ -20,7 +20,7 @@ public class OrderDto {
   private AddressDto invoiceAddress;
 
   @Getter @Setter
-  private AddressDto deliveryAddress;
+  private List<DeliveryDto> deliveries;
 
   @Getter @Setter
   private List<ProductDto> products;
