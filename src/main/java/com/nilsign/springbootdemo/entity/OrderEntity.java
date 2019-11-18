@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
@@ -41,17 +42,17 @@ public class OrderEntity extends AbstractEntity {
   @JoinColumn(name = "invoice_address_id", nullable = false)
   private AddressEntity invoiceAddress;
 
-  // Uni-directional delivery address.
+  // Uni-directional one-to-many relation.
   @Getter @Setter
-  @ManyToOne(
-    fetch = FetchType.EAGER,
-    cascade = {
-      CascadeType.DETACH,
-      CascadeType.MERGE,
-      CascadeType.PERSIST,
-      CascadeType.REFRESH})
-  @JoinColumn(name = "delivery_address_id", nullable = false)
-  private AddressEntity deliveryAddress;
+  @OneToMany(
+      mappedBy="tbl_order",
+      fetch = FetchType.EAGER,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  private List<DeliveryEntity> deliveries;
 
   // Bi-directional many-to-many relation.
   @Getter @Setter
@@ -63,7 +64,7 @@ public class OrderEntity extends AbstractEntity {
         CascadeType.PERSIST,
         CascadeType.REFRESH})
   @JoinTable(
-      name= "tbl_order_tbl_product",
+      name = "tbl_order_tbl_product",
       joinColumns = @JoinColumn(
           name = "order_id",
           referencedColumnName = "id",
@@ -80,7 +81,6 @@ public class OrderEntity extends AbstractEntity {
         .add("\n\tid='" + super.getId() + "'")
         .add("\n\tuser=" + user)
         .add("\n\tinvoiceAddress=" + invoiceAddress)
-        .add("\n\tdeliveryAddress=" + deliveryAddress)
         .add("\n\tproducts=" + (products == null ? null : products.size()))
         .toString();
   }
