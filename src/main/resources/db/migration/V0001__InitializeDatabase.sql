@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS tbl_product (
 CREATE TABLE IF NOT EXISTS tbl_rating (
     id BIGINT CONSTRAINT cstr_rating_primary_key PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    rating REAL CONSTRAINT cstr_rating_within_range
-        CHECK (rating = null OR rating >= 0 AND rating <= 5),
+    score REAL CONSTRAINT cstr_rating_score_within_range
+        CHECK (score = null OR score >= 0 AND score <= 5),
     description VARCHAR(2048),
     CONSTRAINT cstr_rating_user_id_foreign_key FOREIGN KEY(user_id)
         REFERENCES tbl_user(id)
