@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("api/v1/product")
 public class ProductController extends AbstractController<ProductDto, ProductEntity, Long> {
@@ -25,7 +27,7 @@ public class ProductController extends AbstractController<ProductDto, ProductEnt
 
   @Override
   protected ProductDto dtoFromEntity(ProductEntity entity) {
-   return ProductController.productDtoFromEntity(entity);
+    return ProductController.productDtoFromEntity(entity);
   }
 
   public static ProductEntity productEntityFromDto(ProductDto dto) {
@@ -33,6 +35,10 @@ public class ProductController extends AbstractController<ProductDto, ProductEnt
     entity.setId(dto.getId());
     entity.setName(dto.getName());
     entity.setPrice(dto.getPrice());
+    entity.setRatings(dto.getRatings()
+        .stream()
+        .map(RatingController::ratingEntityFromDto)
+        .collect(Collectors.toList()));
     return entity;
   }
 
@@ -40,6 +46,14 @@ public class ProductController extends AbstractController<ProductDto, ProductEnt
     return new ProductDto(
         entity.getId(),
         entity.getName(),
-        entity.getPrice());
+        entity.getPrice(),
+        entity.getRatings()
+            .stream()
+            .map(RatingController::ratingDtoFromEntity)
+            .collect(Collectors.toList()),
+        entity.getOrders()
+            .stream()
+            .map(OrderController::orderDtoFromEntity)
+            .collect(Collectors.toList()));
   }
 }

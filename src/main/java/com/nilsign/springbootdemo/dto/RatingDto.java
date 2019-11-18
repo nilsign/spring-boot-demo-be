@@ -15,6 +15,9 @@ public class RatingDto implements AbstractDto {
   private UserDto user;
 
   @Getter @Setter
+  private ProductDto product;
+
+  @Getter @Setter
   private float score;
 
   @Getter @Setter

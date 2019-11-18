@@ -59,7 +59,6 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
         entity.getProducts()
             .stream()
             .map(ProductController::productDtoFromEntity)
-            .collect(Collectors.toList())
-    );
+            .collect(Collectors.toList()));
   }
 }

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +26,18 @@ public class ProductEntity extends AbstractEntity {
   @Column(name="price", nullable = false)
   private BigDecimal price;
 
-  // TODO(nilsheumer): Find out whether this block/member variable can be completely omitted!
+  // Bi-directional one-to-many relation.
+  @Getter @Setter
+  @OneToMany(
+      mappedBy = "product",
+      fetch = FetchType.LAZY,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  private List<RatingEntity> ratings;
+
   // Bi-directional many-to-many relation.
   @Getter @Setter
   @ManyToMany(
@@ -45,6 +57,7 @@ public class ProductEntity extends AbstractEntity {
         .add("\n\tid='" + super.getId() + "'")
         .add("\n\tname='" + name + "'")
         .add("\n\tprice=" + price)
+        .add("\n\tratings=" + (ratings == null ? null : ratings.size()))
         .add("\n\torders=" + (orders == null ? null : orders.size()))
         .toString();
   }

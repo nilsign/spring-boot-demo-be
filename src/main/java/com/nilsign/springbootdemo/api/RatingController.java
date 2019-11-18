@@ -32,6 +32,7 @@ public class RatingController  extends AbstractController<RatingDto, RatingEntit
     RatingEntity entity = new RatingEntity();
     entity.setId(dto.getId());
     entity.setUser(UserController.userEntityFromDto(dto.getUser()));
+    entity.setProduct(ProductController.productEntityFromDto(dto.getProduct()));
     entity.setScore(dto.getScore());
     entity.setDescription(dto.getDescription());
     return entity;
@@ -41,6 +42,7 @@ public class RatingController  extends AbstractController<RatingDto, RatingEntit
     return new RatingDto(
         entity.getId(),
         UserController.userDtoFromEntity(entity.getUser()),
+        ProductController.productDtoFromEntity(entity.getProduct()),
         entity.getScore(),
         entity.getDescription());
   }
