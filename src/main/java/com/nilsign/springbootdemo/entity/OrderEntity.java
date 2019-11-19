@@ -45,8 +45,7 @@ public class OrderEntity extends AbstractEntity {
   // Uni-directional one-to-many relation.
   @Getter @Setter
   @OneToMany(
-      mappedBy="tbl_order",
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
