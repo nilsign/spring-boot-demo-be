@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController extends AbstractController<UserDto, UserEntity, Long> {
@@ -31,6 +33,11 @@ public class UserController extends AbstractController<UserDto, UserEntity, Long
 
   public static UserEntity userEntityFromDto(UserDto dto) {
     UserEntity entity = new UserEntity();
+    entity.setId(dto.getId());
+    entity.setRoles(dto.getRoles()
+        .stream()
+        .map(RoleController::roleEntityFromDto)
+        .collect(Collectors.toList()));
     entity.setFirstName(dto.getFirstName());
     entity.setLastName(dto.getLastName());
     entity.setEmail(dto.getEmail());
@@ -40,6 +47,10 @@ public class UserController extends AbstractController<UserDto, UserEntity, Long
   public static UserDto userDtoFromEntity(UserEntity entity) {
     return new UserDto(
         entity.getId(),
+        entity.getRoles()
+            .stream()
+            .map(RoleController::roleDtoFromEntity)
+            .collect(Collectors.toList()),
         entity.getFirstName(),
         entity.getLastName(),
         entity.getEmail());

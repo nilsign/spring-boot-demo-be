@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.entity.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,19 +8,13 @@ import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-public class RatingDto implements AbstractDto {
+public class RoleDto implements AbstractDto {
   @Getter @Setter
   private Long id;
 
   @Getter @Setter
-  private UserDto user;
+  private RoleType roleType;
 
   @Getter @Setter
-  private ProductDto product;
-
-  @Getter @Setter
-  private float score;
-
-  @Getter @Setter
-  private String description;
+  private String roleName;
 }
