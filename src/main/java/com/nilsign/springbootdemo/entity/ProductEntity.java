@@ -54,11 +54,11 @@ public class ProductEntity extends AbstractEntity {
   @Override
   public String toString() {
     return new StringJoiner(", ", "\n" + ProductEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\tid='" + super.getId() + "'")
-        .add("\n\tname='" + name + "'")
-        .add("\n\tprice=" + price)
-        .add("\n\tratings=" + (ratings == null ? null : ratings.size()))
-        .add("\n\torders=" + (orders == null ? null : orders.size()))
+        .add("\n\t" + "id='" + super.getId() + "'")
+        .add("\n\t" + "name='" + name + "'")
+        .add("\n\t" + "price=" + price)
+        .add("\n\t" + "ratings=" + (ratings == null ? null : ratings.size()))
+        .add("\n\t" + "orders=" + (orders == null ? null : orders.size()))
         .toString();
   }
 }

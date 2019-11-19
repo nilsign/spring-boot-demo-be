@@ -14,7 +14,7 @@ CREATE TYPE ROLE AS ENUM ('ADMIN', 'SELLER', 'SUPPORT', 'BUYER');
 
 -- Creates all tables and initializes tables the required indices.
 CREATE TABLE IF NOT EXISTS tbl_role (
-	id BIGINT CONSTRAINT cstr_role_primary_key PRIMARY KEY,
+    id BIGINT CONSTRAINT cstr_role_primary_key PRIMARY KEY,
     role_type ROLE CONSTRAINT cstr_role_unique_role_type UNIQUE,
     role_name VARCHAR(1024) NOT NULL CONSTRAINT cstr_role_unique_role_name UNIQUE
 );
@@ -27,29 +27,29 @@ CREATE TABLE IF NOT EXISTS tbl_address (
     country VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS tbl_customer_data (
-    id BIGINT CONSTRAINT cstr_customer_data_primary_key PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS tbl_customer (
+    id BIGINT CONSTRAINT cstr_customer_primary_key PRIMARY KEY,
     postal_address_id BIGINT,
-    accepted_terms_and_conditions BOOLEAN NOT NULL DEFAULT false,
-    CONSTRAINT cstr_customer_data_postal_address_foreign_key FOREIGN KEY(postal_address_id)
+    terms_and_conditions_accepted BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT cstr_customer_postal_address_foreign_key FOREIGN KEY(postal_address_id)
         REFERENCES tbl_address(id)
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-CREATE INDEX idx_customer_data_postal_address_id ON tbl_customer_data(postal_address_id);
+CREATE INDEX idx_customer_postal_address_id ON tbl_customer(postal_address_id);
 
 CREATE TABLE IF NOT EXISTS tbl_user (
     id BIGINT CONSTRAINT cstr_user_primary_key PRIMARY KEY,
-    customer_data_id BIGINT,
+    customer_id BIGINT,
     first_name VARCHAR(1024) NOT NULL,
     last_name VARCHAR(1024) NOT NULL,
     email VARCHAR(320) NOT NULL CONSTRAINT cstr_user_unique_email UNIQUE,
-    CONSTRAINT cstr_user_customer_data_foreign_key FOREIGN KEY(customer_data_id)
-        REFERENCES tbl_customer_data(id)
+    CONSTRAINT cstr_user_customer_foreign_key FOREIGN KEY(customer_id)
+        REFERENCES tbl_customer(id)
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-CREATE INDEX idx_user_customer_data_id ON tbl_user(customer_data_id);
+CREATE INDEX idx_user_customer_id ON tbl_user(customer_id);
 
 CREATE TABLE IF NOT EXISTS tbl_product (
     id BIGINT CONSTRAINT cstr_product_primary_key PRIMARY KEY,
