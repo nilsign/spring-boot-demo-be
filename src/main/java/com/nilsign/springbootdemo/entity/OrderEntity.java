@@ -78,10 +78,10 @@ public class OrderEntity extends AbstractEntity {
   @Override
   public String toString() {
     return new StringJoiner(", ", "\n" + OrderEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\tid='" + super.getId() + "'")
-        .add("\n\tuser=" + user)
-        .add("\n\tinvoiceAddress=" + invoiceAddress)
-        .add("\n\tproducts=" + (products == null ? null : products.size()))
+        .add("\n\t" + "id='" + super.getId() + "'")
+        .add("\n\t" + "user=" + user)
+        .add("\n\t" + "invoiceAddress=" + invoiceAddress)
+        .add("\n\t" + "products=" + (products == null ? null : products.size()))
         .toString();
   }
 }

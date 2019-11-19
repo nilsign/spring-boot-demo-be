@@ -30,11 +30,11 @@ public class AddressEntity extends AbstractEntity {
   @Override
   public String toString() {
     return new StringJoiner(", ", "\n" + AddressEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\tid='" + super.getId() + "'")
-        .add("\n\taddress='" + address + "'")
-        .add("\n\tcity='" + city + "'")
-        .add("\n\tzip='" + zip + "'")
-        .add("\n\tcountry='" + country + "'")
+        .add("\n\t" + "id='" + super.getId() + "'")
+        .add("\n\t" + "address='" + address + "'")
+        .add("\n\t" + "city='" + city + "'")
+        .add("\n\t" + "zip='" + zip + "'")
+        .add("\n\t" + "country='" + country + "'")
         .toString();
   }
 }

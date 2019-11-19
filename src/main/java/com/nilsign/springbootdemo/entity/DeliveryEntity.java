@@ -29,7 +29,7 @@ public class DeliveryEntity extends AbstractEntity {
   @Override
   public String toString() {
     return new StringJoiner(", ", "\n" + DeliveryEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\tid='" + super.getId() + "'")
+        .add("\n\t" + "id='" + super.getId() + "'")
         .add("\n\t" + "deliveryAddress=" + deliveryAddress)
         .toString();
   }
