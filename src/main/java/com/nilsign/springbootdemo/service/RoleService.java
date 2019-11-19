@@ -2,13 +2,15 @@ package com.nilsign.springbootdemo.service;
 
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RoleService extends AbstractService<RoleEntity, Long> {
-  @Autowired
   private RoleRepository roleRepository;
+
+  public RoleService(RoleRepository roleRepository) {
+    this.roleRepository = roleRepository;
+  }
 
   @Override
   protected RoleRepository getRepository() {

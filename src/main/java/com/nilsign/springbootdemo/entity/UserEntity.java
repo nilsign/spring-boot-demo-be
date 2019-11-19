@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
@@ -18,6 +19,18 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "tbl_user")
 public class UserEntity extends AbstractEntity {
+  @Getter @Setter
+  @Column(name="first_name")
+  private String firstName;
+
+  @Getter @Setter
+  @Column(name="last_name")
+  private String lastName;
+
+  @Getter @Setter
+  @Column(name="email")
+  private String email;
+
   // Uni-directional many-to-many relation.
   @Getter @Setter
   @ManyToMany(
@@ -39,17 +52,17 @@ public class UserEntity extends AbstractEntity {
           nullable = false))
   private List<RoleEntity> roles;
 
+  // Bi-directional one-to-one relation.
   @Getter @Setter
-  @Column(name="first_name")
-  private String firstName;
-
-  @Getter @Setter
-  @Column(name="last_name")
-  private String lastName;
-
-  @Getter @Setter
-  @Column(name="email")
-  private String email;
+  @OneToOne(
+      mappedBy = "user",
+      fetch = FetchType.EAGER,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  private CustomerEntity customer;
 
   @Override
   public String toString() {
@@ -58,11 +71,12 @@ public class UserEntity extends AbstractEntity {
         .map(Object::toString)
         .collect(Collectors.joining(","));
     return new StringJoiner(", ", "\n" + UserEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\tid='" + super.getId() + "'")
-        .add("\n\troles='" + appendedRoleNames)
+        .add("\n\t" + "id='" + super.getId() + "'")
+        .add("\n\t" + "roles='" + appendedRoleNames)
         .add("\n\t" + "firstName='" + firstName + "'")
         .add("\n\t" + "lastName='" + lastName + "'")
         .add("\n\t" + "email='" + email + "'")
+        .add("\n\t" + "customer='" + customer + "'")
         .toString();
   }
 }
