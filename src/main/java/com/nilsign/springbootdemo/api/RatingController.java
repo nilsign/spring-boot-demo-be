@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/rating")
-public class RatingController  extends AbstractController<RatingDto, RatingEntity, Long> {
+public class RatingController extends AbstractController<RatingDto, RatingEntity, Long> {
   @Autowired
   private RatingService ratingService;
 
