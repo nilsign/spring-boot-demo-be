@@ -21,28 +21,11 @@ public class CustomerController extends AbstractController<CustomerDto, Customer
 
   @Override
   protected CustomerEntity entityFromDto(CustomerDto dto) {
-    return CustomerController.customerEntityFromDto(dto);
+    return CustomerEntity.fromDto(dto);
   }
 
   @Override
   protected CustomerDto dtoFromEntity(CustomerEntity entity) {
-    return CustomerController.customerDtoFromEntity(entity);
-  }
-
-  public static CustomerEntity customerEntityFromDto(CustomerDto dto) {
-    CustomerEntity entity = new CustomerEntity();
-    entity.setId(dto.getId());
-    entity.setUser(UserController.userEntityFromDto(dto.getUser()));
-    entity.setTermsAndConditionsAccepted(dto.isTermsAndConditionsAccepted());
-    entity.setPostalAddress(AddressController.addressEntityFromDto(dto.getPostalAddress()));
-    return entity;
-  }
-
-  public static CustomerDto customerDtoFromEntity(CustomerEntity entity) {
-    return new CustomerDto(
-        entity.getId(),
-        UserController.userDtoFromEntity(entity.getUser()),
-        entity.isTermsAndConditionsAccepted(),
-        AddressController.addressDtoFromEntity(entity.getPostalAddress()));
+    return CustomerDto.fromEntity(entity);
   }
 }

@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.nilsign.springbootdemo.dto.ProductDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tbl_product")
@@ -50,6 +52,18 @@ public class ProductEntity extends AbstractEntity {
           CascadeType.REFRESH})
   @JsonBackReference
   private List<OrderEntity> orders;
+
+  public static ProductEntity fromDto(ProductDto dto) {
+    ProductEntity entity = new ProductEntity();
+    entity.setId(dto.getId());
+    entity.setName(dto.getName());
+    entity.setPrice(dto.getPrice());
+    entity.setRatings(dto.getRatings()
+        .stream()
+        .map(RatingEntity::fromDto)
+        .collect(Collectors.toList()));
+    return entity;
+  }
 
   @Override
   public String toString() {

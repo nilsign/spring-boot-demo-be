@@ -20,30 +20,11 @@ public class AddressController extends AbstractController<AddressDto, AddressEnt
 
   @Override
   protected AddressEntity entityFromDto(AddressDto dto) {
-    return AddressController.addressEntityFromDto(dto);
+    return AddressEntity.fromDto(dto);
   }
 
   @Override
   protected AddressDto dtoFromEntity(AddressEntity entity) {
-    return AddressController.addressDtoFromEntity(entity);
-  }
-
-  public static AddressDto addressDtoFromEntity(AddressEntity entity) {
-    return new AddressDto(
-        entity.getId(),
-        entity.getAddress(),
-        entity.getCity(),
-        entity.getZip(),
-        entity.getCountry());
-  }
-
-  public static AddressEntity addressEntityFromDto(AddressDto dto) {
-    AddressEntity entity = new AddressEntity();
-    entity.setId(dto.getId());
-    entity.setAddress(dto.getAddress());
-    entity.setCity(dto.getCity());
-    entity.setZip(dto.getZip());
-    entity.setCountry(dto.getCountry());
-    return entity;
+    return AddressDto.fromEntity(entity);
   }
 }

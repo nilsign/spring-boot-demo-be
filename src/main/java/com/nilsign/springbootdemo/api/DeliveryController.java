@@ -20,24 +20,11 @@ public class DeliveryController extends AbstractController<DeliveryDto, Delivery
 
   @Override
   protected DeliveryEntity entityFromDto(DeliveryDto dto) {
-    return DeliveryController.deliveryEntityFromDto(dto);
+    return DeliveryEntity.fromDto(dto);
   }
 
   @Override
   protected DeliveryDto dtoFromEntity(DeliveryEntity entity) {
-    return DeliveryController.deliveryDtoFromEntity(entity);
-  }
-
-  public static DeliveryEntity deliveryEntityFromDto(DeliveryDto dto) {
-    DeliveryEntity entity =  new DeliveryEntity();
-    entity.setId(dto.getId());
-    entity.setDeliveryAddress(AddressController.addressEntityFromDto(dto.getDeliveryAddress()));
-    return entity;
-  }
-
-  public static DeliveryDto deliveryDtoFromEntity(DeliveryEntity entity) {
-    return new DeliveryDto(
-        entity.getId(),
-        AddressController.addressDtoFromEntity(entity.getDeliveryAddress()));
+    return DeliveryDto.fromEntity(entity);
   }
 }

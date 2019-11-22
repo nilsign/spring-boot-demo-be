@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.RatingDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +47,16 @@ public class RatingEntity extends AbstractEntity {
   @Setter @Getter
   @Column(name = "description")
   private String description;
+
+  public static RatingEntity fromDto(RatingDto dto) {
+    RatingEntity entity = new RatingEntity();
+    entity.setId(dto.getId());
+    entity.setUser(UserEntity.fromDto(dto.getUser()));
+    entity.setProduct(ProductEntity.fromDto(dto.getProduct()));
+    entity.setScore(dto.getScore());
+    entity.setDescription(dto.getDescription());
+    return entity;
+  }
 
   @Override
   public String toString() {
