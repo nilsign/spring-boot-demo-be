@@ -138,7 +138,8 @@ CREATE INDEX idx_user_role_role_id ON tbl_user_tbl_role(role_id);
 
 -- Note, this is usually bad a design, but for the sake of covering all entity/table relations,
 -- which are one-to-one, many-to-one, one-to-many, many-to-many, each uni- and bi-directional, this
--- circle dependencies have to be added here, as the referring table did not exist yet.
+-- circle dependencies have to be added here, as the referring table had not exist yet when the
+-- here altered tables were created.
 
 ALTER TABLE tbl_customer
     ADD CONSTRAINT ctr_customer_user_foreign_key FOREIGN KEY (user_id)
