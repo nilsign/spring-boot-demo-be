@@ -2,7 +2,7 @@
 SET client_encoding = 'UTF8';
 
 -- Configures a global id sequence shared by all generated primary keys.
-CREATE SEQUENCE hibernate_sequence
+CREATE SEQUENCE public.hibernate_sequence
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -10,12 +10,12 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 -- Initializes enums.
-CREATE TYPE ROLE AS ENUM ('ADMIN', 'SELLER', 'SUPPORT', 'BUYER');
+-- CREATE TYPE public.ROLE AS ENUM ('GLOBALADMIN', 'ADMIN', 'SELLER', 'SUPPORT', 'BUYER');
 
 -- Creates all tables and initializes tables the required indices.
-CREATE TABLE IF NOT EXISTS tbl_role (
+CREATE TABLE IF NOT EXISTS public.tbl_role (
     id BIGINT CONSTRAINT cstr_role_primary_key PRIMARY KEY,
-    role_type ROLE CONSTRAINT cstr_role_unique_role_type UNIQUE,
+    role_type VARCHAR(64) CONSTRAINT cstr_role_unique_role_type UNIQUE,
     role_name VARCHAR(1024) NOT NULL CONSTRAINT cstr_role_unique_role_name UNIQUE
 );
 

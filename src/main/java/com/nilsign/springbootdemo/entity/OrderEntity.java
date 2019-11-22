@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
 
+// TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
+// be used properly.
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends AbstractEntity {

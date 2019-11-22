@@ -7,13 +7,12 @@ import com.nilsign.springbootdemo.property.EnvironmentProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import javax.annotation.PostConstruct;
 
 @Slf4j
 @SpringBootApplication
-@EnableConfigurationProperties(DataSourceProperties.class)
 public class SpringBootDemoApplication {
-
   private final EnvironmentProperties environmentProperties;
   private final MasterDataCreatorComponent masterDataCreator;
   private final DevDataCreatorComponent devDataCreator;
@@ -29,10 +28,10 @@ public class SpringBootDemoApplication {
     this.environmentProperties = environmentProperties;
     this.masterDataCreator = masterDataCreator;
     this.devDataCreator = devDataCreator;
-    initialize();
   }
 
-  private void initialize() {
+  @PostConstruct
+  protected void initializeData() {
     masterDataCreator.createIfNotExist();
     if (environmentProperties.isDev()) {
       devDataCreator.createIfNotExist();

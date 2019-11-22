@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -35,11 +36,12 @@ public class UserEntity extends AbstractEntity {
   @Getter @Setter
   @ManyToMany(
       fetch = FetchType.EAGER,
-      cascade = {
-          CascadeType.DETACH,
-          CascadeType.MERGE,
-          CascadeType.PERSIST,
-          CascadeType.REFRESH})
+
+  cascade = {
+      CascadeType.DETACH,
+      CascadeType.MERGE,
+      CascadeType.PERSIST,
+      CascadeType.REFRESH})
   @JoinTable(
       name = "tbl_user_tbl_role",
       joinColumns = @JoinColumn(
@@ -63,6 +65,13 @@ public class UserEntity extends AbstractEntity {
           CascadeType.PERSIST,
           CascadeType.REFRESH})
   private CustomerEntity customer;
+
+  public void addRole(RoleEntity role) {
+    if (roles == null) {
+      roles = new ArrayList<>();
+    }
+    roles.add(role);
+  }
 
   @Override
   public String toString() {
