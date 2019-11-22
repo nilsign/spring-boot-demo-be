@@ -17,6 +17,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     this.entityManager = entityManager;
   }
 
+  // TODO(nilsheumer): User string instead of number for string interpolation.
   @Override
   public Optional<UserEntity> findByEmail(String email) {
     try {

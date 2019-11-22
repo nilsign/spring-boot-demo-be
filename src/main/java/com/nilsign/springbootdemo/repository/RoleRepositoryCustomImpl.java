@@ -19,6 +19,8 @@ public class RoleRepositoryCustomImpl implements RoleRepositoryCustom {
     this.entityManager = entityManager;
   }
 
+  // TODO(nilsheumer): User string instead of number for string interpolation.
+  // TODO(nilsheumer): Try to get rid of the name rol. Check whether role is a keyword.
   @Override
   public Optional<RoleEntity> findByRoleType(RoleType roleType) {
     try {

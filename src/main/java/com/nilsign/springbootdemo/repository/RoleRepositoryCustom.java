@@ -8,3 +8,4 @@ import java.util.Optional;
 public interface RoleRepositoryCustom {
   Optional<RoleEntity> findByRoleType(RoleType roleType);
 }
+
