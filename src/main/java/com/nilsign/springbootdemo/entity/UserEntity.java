@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -66,6 +67,19 @@ public class UserEntity extends AbstractEntity {
           CascadeType.REFRESH})
   private CustomerEntity customer;
 
+  public static UserEntity fromDto(UserDto dto) {
+    UserEntity entity = new UserEntity();
+    entity.setId(dto.getId());
+    entity.setRoles(dto.getRoles()
+        .stream()
+        .map(RoleEntity::fromDto)
+        .collect(Collectors.toList()));
+    entity.setFirstName(dto.getFirstName());
+    entity.setLastName(dto.getLastName());
+    entity.setEmail(dto.getEmail());
+    return entity;
+  }
+
   public void addRole(RoleEntity role) {
     if (roles == null) {
       roles = new ArrayList<>();
@@ -73,7 +87,6 @@ public class UserEntity extends AbstractEntity {
     roles.add(role);
   }
 
-  @Override
   public String toString() {
     String appendedRoleNames = roles
         .stream()

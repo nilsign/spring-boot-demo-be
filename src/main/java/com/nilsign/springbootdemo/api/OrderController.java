@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("api/v1/order")
 public class OrderController extends AbstractController<OrderDto, OrderEntity, Long> {
@@ -22,45 +20,11 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
 
   @Override
   protected OrderEntity entityFromDto(OrderDto dto) {
-    return OrderController.orderEntityFromDto(dto);
+    return OrderEntity.fromDto(dto);
   }
 
   @Override
   protected OrderDto dtoFromEntity(OrderEntity entity) {
-    return OrderController.orderDtoFromEntity(entity);
-  }
-
-  // TODO(nilsheumer): Move all entityFromDto function to their according to entity classes.
-  public static OrderEntity orderEntityFromDto(OrderDto dto) {
-    OrderEntity entity = new OrderEntity();
-    entity.setId(dto.getId());
-    entity.setInvoiceAddress(AddressController.addressEntityFromDto(dto.getInvoiceAddress()));
-    entity.setDeliveries(dto.getDeliveries()
-        .stream()
-        .map(DeliveryController::deliveryEntityFromDto)
-        .collect(Collectors.toList())
-    );
-    entity.setUser(UserController.userEntityFromDto(dto.getUser()));
-    entity.setProducts(dto.getProducts()
-        .stream()
-        .map(ProductController::productEntityFromDto)
-        .collect(Collectors.toList()));
-    return entity;
-  }
-
-  // TODO(nilsheumer): Move all dtoFromEntity function to their according to Dto classes.
-  public static OrderDto orderDtoFromEntity(OrderEntity entity) {
-    return new OrderDto(
-        entity.getId(),
-        UserController.userDtoFromEntity(entity.getUser()),
-        AddressController.addressDtoFromEntity(entity.getInvoiceAddress()),
-        entity.getDeliveries()
-            .stream()
-            .map(DeliveryController::deliveryDtoFromEntity)
-            .collect(Collectors.toList()),
-        entity.getProducts()
-            .stream()
-            .map(ProductController::productDtoFromEntity)
-            .collect(Collectors.toList()));
+    return OrderDto.fromEntity(entity);
   }
 }

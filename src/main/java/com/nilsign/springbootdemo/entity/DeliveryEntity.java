@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.DeliveryDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,13 @@ public class DeliveryEntity extends AbstractEntity {
           CascadeType.REFRESH})
   @JoinColumn(name = "delivery_address_id", nullable = false)
   private AddressEntity deliveryAddress;
+
+  public static DeliveryEntity fromDto(DeliveryDto dto) {
+    DeliveryEntity entity =  new DeliveryEntity();
+    entity.setId(dto.getId());
+    entity.setDeliveryAddress(AddressEntity.fromDto(dto.getDeliveryAddress()));
+    return entity;
+  }
 
   @Override
   public String toString() {

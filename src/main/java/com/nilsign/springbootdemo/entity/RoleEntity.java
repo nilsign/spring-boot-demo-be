@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.RoleDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,14 @@ public class RoleEntity extends AbstractEntity {
   @Getter @Setter
   @Column(name = "role_name", nullable = false)
   private String roleName;
+
+  public static RoleEntity fromDto(RoleDto dto) {
+    RoleEntity entity = new RoleEntity();
+    entity.setId(dto.getId());
+    entity.setRoleType(dto.getRoleType());
+    entity.setRoleName(dto.getRoleName());
+    return entity;
+  }
 
   @Override
   public String toString() {

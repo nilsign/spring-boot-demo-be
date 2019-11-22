@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.CustomerDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +43,15 @@ public class CustomerEntity extends AbstractEntity {
           CascadeType.REFRESH})
   @JoinColumn(name = "postal_address_id")
   private AddressEntity postalAddress;
+
+  public static CustomerEntity fromDto(CustomerDto dto) {
+    CustomerEntity entity = new CustomerEntity();
+    entity.setId(dto.getId());
+    entity.setUser(UserEntity.fromDto(dto.getUser()));
+    entity.setTermsAndConditionsAccepted(dto.isTermsAndConditionsAccepted());
+    entity.setPostalAddress(AddressEntity.fromDto(dto.getPostalAddress()));
+    return entity;
+  }
 
   @Override
   public String toString() {

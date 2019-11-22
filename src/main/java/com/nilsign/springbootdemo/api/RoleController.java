@@ -20,26 +20,11 @@ public class RoleController extends AbstractController<RoleDto, RoleEntity, Long
 
   @Override
   protected RoleEntity entityFromDto(RoleDto dto) {
-    return RoleController.roleEntityFromDto(dto);
+    return RoleEntity.fromDto(dto);
   }
 
   @Override
   protected RoleDto dtoFromEntity(RoleEntity entity) {
-    return null;
-  }
-
-  public static RoleEntity roleEntityFromDto(RoleDto dto) {
-    RoleEntity entity = new RoleEntity();
-    entity.setId(dto.getId());
-    entity.setRoleType(dto.getRoleType());
-    entity.setRoleName(dto.getRoleName());
-    return entity;
-  }
-
-  public static RoleDto roleDtoFromEntity(RoleEntity entity) {
-    return new RoleDto(
-        entity.getId(),
-        entity.getRoleType(),
-        entity.getRoleName());
+    return RoleDto.fromEntity(entity);
   }
 }

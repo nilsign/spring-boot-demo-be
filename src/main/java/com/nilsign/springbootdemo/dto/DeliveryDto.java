@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.entity.DeliveryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,4 +15,10 @@ public class DeliveryDto implements AbstractDto {
 
   @Getter @Setter @NonNull
   private AddressDto deliveryAddress;
+
+  public static DeliveryDto fromEntity(DeliveryEntity entity) {
+    return new DeliveryDto(
+        entity.getId(),
+        AddressDto.fromEntity(entity.getDeliveryAddress()));
+  }
 }

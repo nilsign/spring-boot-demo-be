@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.AddressDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,16 @@ public class AddressEntity extends AbstractEntity {
   @Getter @Setter
   @Column(name="country", nullable = false)
   private String country;
+
+  public static AddressEntity fromDto(AddressDto dto) {
+    AddressEntity entity = new AddressEntity();
+    entity.setId(dto.getId());
+    entity.setAddress(dto.getAddress());
+    entity.setCity(dto.getCity());
+    entity.setZip(dto.getZip());
+    entity.setCountry(dto.getCountry());
+    return entity;
+  }
 
   @Override
   public String toString() {

@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.nilsign.springbootdemo.dto.OrderDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 // TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
 // be used properly.
@@ -75,6 +77,24 @@ public class OrderEntity extends AbstractEntity {
           referencedColumnName = "id",
           nullable = false))
   private List<ProductEntity> products;
+
+
+  public static OrderEntity fromDto(OrderDto dto) {
+    OrderEntity entity = new OrderEntity();
+    entity.setId(dto.getId());
+    entity.setInvoiceAddress(AddressEntity.fromDto(dto.getInvoiceAddress()));
+    entity.setDeliveries(dto.getDeliveries()
+        .stream()
+        .map(DeliveryEntity::fromDto)
+        .collect(Collectors.toList())
+    );
+    entity.setUser(UserEntity.fromDto(dto.getUser()));
+    entity.setProducts(dto.getProducts()
+        .stream()
+        .map(ProductEntity::fromDto)
+        .collect(Collectors.toList()));
+    return entity;
+  }
 
   @Override
   public String toString() {
