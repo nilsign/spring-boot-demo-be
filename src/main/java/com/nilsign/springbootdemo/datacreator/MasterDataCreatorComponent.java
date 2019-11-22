@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -22,13 +21,13 @@ public class MasterDataCreatorComponent {
   private static final String GLOBAL_ADMIN_EMAIL = "nilsign@gmail.com";
 
   @Autowired
+  EntityManager entityManager;
+
+  @Autowired
   private UserService userService;
 
   @Autowired
   private RoleService roleService;
-
-  @PersistenceContext
-  EntityManager entityManager;
 
   @Transactional
   public void createIfNotExist() {

@@ -12,13 +12,11 @@ import java.util.Optional;
 
 @Repository
 public class RoleRepositoryCustomImpl implements RoleRepositoryCustom {
-  private final EntityManager entityManager;
-
   @Autowired
-  public RoleRepositoryCustomImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
-  }
+  private EntityManager entityManager;
 
+  // TODO(nilsheumer): User string instead of number for string interpolation.
+  // TODO(nilsheumer): Try to get rid of the name rol. Check whether role is a keyword.
   @Override
   public Optional<RoleEntity> findByRoleType(RoleType roleType) {
     try {
