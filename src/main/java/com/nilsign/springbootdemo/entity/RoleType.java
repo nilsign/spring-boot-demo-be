@@ -1,8 +1,15 @@
 package com.nilsign.springbootdemo.entity;
 
 public enum RoleType {
-  ADMIN,
-  SELLER,
-  SUPPORT,
-  BUYER
+  GLOBALADMIN("GLOBALADMIN"),
+  ADMIN("ADMIN"),
+  SELLER("SELLER"),
+  SUPPORT("SUPPORT"),
+  BUYER("BUYER");
+
+  private final String name;
+
+  RoleType(String name) {
+    this.name = name;
+  }
 }

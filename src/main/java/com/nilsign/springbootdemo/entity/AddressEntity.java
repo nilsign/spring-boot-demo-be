@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.StringJoiner;
 
+// TODO(nilsheumer): Test wether this properly replaced the current to spring methods. If yes,
+// replace all current to string methods by this using this annotation.
+// @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_address")
 public class AddressEntity extends AbstractEntity {

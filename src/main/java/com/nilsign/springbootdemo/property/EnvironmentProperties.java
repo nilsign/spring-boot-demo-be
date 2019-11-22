@@ -5,22 +5,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+// TODO(nilsheumer): Use this principle somewhere meaningful in the code.
+// @Value("${spring.profiles.active}")
+// private String activeProfile;
+// log.info("Active Profile: " + activeProfile);
 
 @Configuration
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "environment")
 public class EnvironmentProperties {
-
-  public static final String DEV = "DEV";
-  public static final String QA = "QA";
-  public static final String PROD = "PROD";
+  private static final String DEV = "DEV";
+  private static final String QA = "QA";
+  private static final String PROD = "PROD";
 
   public enum EnvironmentType {
     DEV,
     QA,
     PROD;
 
-    public static EnvironmentType fromString(String environment) {
+    private static EnvironmentType get(String environment) {
       switch(environment) {
         case EnvironmentProperties.DEV: return EnvironmentType.DEV;
         case EnvironmentProperties.QA: return EnvironmentType.QA;
@@ -34,7 +37,7 @@ public class EnvironmentProperties {
   private String name;
 
   public EnvironmentType getEnvironment() {
-    return EnvironmentType.fromString(name);
+    return EnvironmentType.get(name);
   }
 
   public boolean isDev() {
