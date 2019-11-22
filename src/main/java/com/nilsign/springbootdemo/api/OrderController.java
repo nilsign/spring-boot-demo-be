@@ -30,6 +30,7 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
     return OrderController.orderDtoFromEntity(entity);
   }
 
+  // TODO(nilsheumer): Move all entityFromDto function to their according to entity classes.
   public static OrderEntity orderEntityFromDto(OrderDto dto) {
     OrderEntity entity = new OrderEntity();
     entity.setId(dto.getId());

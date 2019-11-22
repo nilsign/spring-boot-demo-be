@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.StringJoiner;
 
-// TODO(nilsheumer): Test wether this properly replaced the current to spring methods. If yes,
-// replace all current to string methods by this using this annotation.
+// TODO(nilsheumer): Test whether this properly renders the all field including all base class
+//  fields. If yes, replace all to string methods by this using the annotation below.
 // @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_address")
