@@ -9,12 +9,8 @@ import java.util.Optional;
 
 @Service
 public class UserService extends AbstractService<UserEntity, Long> {
-  private final UserRepository userRepository;
-
   @Autowired
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  private UserRepository userRepository;
 
   @Override
   protected UserRepository getRepository() {

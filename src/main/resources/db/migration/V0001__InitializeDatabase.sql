@@ -9,9 +9,6 @@ CREATE SEQUENCE public.hibernate_sequence
     NO MAXVALUE
     CACHE 1;
 
--- Initializes enums.
--- CREATE TYPE public.ROLE AS ENUM ('GLOBALADMIN', 'ADMIN', 'SELLER', 'SUPPORT', 'BUYER');
-
 -- Creates all tables and initializes tables the required indices.
 CREATE TABLE IF NOT EXISTS public.tbl_role (
     id BIGINT CONSTRAINT cstr_role_primary_key PRIMARY KEY,
@@ -29,6 +26,7 @@ CREATE TABLE IF NOT EXISTS tbl_address (
 
 CREATE TABLE IF NOT EXISTS tbl_customer (
     id BIGINT CONSTRAINT cstr_customer_primary_key PRIMARY KEY,
+    user_id BIGINT,
     postal_address_id BIGINT,
     terms_and_conditions_accepted BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT cstr_customer_postal_address_foreign_key FOREIGN KEY(postal_address_id)
@@ -135,3 +133,16 @@ CREATE TABLE IF NOT EXISTS tbl_user_tbl_role (
 );
 CREATE INDEX idx_user_role_user_id ON tbl_user_tbl_role(user_id);
 CREATE INDEX idx_user_role_role_id ON tbl_user_tbl_role(role_id);
+
+-- Adds missing back references and according indices.
+
+-- Note, this is usually bad a design, but for the sake of covering all entity/table relations,
+-- which are one-to-one, many-to-one, one-to-many, many-to-many, each uni- and bi-directional, this
+-- circle dependencies have to be added here, as the referring table did not exist yet.
+
+ALTER TABLE tbl_customer
+    ADD CONSTRAINT ctr_customer_user_foreign_key FOREIGN KEY (user_id)
+        REFERENCES tbl_user(id)
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+CREATE INDEX idx_customer_user_id ON tbl_customer(user_id);

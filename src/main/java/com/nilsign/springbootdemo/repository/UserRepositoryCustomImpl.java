@@ -10,12 +10,8 @@ import java.util.Optional;
 
 @Repository
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
-  private final EntityManager entityManager;
-
   @Autowired
-  public UserRepositoryCustomImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
-  }
+  private EntityManager entityManager;
 
   // TODO(nilsheumer): User string instead of number for string interpolation.
   @Override
