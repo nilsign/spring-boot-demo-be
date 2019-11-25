@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
+import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,6 +66,13 @@ public class UserEntity extends AbstractEntity {
           CascadeType.PERSIST,
           CascadeType.REFRESH})
   private CustomerEntity customer;
+
+  public void addRole(RoleEntity role) {
+    if (roles == null) {
+      roles = new EntityArrayList();
+    }
+    roles.add(role);
+  }
 
   @Override
   public UserDto toDto() {
