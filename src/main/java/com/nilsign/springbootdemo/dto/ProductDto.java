@@ -33,7 +33,10 @@ public class ProductDto implements AbstractDto {
   @Override
   public ProductEntity toEntity() {
     ProductEntity entity = new ProductEntity(
-        name, price, ratings.toEntities(), orders.toEntities());
+        name,
+        price,
+        ratings.toEntities(),
+        orders.toEntities());
     entity.setId(id);
     return entity;
   }

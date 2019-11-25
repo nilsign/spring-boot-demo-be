@@ -3,6 +3,7 @@ package com.nilsign.springbootdemo.datacreator;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
 import com.nilsign.springbootdemo.entity.UserEntity;
+import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import com.nilsign.springbootdemo.service.RoleService;
 import com.nilsign.springbootdemo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,16 @@ public class MasterDataCreatorComponent {
       if (roleEntity.isEmpty()) {
         throw new RuntimeException("Illegal state. Missing global admin role.");
       }
-      UserEntity userEntity = new UserEntity();
       entityManager.merge(roleEntity.get());
-      userEntity.addRole(roleEntity.get());
-      userEntity.setFirstName(GLOBAL_ADMIN_FIRST_NAME);
-      userEntity.setLastName(GLOBAL_ADMIN_LAST_NAME);
-      userEntity.setEmail(GLOBAL_ADMIN_EMAIL);
+      EntityArrayList<RoleEntity> roles = new EntityArrayList<>();
+      roles.add(roleEntity.get());
+
+      UserEntity userEntity = new UserEntity(
+          GLOBAL_ADMIN_FIRST_NAME,
+          GLOBAL_ADMIN_LAST_NAME,
+          GLOBAL_ADMIN_EMAIL,
+          roles,
+          null);
       entityManager.persist(userEntity);
     }
   }

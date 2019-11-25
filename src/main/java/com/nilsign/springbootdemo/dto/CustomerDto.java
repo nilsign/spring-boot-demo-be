@@ -9,24 +9,20 @@ import lombok.ToString;
 import javax.validation.constraints.NotNull;
 
 @ToString
-@AllArgsConstructor
+@AllArgsConstructor()
 public class CustomerDto implements AbstractDto {
-  @Getter
-  @Setter
+  @Getter @Setter
   private Long id;
 
-  @Getter
-  @Setter
+  @Getter @Setter
   @NotNull
   private UserDto user;
 
-  @Getter
-  @Setter
+  @Getter @Setter
   @NotNull
   private boolean termsAndConditionsAccepted;
 
-  @Getter
-  @Setter
+  @Getter @Setter
   private AddressDto postalAddress;
 
   @Override

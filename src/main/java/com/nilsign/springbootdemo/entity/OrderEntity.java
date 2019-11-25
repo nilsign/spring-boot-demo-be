@@ -4,6 +4,7 @@ import com.nilsign.springbootdemo.dto.OrderDto;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import java.util.StringJoiner;
 
 // TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
 // be used properly.
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_order")

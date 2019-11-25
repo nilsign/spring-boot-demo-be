@@ -2,7 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_user")
 public class UserEntity extends AbstractEntity {
@@ -37,12 +41,11 @@ public class UserEntity extends AbstractEntity {
   @Getter @Setter
   @ManyToMany(
       fetch = FetchType.EAGER,
-
-  cascade = {
-      CascadeType.DETACH,
-      CascadeType.MERGE,
-      CascadeType.PERSIST,
-      CascadeType.REFRESH})
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
   @JoinTable(
       name = "tbl_user_tbl_role",
       joinColumns = @JoinColumn(

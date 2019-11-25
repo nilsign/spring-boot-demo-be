@@ -32,12 +32,13 @@ public class UserDto implements AbstractDto {
 
   @Override
   public UserEntity toEntity() {
-    UserEntity entity = new UserEntity();
+    UserEntity entity = new UserEntity(
+        firstName,
+        lastName,
+        email,
+        roles.toEntities(),
+        null);
     entity.setId(id);
-    entity.setRoles(roles.toEntities());
-    entity.setFirstName(firstName);
-    entity.setLastName(lastName);
-    entity.setEmail(email);
     return entity;
   }
 }

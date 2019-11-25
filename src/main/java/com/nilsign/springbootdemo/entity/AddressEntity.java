@@ -3,6 +3,7 @@ package com.nilsign.springbootdemo.entity;
 import com.nilsign.springbootdemo.dto.AddressDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -13,10 +14,12 @@ import java.util.StringJoiner;
 // TODO(nilsheumer): Test whether this properly renders the all field including all base class
 //  fields. If yes, replace all to string methods by this using the annotation below.
 // @ToString(callSuper = true)
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_address")
 public class AddressEntity extends AbstractEntity {
+
   @Getter @Setter
   @Column(name="address", nullable = false)
   private String address;

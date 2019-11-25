@@ -1,7 +1,9 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RoleDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -11,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_role")
 public class RoleEntity extends AbstractEntity {

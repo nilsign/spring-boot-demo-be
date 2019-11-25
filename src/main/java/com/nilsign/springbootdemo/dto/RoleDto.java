@@ -24,10 +24,10 @@ public class RoleDto implements AbstractDto {
 
   @Override
   public RoleEntity toEntity() {
-    RoleEntity entity = new RoleEntity();
+    RoleEntity entity = new RoleEntity(
+        roleType,
+        roleName);
     entity.setId(id);
-    entity.setRoleType(roleType);
-    entity.setRoleName(roleName);
     return entity;
   }
 }

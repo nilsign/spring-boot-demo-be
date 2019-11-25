@@ -29,7 +29,11 @@ public class AddressDto implements AbstractDto {
 
   @Override
   public AddressEntity toEntity() {
-    AddressEntity entity = new AddressEntity(address, city, zip, country);
+    AddressEntity entity = new AddressEntity(
+        address,
+        city,
+        zip,
+        country);
     entity.setId(getId());
     return entity;
   }

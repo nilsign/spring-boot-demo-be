@@ -15,7 +15,6 @@ public abstract class AbstractService<T1 extends AbstractEntity, T2>  {
     return Optional.of(getRepository().save(entity));
   }
 
-  // TODO(nilsheumer): EntityArrayList is probably superfluous. Try to get rid of it.
   public EntityArrayList<T1> findAll() {
     EntityArrayList<T1> entities = new EntityArrayList<>();
     getRepository().findAll().forEach(entity -> entities.add(entity));
