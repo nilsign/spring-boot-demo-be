@@ -50,9 +50,9 @@ public class CustomerEntity extends AbstractEntity {
   public CustomerDto toDto() {
     return new CustomerDto(
       super.getId(),
-      user.toDto(),
+      toDto(user),
       termsAndConditionsAccepted,
-      postalAddress.toDto());
+      toDto(postalAddress));
   }
 
   @Override

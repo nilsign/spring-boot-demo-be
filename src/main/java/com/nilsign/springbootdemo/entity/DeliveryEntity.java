@@ -39,6 +39,6 @@ public class DeliveryEntity extends AbstractEntity {
 
   @Override
   public DeliveryDto toDto() {
-    return new DeliveryDto(super.getId(), deliveryAddress.toDto());
+    return new DeliveryDto(super.getId(), toDto(deliveryAddress));
   }
 }

@@ -26,7 +26,11 @@ public abstract class AbstractEntity {
 
   public abstract <T extends AbstractDto> T toDto();
 
-  public <T extends AbstractDto> DtoArrayList<T> toDtos(List<? extends AbstractEntity> entities) {
+  protected <T extends AbstractDto> T toDto(AbstractEntity entity) {
+    return entity.toDto();
+  }
+
+  protected <T extends AbstractDto> DtoArrayList<T> toDtos(List<? extends AbstractEntity> entities) {
     DtoArrayList<T> dtos = new DtoArrayList<>();
     entities.forEach(entity -> dtos.add(entity.toDto()));
     return dtos;

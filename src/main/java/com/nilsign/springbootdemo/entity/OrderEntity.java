@@ -102,8 +102,8 @@ public class OrderEntity extends AbstractEntity {
   public OrderDto toDto() {
     return new OrderDto(
         super.getId(),
-        user.toDto(),
-        invoiceAddress.toDto(),
+        toDto(user),
+        toDto(invoiceAddress),
         toDtos(deliveries),
         toDtos(products));
   }
