@@ -10,16 +10,18 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class RoleDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private RoleType roleType;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String roleName;
 
   @Override

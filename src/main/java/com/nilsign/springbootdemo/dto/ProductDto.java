@@ -12,22 +12,25 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ProductDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String name;
 
-  @Getter @Setter @NotNull @Positive
+  @NotNull
+  @Positive
   private BigDecimal price;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private DtoArrayList<RatingDto> ratings;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private DtoArrayList<OrderDto> orders;
 
   @Override

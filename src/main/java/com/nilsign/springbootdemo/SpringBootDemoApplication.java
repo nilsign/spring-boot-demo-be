@@ -30,15 +30,15 @@ public class SpringBootDemoApplication {
     this.devDataCreator = devDataCreator;
   }
 
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBootDemoApplication.class, args);
+  }
+
   @PostConstruct
   protected void initializeData() {
     masterDataCreator.createIfNotExist();
     if (environmentProperties.isDev()) {
       devDataCreator.createIfNotExist();
     }
-  }
-
-  public static void main(String[] args) {
-    SpringApplication.run(SpringBootDemoApplication.class, args);
   }
 }

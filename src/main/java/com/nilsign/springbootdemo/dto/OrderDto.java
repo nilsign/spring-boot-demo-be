@@ -10,22 +10,25 @@ import lombok.ToString;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class OrderDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private UserDto user;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private AddressDto invoiceAddress;
 
-  @Getter @Setter @NotNull @NotEmpty
+  @NotNull
+  @NotEmpty
   private DtoArrayList<DeliveryDto> deliveries;
 
-  @Getter @Setter @NotNull @NotEmpty
+  @NotNull
+  @NotEmpty
   private DtoArrayList<ProductDto> products;
 
   @Override

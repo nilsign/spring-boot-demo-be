@@ -17,22 +17,6 @@ public class EnvironmentProperties {
   private static final String DEV = "DEV";
   private static final String QA = "QA";
   private static final String PROD = "PROD";
-
-  public enum EnvironmentType {
-    DEV,
-    QA,
-    PROD;
-
-    private static EnvironmentType get(String environment) {
-      switch(environment) {
-        case EnvironmentProperties.DEV: return EnvironmentType.DEV;
-        case EnvironmentProperties.QA: return EnvironmentType.QA;
-        case EnvironmentProperties.PROD: return EnvironmentType.PROD;
-      }
-      throw new RuntimeException("Unknown environment or unsupported environment profile.");
-    }
-  }
-
   @Setter
   private String name;
 
@@ -50,5 +34,23 @@ public class EnvironmentProperties {
 
   public boolean isProd() {
     return getEnvironment() == EnvironmentType.PROD;
+  }
+
+  public enum EnvironmentType {
+    DEV,
+    QA,
+    PROD;
+
+    private static EnvironmentType get(String environment) {
+      switch (environment) {
+        case EnvironmentProperties.DEV:
+          return EnvironmentType.DEV;
+        case EnvironmentProperties.QA:
+          return EnvironmentType.QA;
+        case EnvironmentProperties.PROD:
+          return EnvironmentType.PROD;
+      }
+      throw new RuntimeException("Unknown environment or unsupported environment profile.");
+    }
   }
 }

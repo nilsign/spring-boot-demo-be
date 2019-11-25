@@ -21,19 +21,19 @@ import java.util.StringJoiner;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_product")
 public class ProductEntity extends AbstractEntity {
-  @Getter @Setter
-  @Column(name="name", nullable = false)
+
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @Getter @Setter
-  @Column(name="price", nullable = false)
+  @Column(name = "price", nullable = false)
   private BigDecimal price;
 
   // Bi-directional one-to-many relation.
-  @Getter @Setter
   @OneToMany(
       mappedBy = "product",
       fetch = FetchType.LAZY,
@@ -45,7 +45,6 @@ public class ProductEntity extends AbstractEntity {
   private List<RatingEntity> ratings;
 
   // Bi-directional many-to-many relation.
-  @Getter @Setter
   @ManyToMany(
       mappedBy = "products",
       fetch = FetchType.LAZY,
@@ -86,5 +85,4 @@ public class ProductEntity extends AbstractEntity {
         .add("\n\t" + "orders=" + (orders == null ? null : orders.size()))
         .toString();
   }
-
 }

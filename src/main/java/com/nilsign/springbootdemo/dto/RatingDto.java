@@ -10,22 +10,23 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class RatingDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private UserDto user;
 
-  @Getter @Setter @NotNull
+  @NotNull
   private ProductDto product;
 
-  @Getter @Setter @Size(min = 0, max = 5)
+  @Size(min = 0, max = 5)
   private float score;
 
-  @Getter @Setter @NotBlank
+  @NotBlank
   private String description;
 
   @Override

@@ -12,22 +12,28 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class UserDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull @NotEmpty
+  @NotNull
+  @NotEmpty
   private DtoArrayList<RoleDto> roles;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String firstName;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String lastName;
 
-  @Getter @Setter @NotNull @NotBlank @Email
+  @NotNull
+  @NotBlank
+  @Email
   private String email;
 
   @Override

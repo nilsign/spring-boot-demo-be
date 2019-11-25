@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public abstract class AbstractService<T1 extends AbstractEntity, T2>  {
+public abstract class AbstractService<T1 extends AbstractEntity, T2> {
   abstract protected JpaRepository<T1, T2> getRepository();
 
   public Optional<T1> save(T1 entity) {

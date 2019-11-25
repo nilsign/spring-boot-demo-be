@@ -22,23 +22,21 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_user")
 public class UserEntity extends AbstractEntity {
-  @Getter @Setter
-  @Column(name="first_name")
+  @Column(name = "first_name")
   private String firstName;
 
-  @Getter @Setter
-  @Column(name="last_name")
+  @Column(name = "last_name")
   private String lastName;
 
-  @Getter @Setter
-  @Column(name="email")
+  @Column(name = "email")
   private String email;
 
   // Uni-directional many-to-many relation.
-  @Getter @Setter
   @ManyToMany(
       fetch = FetchType.EAGER,
       cascade = {
@@ -59,7 +57,6 @@ public class UserEntity extends AbstractEntity {
   private List<RoleEntity> roles;
 
   // Bi-directional one-to-one relation.
-  @Getter @Setter
   @OneToOne(
       mappedBy = "user",
       fetch = FetchType.EAGER,

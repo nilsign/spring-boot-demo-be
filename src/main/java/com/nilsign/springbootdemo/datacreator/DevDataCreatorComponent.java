@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DevDataCreatorComponent {
   public void createIfNotExist() {
-    log. info("DevDataCreatorComponent::createIfNotExist()");
+    log.info("DevDataCreatorComponent::createIfNotExist()");
   }
 }
