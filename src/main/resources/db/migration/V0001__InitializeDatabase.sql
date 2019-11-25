@@ -147,4 +147,3 @@ ALTER TABLE tbl_customer
         ON UPDATE NO ACTION
         ON DELETE NO ACTION;
 CREATE INDEX idx_customer_user_id ON tbl_customer(user_id);
-q
