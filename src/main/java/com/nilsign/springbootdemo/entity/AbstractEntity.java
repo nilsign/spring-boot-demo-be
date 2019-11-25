@@ -14,9 +14,10 @@ import java.util.List;
 // TODO(nilsheumer): Convert this class to an interface. Create an abstract GloballySequencedEntity
 // class, and place it in between the concrete entity class and this interface/class. Do this
 // everywhere int the codebase.
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class AbstractEntity {
-  @Getter @Setter
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;

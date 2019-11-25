@@ -15,15 +15,15 @@ import java.util.StringJoiner;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_role")
 public class RoleEntity extends AbstractEntity {
-  @Getter @Setter
   @Column(name = "role_type", nullable = false)
   @Enumerated(EnumType.STRING)
   private RoleType roleType;
 
-  @Getter @Setter
   @Column(name = "role_name", nullable = false)
   private String roleName;
 

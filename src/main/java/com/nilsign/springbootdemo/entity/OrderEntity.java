@@ -23,12 +23,12 @@ import java.util.StringJoiner;
 // be used properly.
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends AbstractEntity {
   // Uni-directional many-to-one relation.
-  @Getter
-  @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -40,8 +40,6 @@ public class OrderEntity extends AbstractEntity {
   private UserEntity user;
 
   // Uni-directional many-to-one relation.
-  @Getter
-  @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -53,8 +51,6 @@ public class OrderEntity extends AbstractEntity {
   private AddressEntity invoiceAddress;
 
   // Uni-directional one-to-many relation.
-  @Getter
-  @Setter
   @OneToMany(
       fetch = FetchType.LAZY,
       cascade = {
@@ -65,8 +61,6 @@ public class OrderEntity extends AbstractEntity {
   private List<DeliveryEntity> deliveries;
 
   // Bi-directional many-to-many relation.
-  @Getter
-  @Setter
   @ManyToMany(
       fetch = FetchType.LAZY,
       cascade = {

@@ -17,23 +17,23 @@ import java.util.StringJoiner;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_rating")
 public class RatingEntity extends AbstractEntity {
   // Uni-directional many-to-one relation.
-  @Getter @Setter
   @ManyToOne(
-    fetch = FetchType.LAZY,
-    cascade = {
-        CascadeType.DETACH,
-        CascadeType.MERGE,
-        CascadeType.PERSIST,
-        CascadeType.REFRESH})
+      fetch = FetchType.LAZY,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
   // Bi-directional many-to-one relation.
-  @Getter @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -44,11 +44,9 @@ public class RatingEntity extends AbstractEntity {
   @JoinColumn(name = "product_id", nullable = false)
   private ProductEntity product;
 
-  @Getter @Setter
   @Column(name = "score")
   private float score;
 
-  @Setter @Getter
   @Column(name = "description")
   private String description;
 

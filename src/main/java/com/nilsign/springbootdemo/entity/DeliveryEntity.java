@@ -16,11 +16,12 @@ import java.util.StringJoiner;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_delivery")
 public class DeliveryEntity extends AbstractEntity {
   // Uni-directional delivery address.
-  @Getter @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {

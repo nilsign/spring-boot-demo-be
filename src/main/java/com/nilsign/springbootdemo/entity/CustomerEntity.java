@@ -17,11 +17,12 @@ import java.util.StringJoiner;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tbl_customer")
 public class CustomerEntity extends AbstractEntity {
   // Bi-directional one-to-one relation.
-  @Getter @Setter
   @OneToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -32,12 +33,10 @@ public class CustomerEntity extends AbstractEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Getter @Setter
   @Column(name = "terms_and_conditions_accepted", nullable = false)
   private boolean termsAndConditionsAccepted;
 
   // Uni-directional one-to-one relation.
-  @Getter @Setter
   @OneToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -51,10 +50,10 @@ public class CustomerEntity extends AbstractEntity {
   @Override
   public CustomerDto toDto() {
     return new CustomerDto(
-      super.getId(),
-      toDto(user),
-      termsAndConditionsAccepted,
-      toDto(postalAddress));
+        super.getId(),
+        toDto(user),
+        termsAndConditionsAccepted,
+        toDto(postalAddress));
   }
 
   @Override

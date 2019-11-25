@@ -9,22 +9,27 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class AddressDto implements AbstractDto {
-  @Getter @Setter
   private Long id;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String address;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String city;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String zip;
 
-  @Getter @Setter @NotNull @NotBlank
+  @NotNull
+  @NotBlank
   private String country;
 
   @Override
