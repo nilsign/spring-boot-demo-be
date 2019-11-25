@@ -18,14 +18,4 @@ public class CustomerController extends AbstractController<CustomerDto, Customer
   protected AbstractService<CustomerEntity, Long> getService() {
     return orderService;
   }
-
-  @Override
-  protected CustomerEntity entityFromDto(CustomerDto dto) {
-    return CustomerEntity.fromDto(dto);
-  }
-
-  @Override
-  protected CustomerDto dtoFromEntity(CustomerEntity entity) {
-    return CustomerDto.fromEntity(entity);
-  }
 }

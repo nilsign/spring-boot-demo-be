@@ -17,14 +17,4 @@ public class AddressController extends AbstractController<AddressDto, AddressEnt
   protected AddressService getService() {
     return addressService;
   }
-
-  @Override
-  protected AddressEntity entityFromDto(AddressDto dto) {
-    return AddressEntity.fromDto(dto);
-  }
-
-  @Override
-  protected AddressDto dtoFromEntity(AddressEntity entity) {
-    return AddressDto.fromEntity(entity);
-  }
 }

@@ -16,9 +16,10 @@ public class DeliveryDto implements AbstractDto {
   @Getter @Setter @NonNull
   private AddressDto deliveryAddress;
 
-  public static DeliveryDto fromEntity(DeliveryEntity entity) {
-    return new DeliveryDto(
-        entity.getId(),
-        AddressDto.fromEntity(entity.getDeliveryAddress()));
+  @Override
+  public DeliveryEntity toEntity() {
+     DeliveryEntity entity =  new DeliveryEntity(deliveryAddress.toEntity());
+     entity.setId(id);
+     return entity;
   }
 }

@@ -17,14 +17,4 @@ public class OrderController extends AbstractController<OrderDto, OrderEntity, L
   protected OrderService getService() {
     return orderService;
   }
-
-  @Override
-  protected OrderEntity entityFromDto(OrderDto dto) {
-    return OrderEntity.fromDto(dto);
-  }
-
-  @Override
-  protected OrderDto dtoFromEntity(OrderEntity entity) {
-    return OrderDto.fromEntity(entity);
-  }
 }

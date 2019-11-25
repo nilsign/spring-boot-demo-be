@@ -22,10 +22,12 @@ public class RoleDto implements AbstractDto {
   @Getter @Setter @NotNull @NotBlank
   private String roleName;
 
-  public static RoleDto fromEntity(RoleEntity entity) {
-    return new RoleDto(
-        entity.getId(),
-        entity.getRoleType(),
-        entity.getRoleName());
+  @Override
+  public RoleEntity toEntity() {
+    RoleEntity entity = new RoleEntity(
+        roleType,
+        roleName);
+    entity.setId(id);
+    return entity;
   }
 }

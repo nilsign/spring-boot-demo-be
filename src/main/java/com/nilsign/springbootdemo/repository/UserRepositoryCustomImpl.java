@@ -13,15 +13,14 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
   @Autowired
   private EntityManager entityManager;
 
-  // TODO(nilsheumer): User string instead of number for string interpolation.
   @Override
   public Optional<UserEntity> findByEmail(String email) {
     try {
       return Optional.of(entityManager
           .createQuery(
-              "from UserEntity user where user.email = ?1",
+              "from UserEntity user where user.email = :email",
               UserEntity.class)
-          .setParameter(1, email)
+          .setParameter("email", email)
           .getSingleResult());
     } catch (NoResultException e) {
       // Nothing to do here.

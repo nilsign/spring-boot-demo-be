@@ -1,7 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
+import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -15,15 +18,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 // TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
 // be used properly.
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends AbstractEntity {
   // Uni-directional many-to-one relation.
-  @Getter @Setter
+  @Getter
+  @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {
@@ -35,19 +40,21 @@ public class OrderEntity extends AbstractEntity {
   private UserEntity user;
 
   // Uni-directional many-to-one relation.
-  @Getter @Setter
+  @Getter
+  @Setter
   @ManyToOne(
       fetch = FetchType.EAGER,
       cascade = {
-        CascadeType.DETACH,
-        CascadeType.MERGE,
-        CascadeType.PERSIST,
-        CascadeType.REFRESH})
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
   @JoinColumn(name = "invoice_address_id", nullable = false)
   private AddressEntity invoiceAddress;
 
   // Uni-directional one-to-many relation.
-  @Getter @Setter
+  @Getter
+  @Setter
   @OneToMany(
       fetch = FetchType.LAZY,
       cascade = {
@@ -58,14 +65,15 @@ public class OrderEntity extends AbstractEntity {
   private List<DeliveryEntity> deliveries;
 
   // Bi-directional many-to-many relation.
-  @Getter @Setter
+  @Getter
+  @Setter
   @ManyToMany(
       fetch = FetchType.LAZY,
       cascade = {
-        CascadeType.DETACH,
-        CascadeType.MERGE,
-        CascadeType.PERSIST,
-        CascadeType.REFRESH})
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
   @JoinTable(
       name = "tbl_order_tbl_product",
       joinColumns = @JoinColumn(
@@ -78,22 +86,28 @@ public class OrderEntity extends AbstractEntity {
           nullable = false))
   private List<ProductEntity> products;
 
+  public void addDelivery(DeliveryEntity delivery) {
+    if (deliveries == null) {
+      deliveries = new EntityArrayList<>();
+    }
+    deliveries.add(delivery);
+  }
 
-  public static OrderEntity fromDto(OrderDto dto) {
-    OrderEntity entity = new OrderEntity();
-    entity.setId(dto.getId());
-    entity.setInvoiceAddress(AddressEntity.fromDto(dto.getInvoiceAddress()));
-    entity.setDeliveries(dto.getDeliveries()
-        .stream()
-        .map(DeliveryEntity::fromDto)
-        .collect(Collectors.toList())
-    );
-    entity.setUser(UserEntity.fromDto(dto.getUser()));
-    entity.setProducts(dto.getProducts()
-        .stream()
-        .map(ProductEntity::fromDto)
-        .collect(Collectors.toList()));
-    return entity;
+  public void addProduct(ProductEntity product) {
+    if (products == null) {
+      products = new EntityArrayList<>();
+    }
+    products.add(product);
+  }
+
+  @Override
+  public OrderDto toDto() {
+    return new OrderDto(
+        super.getId(),
+        toDto(user),
+        toDto(invoiceAddress),
+        toDtos(deliveries),
+        toDtos(products));
   }
 
   @Override

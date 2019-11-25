@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.api;
 
 import com.nilsign.springbootdemo.dto.AbstractDto;
+import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.AbstractEntity;
 import com.nilsign.springbootdemo.service.AbstractService;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,24 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public abstract class AbstractController<T1 extends AbstractDto, T2 extends AbstractEntity, T3> {
   protected abstract AbstractService<T2, T3> getService();
 
-  protected abstract T2 entityFromDto(T1 dto);
-  protected abstract T1 dtoFromEntity(T2 entity);
-
-  protected List<T1> dtosFromEntities(List<T2> entities) {
-    return entities.stream().map(this::dtoFromEntity).collect(Collectors.toList());
-  }
-
   @GetMapping
-  public List<T1> findAll() {
-    return dtosFromEntities(getService().findAll());
+  public DtoArrayList<T1> findAll() {
+    return getService().findAll().toDtos();
   }
 
   @GetMapping(path = "{id}")
@@ -39,25 +31,25 @@ public abstract class AbstractController<T1 extends AbstractDto, T2 extends Abst
     Optional<T2> result = getService().findById(id);
     return result.isEmpty()
         ? Optional.empty()
-        : Optional.of(dtoFromEntity(result.get()));
+        : Optional.of(result.get().toDto());
   }
 
   @PostMapping
   public Optional<T1> insert(
       @NotNull @Valid @RequestBody T1 dto) {
-    Optional<T2> result = getService().save(entityFromDto(dto));
+    Optional<T2> result = getService().save(dto.toEntity());
     return result.isEmpty()
         ? Optional.empty()
-        : Optional.of(dtoFromEntity(result.get()));
+        : Optional.of(result.get().toDto());
   }
 
   @PutMapping
   public Optional<T1> update(
       @NotNull @Valid @RequestBody T1 dto) {
-    Optional<T2> result = getService().save(entityFromDto(dto));
+    Optional<T2> result = getService().save(dto.toEntity());
     return result.isEmpty()
         ? Optional.empty()
-        : Optional.of(dtoFromEntity(result.get()));
+        : Optional.of(result.get().toDto());
   }
 
   @DeleteMapping(path = "{id}")

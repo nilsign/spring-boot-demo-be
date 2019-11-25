@@ -27,12 +27,14 @@ public class AddressDto implements AbstractDto {
   @Getter @Setter @NotNull @NotBlank
   private String country;
 
-  public static AddressDto fromEntity(AddressEntity entity) {
-    return new AddressDto(
-        entity.getId(),
-        entity.getAddress(),
-        entity.getCity(),
-        entity.getZip(),
-        entity.getCountry());
+  @Override
+  public AddressEntity toEntity() {
+    AddressEntity entity = new AddressEntity(
+        address,
+        city,
+        zip,
+        country);
+    entity.setId(getId());
+    return entity;
   }
 }

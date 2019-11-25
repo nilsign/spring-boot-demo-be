@@ -2,7 +2,10 @@ package com.nilsign.springbootdemo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
+import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -15,8 +18,9 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_product")
 public class ProductEntity extends AbstractEntity {
@@ -53,16 +57,23 @@ public class ProductEntity extends AbstractEntity {
   @JsonBackReference
   private List<OrderEntity> orders;
 
-  public static ProductEntity fromDto(ProductDto dto) {
-    ProductEntity entity = new ProductEntity();
-    entity.setId(dto.getId());
-    entity.setName(dto.getName());
-    entity.setPrice(dto.getPrice());
-    entity.setRatings(dto.getRatings()
-        .stream()
-        .map(RatingEntity::fromDto)
-        .collect(Collectors.toList()));
-    return entity;
+  public void addRating(RatingEntity rating) {
+    if (ratings == null) {
+      ratings = new EntityArrayList<>();
+    }
+    ratings.add(rating);
+  }
+
+  public void addOrder(OrderEntity order) {
+    if (orders == null) {
+      orders = new EntityArrayList<>();
+    }
+    orders.add(order);
+  }
+
+  @Override
+  public ProductDto toDto() {
+    return new ProductDto(super.getId(), name, price, toDtos(ratings), toDtos(orders));
   }
 
   @Override
@@ -75,4 +86,5 @@ public class ProductEntity extends AbstractEntity {
         .add("\n\t" + "orders=" + (orders == null ? null : orders.size()))
         .toString();
   }
+
 }

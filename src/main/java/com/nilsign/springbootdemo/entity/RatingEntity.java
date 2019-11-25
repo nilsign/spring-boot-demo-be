@@ -1,7 +1,9 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RatingDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_rating")
 public class RatingEntity extends AbstractEntity {
@@ -48,14 +52,9 @@ public class RatingEntity extends AbstractEntity {
   @Column(name = "description")
   private String description;
 
-  public static RatingEntity fromDto(RatingDto dto) {
-    RatingEntity entity = new RatingEntity();
-    entity.setId(dto.getId());
-    entity.setUser(UserEntity.fromDto(dto.getUser()));
-    entity.setProduct(ProductEntity.fromDto(dto.getProduct()));
-    entity.setScore(dto.getScore());
-    entity.setDescription(dto.getDescription());
-    return entity;
+  @Override
+  public RatingDto toDto() {
+    return new RatingDto(super.getId(), toDto(user), toDto(product), score, description);
   }
 
   @Override

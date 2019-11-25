@@ -28,12 +28,14 @@ public class RatingDto implements AbstractDto {
   @Getter @Setter @NotBlank
   private String description;
 
-  public static RatingDto fromEntity(RatingEntity entity) {
-    return new RatingDto(
-        entity.getId(),
-        UserDto.fromEntity(entity.getUser()),
-        ProductDto.fromEntity(entity.getProduct()),
-        entity.getScore(),
-        entity.getDescription());
+  @Override
+  public RatingEntity toEntity() {
+    RatingEntity entity = new RatingEntity(
+        user.toEntity(),
+        product.toEntity(),
+        score,
+        description);
+    entity.setId(id);
+    return entity;
   }
 }

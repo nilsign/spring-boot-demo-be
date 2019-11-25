@@ -15,16 +15,14 @@ public class RoleRepositoryCustomImpl implements RoleRepositoryCustom {
   @Autowired
   private EntityManager entityManager;
 
-  // TODO(nilsheumer): User string instead of number for string interpolation.
-  // TODO(nilsheumer): Try to get rid of the name rol. Check whether role is a keyword.
   @Override
   public Optional<RoleEntity> findByRoleType(RoleType roleType) {
     try {
       return Optional.of(entityManager
           .createQuery(
-              "from RoleEntity rol where rol.roleType = ?1",
+              "from RoleEntity role where role.roleType = :roleType",
               RoleEntity.class)
-          .setParameter(1, roleType)
+          .setParameter("roleType", roleType)
           .getSingleResult());
     } catch (NoResultException e) {
       // Nothing to do here.
