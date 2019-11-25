@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.CustomerDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.StringJoiner;
 
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_customer")
 public class CustomerEntity extends AbstractEntity {
@@ -44,13 +46,13 @@ public class CustomerEntity extends AbstractEntity {
   @JoinColumn(name = "postal_address_id")
   private AddressEntity postalAddress;
 
-  public static CustomerEntity fromDto(CustomerDto dto) {
-    CustomerEntity entity = new CustomerEntity();
-    entity.setId(dto.getId());
-    entity.setUser(UserEntity.fromDto(dto.getUser()));
-    entity.setTermsAndConditionsAccepted(dto.isTermsAndConditionsAccepted());
-    entity.setPostalAddress(AddressEntity.fromDto(dto.getPostalAddress()));
-    return entity;
+  @Override
+  public CustomerDto toDto() {
+    return new CustomerDto(
+      super.getId(),
+      user.toDto(),
+      termsAndConditionsAccepted,
+      postalAddress.toDto());
   }
 
   @Override

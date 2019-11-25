@@ -17,14 +17,4 @@ public class RoleController extends AbstractController<RoleDto, RoleEntity, Long
   protected RoleService getService() {
     return roleService;
   }
-
-  @Override
-  protected RoleEntity entityFromDto(RoleDto dto) {
-    return RoleEntity.fromDto(dto);
-  }
-
-  @Override
-  protected RoleDto dtoFromEntity(RoleEntity entity) {
-    return RoleDto.fromEntity(entity);
-  }
 }

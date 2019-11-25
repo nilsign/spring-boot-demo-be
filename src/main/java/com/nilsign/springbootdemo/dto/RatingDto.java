@@ -2,6 +2,7 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.entity.RatingEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Builder
 @ToString
 @AllArgsConstructor
 public class RatingDto implements AbstractDto {
@@ -28,12 +30,14 @@ public class RatingDto implements AbstractDto {
   @Getter @Setter @NotBlank
   private String description;
 
-  public static RatingDto fromEntity(RatingEntity entity) {
-    return new RatingDto(
-        entity.getId(),
-        UserDto.fromEntity(entity.getUser()),
-        ProductDto.fromEntity(entity.getProduct()),
-        entity.getScore(),
-        entity.getDescription());
+  @Override
+  public RatingEntity toEntity() {
+    RatingEntity entity = new RatingEntity();
+    entity.setId(id);
+    entity.setUser(user.toEntity());
+    entity.setProduct(product.toEntity());
+    entity.setScore(score);
+    entity.setDescription(description);
+    return entity;
   }
 }

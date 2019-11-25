@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +9,6 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ToString
 @AllArgsConstructor
@@ -24,23 +23,19 @@ public class OrderDto implements AbstractDto {
   private AddressDto invoiceAddress;
 
   @Getter @Setter @NotNull @NotEmpty
-  private List<DeliveryDto> deliveries;
+  private DtoArrayList<DeliveryDto> deliveries;
 
   @Getter @Setter @NotNull @NotEmpty
-  private List<ProductDto> products;
+  private DtoArrayList<ProductDto> products;
 
-  public static OrderDto fromEntity(OrderEntity entity) {
-    return new OrderDto(
-        entity.getId(),
-        UserDto.fromEntity(entity.getUser()),
-        AddressDto.fromEntity(entity.getInvoiceAddress()),
-        entity.getDeliveries()
-            .stream()
-            .map(DeliveryDto::fromEntity)
-            .collect(Collectors.toList()),
-        entity.getProducts()
-            .stream()
-            .map(ProductDto::fromEntity)
-            .collect(Collectors.toList()));
+  @Override
+  public OrderEntity toEntity() {
+    OrderEntity entity = new OrderEntity(
+        user.toEntity(),
+        invoiceAddress.toEntity(),
+        deliveries.toEntities(),
+        products.toEntities());
+    entity.setId(id);
+    return entity;
   }
 }

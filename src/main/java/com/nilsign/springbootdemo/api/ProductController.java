@@ -17,14 +17,4 @@ public class ProductController extends AbstractController<ProductDto, ProductEnt
   protected ProductService getService() {
     return productService;
   }
-
-  @Override
-  protected ProductEntity entityFromDto(ProductDto dto) {
-    return ProductEntity.fromDto(dto);
-  }
-
-  @Override
-  protected ProductDto dtoFromEntity(ProductEntity entity) {
-    return ProductDto.fromEntity(entity);
-  }
 }

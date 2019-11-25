@@ -17,14 +17,4 @@ public class DeliveryController extends AbstractController<DeliveryDto, Delivery
   protected DeliveryService getService() {
     return deliveryService;
   }
-
-  @Override
-  protected DeliveryEntity entityFromDto(DeliveryDto dto) {
-    return DeliveryEntity.fromDto(dto);
-  }
-
-  @Override
-  protected DeliveryDto dtoFromEntity(DeliveryEntity entity) {
-    return DeliveryDto.fromEntity(entity);
-  }
 }

@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +11,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ToString
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class UserDto implements AbstractDto {
   private Long id;
 
   @Getter @Setter @NotNull @NotEmpty
-  private List<RoleDto> roles;
+  private DtoArrayList<RoleDto> roles;
 
   @Getter @Setter @NotNull @NotBlank
   private String firstName;
@@ -31,15 +30,14 @@ public class UserDto implements AbstractDto {
   @Getter @Setter @NotNull @NotBlank @Email
   private String email;
 
-  public static UserDto fromEntity(UserEntity entity) {
-    return new UserDto(
-        entity.getId(),
-        entity.getRoles()
-            .stream()
-            .map(RoleDto::fromEntity)
-            .collect(Collectors.toList()),
-        entity.getFirstName(),
-        entity.getLastName(),
-        entity.getEmail());
+  @Override
+  public UserEntity toEntity() {
+    UserEntity entity = new UserEntity();
+    entity.setId(id);
+    entity.setRoles(roles.toEntities());
+    entity.setFirstName(firstName);
+    entity.setLastName(lastName);
+    entity.setEmail(email);
+    return entity;
   }
 }

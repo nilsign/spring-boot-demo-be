@@ -23,12 +23,9 @@ public class RoleEntity extends AbstractEntity {
   @Column(name = "role_name", nullable = false)
   private String roleName;
 
-  public static RoleEntity fromDto(RoleDto dto) {
-    RoleEntity entity = new RoleEntity();
-    entity.setId(dto.getId());
-    entity.setRoleType(dto.getRoleType());
-    entity.setRoleName(dto.getRoleName());
-    return entity;
+  @Override
+  public RoleDto toDto() {
+    return new RoleDto(super.getId(), roleType, roleName);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
+import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -67,24 +67,16 @@ public class UserEntity extends AbstractEntity {
           CascadeType.REFRESH})
   private CustomerEntity customer;
 
-  public static UserEntity fromDto(UserDto dto) {
-    UserEntity entity = new UserEntity();
-    entity.setId(dto.getId());
-    entity.setRoles(dto.getRoles()
-        .stream()
-        .map(RoleEntity::fromDto)
-        .collect(Collectors.toList()));
-    entity.setFirstName(dto.getFirstName());
-    entity.setLastName(dto.getLastName());
-    entity.setEmail(dto.getEmail());
-    return entity;
-  }
-
   public void addRole(RoleEntity role) {
     if (roles == null) {
-      roles = new ArrayList<>();
+      roles = new EntityArrayList();
     }
     roles.add(role);
+  }
+
+  @Override
+  public UserDto toDto() {
+    return new UserDto(super.getId(), toDtos(roles), firstName, lastName, email);
   }
 
   public String toString() {

@@ -17,14 +17,4 @@ public class UserController extends AbstractController<UserDto, UserEntity, Long
   protected UserService getService() {
     return userService;
   }
-
-  @Override
-  protected UserEntity entityFromDto(UserDto dto) {
-    return UserEntity.fromDto(dto);
-  }
-
-  @Override
-  protected UserDto dtoFromEntity(UserEntity entity) {
-    return UserDto.fromEntity(entity);
-  }
 }

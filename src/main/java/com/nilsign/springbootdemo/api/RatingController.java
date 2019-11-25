@@ -17,14 +17,4 @@ public class RatingController extends AbstractController<RatingDto, RatingEntity
   protected RatingService getService() {
     return ratingService;
   }
-
-  @Override
-  protected RatingEntity entityFromDto(RatingDto dto) {
-    return RatingEntity.fromDto(dto);
-  }
-
-  @Override
-  protected RatingDto dtoFromEntity(RatingEntity entity) {
-    return RatingDto.fromEntity(entity);
-  }
 }
