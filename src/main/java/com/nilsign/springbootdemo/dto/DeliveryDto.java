@@ -2,15 +2,11 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.entity.DeliveryEntity;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class DeliveryDto implements AbstractDto {
   private Long id;
 

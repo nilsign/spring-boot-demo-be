@@ -3,9 +3,7 @@ package com.nilsign.springbootdemo.dto;
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,9 +11,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class UserDto implements AbstractDto {
   private Long id;
 

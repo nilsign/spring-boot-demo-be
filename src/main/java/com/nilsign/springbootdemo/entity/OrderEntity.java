@@ -19,8 +19,6 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
 
-// TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
-// be used properly.
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -98,10 +96,10 @@ public class OrderEntity extends AbstractEntity {
   public OrderDto toDto() {
     return new OrderDto(
         super.getId(),
-        toDto(user),
-        toDto(invoiceAddress),
-        toDtos(deliveries),
-        toDtos(products));
+        user.toDto(),
+        invoiceAddress.toDto(),
+        toDtoArrayList(deliveries),
+        toDtoArrayList(products));
   }
 
   @Override

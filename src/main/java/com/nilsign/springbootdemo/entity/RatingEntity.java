@@ -52,7 +52,12 @@ public class RatingEntity extends AbstractEntity {
 
   @Override
   public RatingDto toDto() {
-    return new RatingDto(super.getId(), toDto(user), toDto(product), score, description);
+    return new RatingDto(
+        super.getId(),
+        user.toDto(),
+        product.toDto(),
+        score,
+        description);
   }
 
   @Override
