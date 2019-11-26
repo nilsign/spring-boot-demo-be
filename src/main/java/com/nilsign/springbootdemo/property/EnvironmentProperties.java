@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-// TODO(nilsheumer): Use this principle somewhere meaningful in the code.
+// Note, with the code below it is also possible to directly access certain property field without
+// the need to create a property binding class like this.
 // @Value("${spring.profiles.active}")
 // private String activeProfile;
-// log.info("Active Profile: " + activeProfile);
 
 @Configuration
 @PropertySource("classpath:application.properties")

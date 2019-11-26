@@ -6,6 +6,7 @@ import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
@@ -18,12 +19,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
-import java.util.StringJoiner;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends SequencedEntity {
@@ -102,15 +103,5 @@ public class OrderEntity extends SequencedEntity {
         .deliveries(toDtoArrayList(deliveries))
         .products(toDtoArrayList(products))
         .build();
-  }
-
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", "\n" + OrderEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\t" + "id='" + super.getId() + "'")
-        .add("\n\t" + "user=" + user)
-        .add("\n\t" + "invoiceAddress=" + invoiceAddress)
-        .add("\n\t" + "products=" + (products == null ? null : products.size()))
-        .toString();
   }
 }

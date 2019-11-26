@@ -6,6 +6,7 @@ import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
@@ -18,13 +19,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_user")
 public class UserEntity extends SequencedEntity {
@@ -84,21 +84,5 @@ public class UserEntity extends SequencedEntity {
         .lastName(lastName)
         .email(email)
         .build();
-  }
-
-  @Override
-  public String toString() {
-    String appendedRoleNames = roles
-        .stream()
-        .map(Object::toString)
-        .collect(Collectors.joining(", "));
-    return new StringJoiner(", ", "\n" + UserEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\t" + "id='" + super.getId() + "'")
-        .add("\n\t" + "roles='" + appendedRoleNames)
-        .add("\n\t" + "firstName='" + firstName + "'")
-        .add("\n\t" + "lastName='" + lastName + "'")
-        .add("\n\t" + "email='" + email + "'")
-        .add("\n\t" + "customer='" + customer + "'")
-        .toString();
   }
 }
