@@ -2,9 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RoleDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -16,8 +16,8 @@ import javax.persistence.Table;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_role")

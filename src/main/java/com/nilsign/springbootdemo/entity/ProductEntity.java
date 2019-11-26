@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -22,8 +22,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_product")
