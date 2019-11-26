@@ -2,10 +2,10 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -94,12 +94,13 @@ public class OrderEntity extends AbstractEntity {
 
   @Override
   public OrderDto toDto() {
-    return new OrderDto(
-        super.getId(),
-        user.toDto(),
-        invoiceAddress.toDto(),
-        toDtoArrayList(deliveries),
-        toDtoArrayList(products));
+    return OrderDto.builder()
+        .id(super.getId())
+        .user(user.toDto())
+        .invoiceAddress(invoiceAddress.toDto())
+        .deliveries(toDtoArrayList(deliveries))
+        .products(toDtoArrayList(products))
+        .build();
   }
 
   @Override

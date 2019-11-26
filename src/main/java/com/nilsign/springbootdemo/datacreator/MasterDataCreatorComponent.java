@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Optional;
-
 @Slf4j
 @Component
 public class MasterDataCreatorComponent {
@@ -46,14 +45,12 @@ public class MasterDataCreatorComponent {
       entityManager.merge(roleEntity.get());
       EntityArrayList<RoleEntity> roles = new EntityArrayList<>();
       roles.add(roleEntity.get());
-
-      UserEntity userEntity = new UserEntity(
-          GLOBAL_ADMIN_FIRST_NAME,
-          GLOBAL_ADMIN_LAST_NAME,
-          GLOBAL_ADMIN_EMAIL,
-          roles,
-          null);
-      entityManager.persist(userEntity);
+      entityManager.persist(UserEntity.builder()
+          .firstName(GLOBAL_ADMIN_FIRST_NAME)
+          .lastName(GLOBAL_ADMIN_LAST_NAME)
+          .email(GLOBAL_ADMIN_EMAIL)
+          .roles(roles)
+          .build());
     }
   }
 }

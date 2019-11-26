@@ -2,7 +2,7 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.UserEntity;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor
+@Builder
 @Data
 public class UserDto implements AbstractDto {
   private Long id;
@@ -34,13 +34,12 @@ public class UserDto implements AbstractDto {
 
   @Override
   public UserEntity toEntity() {
-    UserEntity entity = new UserEntity(
-        firstName,
-        lastName,
-        email,
-        roles.toEntities(),
-        null);
-    entity.setId(id);
-    return entity;
+    return UserEntity.builder()
+        .id(id)
+        .firstName(firstName)
+        .lastName(lastName)
+        .email(email)
+        .roles(roles.toEntities())
+        .build();
   }
 }

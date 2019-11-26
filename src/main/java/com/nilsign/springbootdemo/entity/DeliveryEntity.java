@@ -1,10 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.DeliveryDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -42,6 +42,9 @@ public class DeliveryEntity extends AbstractEntity {
 
   @Override
   public DeliveryDto toDto() {
-    return new DeliveryDto(super.getId(), deliveryAddress.toDto());
+    return DeliveryDto.builder()
+        .id(super.getId())
+        .deliveryAddress(deliveryAddress.toDto())
+        .build();
   }
 }

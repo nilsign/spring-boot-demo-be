@@ -1,10 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.CustomerDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -49,11 +49,12 @@ public class CustomerEntity extends AbstractEntity {
 
   @Override
   public CustomerDto toDto() {
-    return new CustomerDto(
-        super.getId(),
-        user.toDto(),
-        termsAndConditionsAccepted,
-        postalAddress.toDto());
+    return CustomerDto.builder()
+        .id(super.getId())
+        .user(user.toDto())
+        .termsAndConditionsAccepted(termsAndConditionsAccepted)
+        .postalAddress(postalAddress.toDto())
+        .build();
   }
 
   @Override
