@@ -76,14 +76,20 @@ public class UserEntity extends AbstractEntity {
 
   @Override
   public UserDto toDto() {
-    return new UserDto(super.getId(), toDtos(roles), firstName, lastName, email);
+    return new UserDto(
+        super.getId(),
+        toDtoArrayList(roles),
+        firstName,
+        lastName,
+        email);
   }
 
+  @Override
   public String toString() {
     String appendedRoleNames = roles
         .stream()
         .map(Object::toString)
-        .collect(Collectors.joining(","));
+        .collect(Collectors.joining(", "));
     return new StringJoiner(", ", "\n" + UserEntity.class.getSimpleName() + "[", "\n]")
         .add("\n\t" + "id='" + super.getId() + "'")
         .add("\n\t" + "roles='" + appendedRoleNames)

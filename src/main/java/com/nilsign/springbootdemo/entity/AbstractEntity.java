@@ -22,16 +22,10 @@ public abstract class AbstractEntity {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
-  @Override
-  public abstract String toString();
-
   public abstract <T extends AbstractDto> T toDto();
 
-  protected <T extends AbstractDto> T toDto(AbstractEntity entity) {
-    return entity.toDto();
-  }
-
-  protected <T extends AbstractDto> DtoArrayList<T> toDtos(List<? extends AbstractEntity> entities) {
+  protected <T extends AbstractDto> DtoArrayList<T> toDtoArrayList(
+      List<? extends AbstractEntity> entities) {
     DtoArrayList<T> dtos = new DtoArrayList<>();
     entities.forEach(entity -> dtos.add(entity.toDto()));
     return dtos;

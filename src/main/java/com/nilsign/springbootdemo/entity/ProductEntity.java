@@ -72,7 +72,12 @@ public class ProductEntity extends AbstractEntity {
 
   @Override
   public ProductDto toDto() {
-    return new ProductDto(super.getId(), name, price, toDtos(ratings), toDtos(orders));
+    return new ProductDto(
+        super.getId(),
+        name,
+        price,
+        toDtoArrayList(ratings),
+        toDtoArrayList(orders));
   }
 
   @Override
