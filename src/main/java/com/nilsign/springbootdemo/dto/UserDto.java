@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Data
-public class UserDto implements AbstractDto {
+public class UserDto implements Dto {
   private Long id;
 
   @NotNull

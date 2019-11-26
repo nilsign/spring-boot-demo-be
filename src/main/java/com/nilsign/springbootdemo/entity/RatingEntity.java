@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RatingDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_rating")
-public class RatingEntity extends AbstractEntity {
+public class RatingEntity extends SequencedEntity {
   // Uni-directional many-to-one relation.
   @ManyToOne(
       fetch = FetchType.LAZY,

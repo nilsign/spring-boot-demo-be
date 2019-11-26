@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @Setter
 @Entity
 @Table(name = "tbl_user")
-public class UserEntity extends AbstractEntity {
+public class UserEntity extends SequencedEntity {
   @Column(name = "first_name")
   private String firstName;
 

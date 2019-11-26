@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RoleDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_role")
-public class RoleEntity extends AbstractEntity {
+public class RoleEntity extends SequencedEntity {
   @Column(name = "role_type", nullable = false)
   @Enumerated(EnumType.STRING)
   private RoleType roleType;

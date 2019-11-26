@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.OrderEntity;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Data
-public class OrderDto implements AbstractDto {
+public class OrderDto implements Dto {
   private Long id;
 
   @NotNull

@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.AddressDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_address")
-public class AddressEntity extends AbstractEntity {
+public class AddressEntity extends SequencedEntity {
   @Column(name = "address", nullable = false)
   private String address;
 

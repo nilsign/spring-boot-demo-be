@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.DeliveryDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_delivery")
-public class DeliveryEntity extends AbstractEntity {
+public class DeliveryEntity extends SequencedEntity {
   // Uni-directional delivery address.
   @ManyToOne(
       fetch = FetchType.EAGER,

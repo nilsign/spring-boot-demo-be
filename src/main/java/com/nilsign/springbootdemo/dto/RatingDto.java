@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.RatingEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import javax.validation.constraints.Size;
 
 @Builder
 @Data
-public class RatingDto implements AbstractDto {
+public class RatingDto implements Dto {
   private Long id;
 
   @NotNull
