@@ -2,13 +2,13 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor
+@Builder
 @Data
 public class RoleDto implements AbstractDto {
   private Long id;
@@ -22,10 +22,10 @@ public class RoleDto implements AbstractDto {
 
   @Override
   public RoleEntity toEntity() {
-    RoleEntity entity = new RoleEntity(
-        roleType,
-        roleName);
-    entity.setId(id);
-    return entity;
+    return RoleEntity.builder()
+        .id(id)
+        .roleName(roleName)
+        .roleType(roleType)
+        .build();
   }
 }

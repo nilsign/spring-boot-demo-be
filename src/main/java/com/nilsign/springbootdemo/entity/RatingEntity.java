@@ -1,10 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RatingDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -52,12 +52,13 @@ public class RatingEntity extends AbstractEntity {
 
   @Override
   public RatingDto toDto() {
-    return new RatingDto(
-        super.getId(),
-        user.toDto(),
-        product.toDto(),
-        score,
-        description);
+    return RatingDto.builder()
+        .id(super.getId())
+        .user(user.toDto())
+        .product(product.toDto())
+        .score(score)
+        .description(description)
+        .build();
   }
 
   @Override

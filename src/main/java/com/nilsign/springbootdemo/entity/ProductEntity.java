@@ -3,10 +3,10 @@ package com.nilsign.springbootdemo.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -72,12 +72,13 @@ public class ProductEntity extends AbstractEntity {
 
   @Override
   public ProductDto toDto() {
-    return new ProductDto(
-        super.getId(),
-        name,
-        price,
-        toDtoArrayList(ratings),
-        toDtoArrayList(orders));
+    return ProductDto.builder()
+        .id(super.getId())
+        .name(name)
+        .price(price)
+        .ratings(toDtoArrayList(ratings))
+        .orders(toDtoArrayList(orders))
+        .build();
   }
 
   @Override

@@ -1,10 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RoleDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -29,7 +29,11 @@ public class RoleEntity extends AbstractEntity {
 
   @Override
   public RoleDto toDto() {
-    return new RoleDto(super.getId(), roleType, roleName);
+    return RoleDto.builder()
+        .id(super.getId())
+        .roleName(roleName)
+        .roleType(roleType)
+        .build();
   }
 
   @Override

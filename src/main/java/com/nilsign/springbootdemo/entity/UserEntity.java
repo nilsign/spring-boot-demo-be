@@ -2,10 +2,10 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +21,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -76,12 +76,13 @@ public class UserEntity extends AbstractEntity {
 
   @Override
   public UserDto toDto() {
-    return new UserDto(
-        super.getId(),
-        toDtoArrayList(roles),
-        firstName,
-        lastName,
-        email);
+    return UserDto.builder()
+        .id(super.getId())
+        .roles(toDtoArrayList(roles))
+        .firstName(firstName)
+        .lastName(lastName)
+        .email(email)
+        .build();
   }
 
   @Override

@@ -2,7 +2,7 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.ProductEntity;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-@AllArgsConstructor
+@Builder
 @Data
 public class ProductDto implements AbstractDto {
   private Long id;
@@ -31,12 +31,12 @@ public class ProductDto implements AbstractDto {
 
   @Override
   public ProductEntity toEntity() {
-    ProductEntity entity = new ProductEntity(
-        name,
-        price,
-        ratings.toEntities(),
-        orders.toEntities());
-    entity.setId(id);
-    return entity;
+    return ProductEntity.builder()
+        .id(id)
+        .name(name)
+        .price(price)
+        .ratings(ratings.toEntities())
+        .orders(orders.toEntities())
+        .build();
   }
 }

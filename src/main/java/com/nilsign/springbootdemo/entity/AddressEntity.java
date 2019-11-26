@@ -1,10 +1,10 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.AddressDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,7 @@ import java.util.StringJoiner;
 //  fields. If yes, replace all to string methods by this using the annotation below.
 // @ToString(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -35,7 +35,13 @@ public class AddressEntity extends AbstractEntity {
 
   @Override
   public AddressDto toDto() {
-    return new AddressDto(super.getId(), address, city, zip, country);
+    return AddressDto.builder()
+        .id(super.getId())
+        .address(address)
+        .city(city)
+        .zip(zip)
+        .country(country)
+        .build();
   }
 
   @Override

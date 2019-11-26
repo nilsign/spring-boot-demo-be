@@ -1,14 +1,14 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.entity.RatingEntity;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@AllArgsConstructor
+@Builder
 @Data
 public class RatingDto implements AbstractDto {
   private Long id;
@@ -27,12 +27,12 @@ public class RatingDto implements AbstractDto {
 
   @Override
   public RatingEntity toEntity() {
-    RatingEntity entity = new RatingEntity(
-        user.toEntity(),
-        product.toEntity(),
-        score,
-        description);
-    entity.setId(id);
-    return entity;
+    return RatingEntity.builder()
+        .id(id)
+        .user(user.toEntity())
+        .product(product.toEntity())
+        .score(score)
+        .description(description)
+        .build();
   }
 }
