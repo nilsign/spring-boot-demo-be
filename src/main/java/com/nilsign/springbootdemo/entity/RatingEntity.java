@@ -5,6 +5,7 @@ import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
@@ -14,12 +15,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.StringJoiner;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_rating")
 public class RatingEntity extends SequencedEntity {
@@ -60,16 +61,5 @@ public class RatingEntity extends SequencedEntity {
         .score(score)
         .description(description)
         .build();
-  }
-
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", "\n" + RatingEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\t" + "id=" + super.getId())
-        .add("\n\t" + "user=" + user)
-        .add("\n\t" + "product=" + product)
-        .add("\n\t" + "score=" + score)
-        .add("\n\t" + "description='" + description + "'")
-        .toString();
   }
 }

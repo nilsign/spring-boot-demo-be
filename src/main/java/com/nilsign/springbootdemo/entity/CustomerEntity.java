@@ -5,6 +5,7 @@ import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
@@ -14,12 +15,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.StringJoiner;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_customer")
 public class CustomerEntity extends SequencedEntity {
@@ -56,15 +57,5 @@ public class CustomerEntity extends SequencedEntity {
         .termsAndConditionsAccepted(termsAndConditionsAccepted)
         .postalAddress(postalAddress.toDto())
         .build();
-  }
-
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", "\n" + CustomerEntity.class.getSimpleName() + "[", "\n]")
-        .add("\n\t" + "id=" + super.getId())
-        .add("\n\t" + "user=" + user)
-        .add("\n\t" + "postalAddress=" + postalAddress)
-        .add("\n\t" + "termsAndConditionsAccepted=" + termsAndConditionsAccepted)
-        .toString();
   }
 }
