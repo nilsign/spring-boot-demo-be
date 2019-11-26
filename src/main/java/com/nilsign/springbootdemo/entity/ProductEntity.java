@@ -2,6 +2,7 @@ package com.nilsign.springbootdemo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_product")
-public class ProductEntity extends AbstractEntity {
+public class ProductEntity extends SequencedEntity {
 
   @Column(name = "name", nullable = false)
   private String name;

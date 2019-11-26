@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_order")
-public class OrderEntity extends AbstractEntity {
+public class OrderEntity extends SequencedEntity {
   // Uni-directional many-to-one relation.
   @ManyToOne(
       fetch = FetchType.EAGER,

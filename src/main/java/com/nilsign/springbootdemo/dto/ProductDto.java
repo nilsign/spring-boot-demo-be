@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
+import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.ProductEntity;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 
 @Builder
 @Data
-public class ProductDto implements AbstractDto {
+public class ProductDto implements Dto {
   private Long id;
 
   @NotNull

@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.CustomerDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "tbl_customer")
-public class CustomerEntity extends AbstractEntity {
+public class CustomerEntity extends SequencedEntity {
   // Bi-directional one-to-one relation.
   @OneToOne(
       fetch = FetchType.EAGER,

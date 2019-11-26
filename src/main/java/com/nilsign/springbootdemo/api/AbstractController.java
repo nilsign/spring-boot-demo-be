@@ -1,8 +1,8 @@
 package com.nilsign.springbootdemo.api;
 
-import com.nilsign.springbootdemo.dto.AbstractDto;
+import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
-import com.nilsign.springbootdemo.entity.AbstractEntity;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import com.nilsign.springbootdemo.service.AbstractService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @RestController
-public abstract class AbstractController<T1 extends AbstractDto, T2 extends AbstractEntity, T3> {
+public abstract class AbstractController<T1 extends Dto, T2 extends SequencedEntity, T3> {
   protected abstract AbstractService<T2, T3> getService();
 
   @GetMapping
