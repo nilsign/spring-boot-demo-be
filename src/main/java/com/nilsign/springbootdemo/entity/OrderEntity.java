@@ -19,9 +19,6 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.StringJoiner;
 
-// TODO(nilsheumer): Research what the lombok @Data annotation really does and whether/where it can
-// be used properly.
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

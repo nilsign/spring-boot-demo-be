@@ -3,17 +3,13 @@ package com.nilsign.springbootdemo.dto;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class RoleDto implements AbstractDto {
   private Long id;
 
