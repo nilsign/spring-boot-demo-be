@@ -33,6 +33,9 @@ public class UserDto implements Dto {
   @Email
   private String email;
 
+  private Long customerId;
+  private CustomerDto customer;
+
   @Override
   public UserEntity toEntity() {
     return UserEntity.builder()
@@ -41,6 +44,7 @@ public class UserDto implements Dto {
         .lastName(lastName)
         .email(email)
         .roles(roles.toEntities())
+        .customer(customer.toEntity())
         .build();
   }
 }

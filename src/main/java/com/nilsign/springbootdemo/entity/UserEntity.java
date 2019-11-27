@@ -2,7 +2,6 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,7 @@ public class UserEntity extends SequencedEntity {
 
   // Uni-directional many-to-many relation.
   @ManyToMany(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -68,13 +67,6 @@ public class UserEntity extends SequencedEntity {
           CascadeType.REFRESH})
   private CustomerEntity customer;
 
-  public void addRole(RoleEntity role) {
-    if (roles == null) {
-      roles = new EntityArrayList();
-    }
-    roles.add(role);
-  }
-
   @Override
   public UserDto toDto() {
     return UserDto.builder()
@@ -83,6 +75,7 @@ public class UserEntity extends SequencedEntity {
         .firstName(firstName)
         .lastName(lastName)
         .email(email)
+        .customer(customer.toDto())
         .build();
   }
 }

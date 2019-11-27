@@ -2,7 +2,6 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -79,20 +78,6 @@ public class OrderEntity extends SequencedEntity {
           referencedColumnName = "id",
           nullable = false))
   private List<ProductEntity> products;
-
-  public void addDelivery(DeliveryEntity delivery) {
-    if (deliveries == null) {
-      deliveries = new EntityArrayList<>();
-    }
-    deliveries.add(delivery);
-  }
-
-  public void addProduct(ProductEntity product) {
-    if (products == null) {
-      products = new EntityArrayList<>();
-    }
-    products.add(product);
-  }
 
   @Override
   public OrderDto toDto() {

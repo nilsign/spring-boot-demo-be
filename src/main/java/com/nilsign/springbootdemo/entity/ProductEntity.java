@@ -3,7 +3,6 @@ package com.nilsign.springbootdemo.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -57,20 +56,6 @@ public class ProductEntity extends SequencedEntity {
           CascadeType.REFRESH})
   @JsonBackReference
   private List<OrderEntity> orders;
-
-  public void addRating(RatingEntity rating) {
-    if (ratings == null) {
-      ratings = new EntityArrayList<>();
-    }
-    ratings.add(rating);
-  }
-
-  public void addOrder(OrderEntity order) {
-    if (orders == null) {
-      orders = new EntityArrayList<>();
-    }
-    orders.add(order);
-  }
 
   @Override
   public ProductDto toDto() {

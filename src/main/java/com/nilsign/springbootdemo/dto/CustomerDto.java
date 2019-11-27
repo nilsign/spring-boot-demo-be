@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class CustomerDto implements Dto {
   private Long id;
 
+  // @ToString.Exclude
   @NotNull
   private UserDto user;
 

@@ -25,6 +25,7 @@ import javax.persistence.Table;
 @Table(name = "tbl_customer")
 public class CustomerEntity extends SequencedEntity {
   // Bi-directional one-to-one relation.
+  @ToString.Exclude
   @OneToOne(
       fetch = FetchType.EAGER,
       cascade = {
