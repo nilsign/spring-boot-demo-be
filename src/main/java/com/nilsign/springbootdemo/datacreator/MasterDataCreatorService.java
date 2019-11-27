@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 public class MasterDataCreatorService {
   private static final String GLOBAL_ADMIN_FIRST_NAME = "Nils";
   private static final String GLOBAL_ADMIN_LAST_NAME = "Heumer";

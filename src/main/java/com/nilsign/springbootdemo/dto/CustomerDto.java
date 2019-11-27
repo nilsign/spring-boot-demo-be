@@ -4,6 +4,7 @@ import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class CustomerDto implements Dto {
   private Long id;
 
-  // @ToString.Exclude
+  @ToString.Exclude
   @NotNull
   private UserDto user;
 

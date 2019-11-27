@@ -33,7 +33,6 @@ public class UserDto implements Dto {
   @Email
   private String email;
 
-  private Long customerId;
   private CustomerDto customer;
 
   @Override
