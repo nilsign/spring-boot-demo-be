@@ -75,8 +75,10 @@ public class DevDataCreatorService {
     log.warn("Customer.USER: " + customers.get(0).getUser());
     log.warn("User: " + user.get());
     log.warn("User.CUSTOMER: " + user.get().getCustomer());
-//    log.warn("UserDto: " + user.get().toDto());
-//    log.warn("CustomerDto: " + customers.get(0).toDto());
-//    UserDto.builder().
+    // TODO(nilsheumer): Fix circular dependencies and reintroduce for testing. Once tested, delete
+    // complete function.
+    // log.warn("UserDto: " + user.get().toDto());
+    // log.warn("CustomerDto: " + customers.get(0).toDto());
+    // UserDto.builder().
   }
 }
