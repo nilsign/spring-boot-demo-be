@@ -25,7 +25,9 @@ public class UserDtoService extends DtoService<UserDto, UserEntity, Long> {
   protected UserEntity toEntity(UserDto userDto) {
     return UserEntity.create(
         userDto,
-        customerEntityService.findById(userDto.getCustomerId()).get());
+        userDto.getCustomerId() == null
+            ? null
+            : customerEntityService.findById(userDto.getCustomerId()).get());
   }
 
   @Override
