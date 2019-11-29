@@ -37,7 +37,7 @@ public class UserDto implements Dto {
   @NotEmpty
   private List<RoleDto> roles;
 
-  // Bi-directional cyclic dependency, so use an id here instead of the actual CustomerDto.
+  // Bi-directional one-to-one dependency, so use an id here instead of the actual CustomerDto.
   private Long customerId;
 
   public static UserDto create(UserEntity userEntity) {

@@ -13,7 +13,7 @@ public class CustomerDto implements Dto {
 
   private Long id;
 
-  // Bi-directional cyclic dependency.
+  // Bi-directional one-to-one dependency.
   @NotNull
   private UserDto user;
 
