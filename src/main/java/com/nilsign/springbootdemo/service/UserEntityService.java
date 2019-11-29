@@ -2,13 +2,15 @@ package com.nilsign.springbootdemo.service;
 
 import com.nilsign.springbootdemo.entity.UserEntity;
 import com.nilsign.springbootdemo.repository.UserRepository;
+import com.nilsign.springbootdemo.service.base.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService extends AbstractService<UserEntity, Long> {
+public class UserEntityService extends EntityService<UserEntity, Long> {
+
   @Autowired
   private UserRepository userRepository;
 

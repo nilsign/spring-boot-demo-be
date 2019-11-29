@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @SpringBootApplication
 public class SpringBootDemoApplication {
+
   private final EnvironmentProperties environmentProperties;
   private final MasterDataCreatorService masterDataCreator;
   private final DevDataCreatorService devDataCreator;

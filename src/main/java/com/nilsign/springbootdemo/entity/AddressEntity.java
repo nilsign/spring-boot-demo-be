@@ -20,6 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_address")
 public class AddressEntity extends SequencedEntity {
+
   @Column(name = "address", nullable = false)
   private String address;
 
@@ -32,14 +33,13 @@ public class AddressEntity extends SequencedEntity {
   @Column(name = "country", nullable = false)
   private String country;
 
-  @Override
-  public AddressDto toDto() {
-    return AddressDto.builder()
-        .id(super.getId())
-        .address(address)
-        .city(city)
-        .zip(zip)
-        .country(country)
+  public static AddressEntity create(AddressDto addressDto) {
+    return AddressEntity.builder()
+        .id(addressDto.getId())
+        .address(addressDto.getAddress())
+        .zip(addressDto.getZip())
+        .city(addressDto.getCity())
+        .country(addressDto.getCountry())
         .build();
   }
 }

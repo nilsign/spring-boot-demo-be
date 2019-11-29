@@ -4,16 +4,16 @@ import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 @Builder
 @Data
 public class CustomerDto implements Dto {
+
   private Long id;
 
-  @ToString.Exclude
+  // Bi-directional cyclic dependency.
   @NotNull
   private UserDto user;
 
@@ -22,13 +22,12 @@ public class CustomerDto implements Dto {
 
   private AddressDto postalAddress;
 
-  @Override
-  public CustomerEntity toEntity() {
-    return CustomerEntity.builder()
-        .id(id)
-        .user(user.toEntity())
-        .termsAndConditionsAccepted(termsAndConditionsAccepted)
-        .postalAddress(postalAddress.toEntity())
+  public static CustomerDto create(CustomerEntity customerEntity) {
+    return CustomerDto.builder()
+        .id(customerEntity.getId())
+        .user(UserDto.create(customerEntity.getUser()))
+        .termsAndConditionsAccepted(customerEntity.isTermsAndConditionsAccepted())
+        .postalAddress(AddressDto.create(customerEntity.getPostalAddress()))
         .build();
   }
 }

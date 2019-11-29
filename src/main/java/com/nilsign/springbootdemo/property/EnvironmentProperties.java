@@ -14,9 +14,11 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "environment")
 public class EnvironmentProperties {
+
   private static final String DEV = "DEV";
   private static final String QA = "QA";
   private static final String PROD = "PROD";
+
   @Setter
   private String name;
 

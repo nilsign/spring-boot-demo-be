@@ -1,24 +1,29 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
-import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Builder
 @Data
 public class UserDto implements Dto {
+
   private Long id;
 
   @NotNull
-  @NotEmpty
-  private DtoArrayList<RoleDto> roles;
+  @NotBlank
+  @Email
+  private String email;
 
   @NotNull
   @NotBlank
@@ -29,21 +34,25 @@ public class UserDto implements Dto {
   private String lastName;
 
   @NotNull
-  @NotBlank
-  @Email
-  private String email;
+  @NotEmpty
+  private List<RoleDto> roles;
 
-  private CustomerDto customer;
+  // Bi-directional cyclic dependency, so use an id here instead of the actual CustomerDto.
+  private Long customerId;
 
-  @Override
-  public UserEntity toEntity() {
-    return UserEntity.builder()
-        .id(id)
-        .firstName(firstName)
-        .lastName(lastName)
-        .email(email)
-        .roles(roles.toEntities())
-        .customer(customer.toEntity())
+  public static UserDto create(UserEntity userEntity) {
+    return UserDto.builder()
+        .id(userEntity.getId())
+        .email(userEntity.getEmail())
+        .firstName(userEntity.getFirstName())
+        .lastName(userEntity.getLastName())
+        .roles(userEntity.getRoles()
+            .stream()
+            .map(RoleDto::create)
+            .collect(Collectors.toList()))
+        .customerId(userEntity.getCustomer() == null
+            ? null
+            : userEntity.getCustomer().getId())
         .build();
   }
 }

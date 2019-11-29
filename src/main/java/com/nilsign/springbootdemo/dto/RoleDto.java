@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class RoleDto implements Dto {
+
   private Long id;
 
   @NotNull
@@ -21,12 +22,11 @@ public class RoleDto implements Dto {
   @NotBlank
   private String roleName;
 
-  @Override
-  public RoleEntity toEntity() {
-    return RoleEntity.builder()
-        .id(id)
-        .roleName(roleName)
-        .roleType(roleType)
+  public static RoleDto create(RoleEntity roleEntity) {
+    return RoleDto.builder()
+        .id(roleEntity.getId())
+        .roleType(roleEntity.getRoleType())
+        .roleName(roleEntity.getRoleName())
         .build();
   }
 }

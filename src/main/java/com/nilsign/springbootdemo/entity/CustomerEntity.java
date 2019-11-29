@@ -24,15 +24,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_customer")
 public class CustomerEntity extends SequencedEntity {
+
   // Bi-directional one-to-one relation.
-  @ToString.Exclude
-  @OneToOne(
-      fetch = FetchType.EAGER,
-      cascade = {
-          CascadeType.DETACH,
-          CascadeType.MERGE,
-          CascadeType.PERSIST,
-          CascadeType.REFRESH})
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
@@ -41,7 +35,7 @@ public class CustomerEntity extends SequencedEntity {
 
   // Uni-directional one-to-one relation.
   @OneToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -50,13 +44,14 @@ public class CustomerEntity extends SequencedEntity {
   @JoinColumn(name = "postal_address_id")
   private AddressEntity postalAddress;
 
-  @Override
-  public CustomerDto toDto() {
-    return CustomerDto.builder()
-        .id(super.getId())
-        .user(user.toDto())
-        .termsAndConditionsAccepted(termsAndConditionsAccepted)
-        .postalAddress(postalAddress.toDto())
+  public static CustomerEntity create(CustomerDto customerDto) {
+    return CustomerEntity.builder()
+        .user(
+            UserEntity.create(
+                customerDto.getUser(),
+                CustomerEntity.create(customerDto)))
+        .termsAndConditionsAccepted(customerDto.isTermsAndConditionsAccepted())
+        .postalAddress(AddressEntity.create(customerDto.getPostalAddress()))
         .build();
   }
 }

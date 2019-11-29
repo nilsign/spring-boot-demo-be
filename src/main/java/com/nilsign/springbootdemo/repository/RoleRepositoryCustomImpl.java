@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class RoleRepositoryCustomImpl implements RoleRepositoryCustom {
+
   @Autowired
   private EntityManager entityManager;
 

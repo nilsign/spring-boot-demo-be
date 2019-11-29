@@ -1,20 +1,22 @@
 package com.nilsign.springbootdemo.datacreator;
 
+import com.nilsign.springbootdemo.dto.CustomerDto;
+import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.AddressEntity;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
 import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import com.nilsign.springbootdemo.service.CustomerService;
-import com.nilsign.springbootdemo.service.RoleService;
-import com.nilsign.springbootdemo.service.UserService;
+import com.nilsign.springbootdemo.service.CustomerEntityService;
+import com.nilsign.springbootdemo.service.RoleEntityService;
+import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,20 +30,20 @@ public class DevDataCreatorService {
   private EntityManager entityManager;
 
   @Autowired
-  private UserService userService;
+  private UserEntityService userService;
 
   @Autowired
-  private RoleService roleService;
+  private RoleEntityService roleService;
 
   @Autowired
-  private CustomerService customerService;
+  private CustomerEntityService customerService;
 
   @Transactional
   public void createIfNotExist() {
     log.info("Create DEV environment data");
     if (userService.findByEmail(BUYER_1_EMAIL).isEmpty()) {
       Optional<RoleEntity> buyerRole = roleService.findByRoleType(RoleType.BUYER);
-      EntityArrayList<RoleEntity> roles = new EntityArrayList<>();
+      List<RoleEntity> roles = new ArrayList<>();
       roles.add(buyerRole.orElseThrow(
           () -> new RuntimeException("Illegal state. Missing buyer role.")));
       AddressEntity address = AddressEntity.builder()
@@ -75,10 +77,8 @@ public class DevDataCreatorService {
     log.warn("Customer.USER: " + customers.get(0).getUser());
     log.warn("User: " + user.get());
     log.warn("User.CUSTOMER: " + user.get().getCustomer());
-    // TODO(nilsheumer): Fix circular dependencies and reintroduce for testing. Once tested, delete
-    // complete function.
-    // log.warn("UserDto: " + user.get().toDto());
-    // log.warn("CustomerDto: " + customers.get(0).toDto());
-    // UserDto.builder().
+
+     log.warn("UserDto: " + UserDto.create(user.get()));
+     log.warn("CustomerDto: " + CustomerDto.create(customers.get(0)));
   }
 }

@@ -22,6 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_role")
 public class RoleEntity extends SequencedEntity {
+
   @Column(name = "role_type", nullable = false)
   @Enumerated(EnumType.STRING)
   private RoleType roleType;
@@ -29,12 +30,11 @@ public class RoleEntity extends SequencedEntity {
   @Column(name = "role_name", nullable = false)
   private String roleName;
 
-  @Override
-  public RoleDto toDto() {
-    return RoleDto.builder()
-        .id(super.getId())
-        .roleName(roleName)
-        .roleType(roleType)
+  public static RoleEntity create(RoleDto roleDto) {
+    return RoleEntity.builder()
+        .id(roleDto.getId())
+        .roleType(roleDto.getRoleType())
+        .roleName(roleDto.getRoleName())
         .build();
   }
 }

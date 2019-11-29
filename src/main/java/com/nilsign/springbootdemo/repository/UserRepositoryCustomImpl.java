@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
+
   @Autowired
   private EntityManager entityManager;
 
