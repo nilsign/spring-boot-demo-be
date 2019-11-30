@@ -46,10 +46,9 @@ public class CustomerEntity extends SequencedEntity {
 
   public static CustomerEntity create(CustomerDto customerDto) {
     return CustomerEntity.builder()
-        .user(
-            UserEntity.create(
-                customerDto.getUser(),
-                CustomerEntity.create(customerDto)))
+        .user(UserEntity.create(
+            customerDto.getUser(),
+            CustomerEntity.create(customerDto)))
         .termsAndConditionsAccepted(customerDto.isTermsAndConditionsAccepted())
         .postalAddress(AddressEntity.create(customerDto.getPostalAddress()))
         .build();
