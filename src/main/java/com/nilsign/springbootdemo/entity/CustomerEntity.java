@@ -26,7 +26,13 @@ import javax.persistence.Table;
 public class CustomerEntity extends SequencedEntity {
 
   // Bi-directional one-to-one relation.
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(
+      fetch = FetchType.LAZY,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
