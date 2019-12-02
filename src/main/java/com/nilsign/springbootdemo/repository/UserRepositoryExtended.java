@@ -4,7 +4,7 @@ import com.nilsign.springbootdemo.entity.UserEntity;
 
 import java.util.Optional;
 
-public interface UserRepositoryCustom {
+public interface UserRepositoryExtended {
 
   // Note, that the implementation of this function will be automatically generated when this
   // signature is added directly to the UserRepository. There is actually no need to create a

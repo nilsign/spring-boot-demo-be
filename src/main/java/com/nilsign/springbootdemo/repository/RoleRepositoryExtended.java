@@ -5,7 +5,7 @@ import com.nilsign.springbootdemo.entity.RoleType;
 
 import java.util.Optional;
 
-public interface RoleRepositoryCustom {
+public interface RoleRepositoryExtended {
 
   // Note, that the implementation of this function will be automatically generated when this
   // signature is added directly to the UserRepository. There is actually no need to create a

@@ -15,7 +15,7 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
 
   protected abstract T2 toEntity(T1 dto);
 
-  protected  abstract T1 toDto(T2 entity);
+  protected abstract T1 toDto(T2 entity);
 
   public List<T1> findAll() {
     return getEntityService().findAll()
@@ -25,12 +25,15 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
   }
 
   public Optional<T1> findById(T3 id) {
-    return Optional.ofNullable(toDto(getEntityService().findById(id).get()));
+    return Optional.ofNullable(toDto(
+        getEntityService().findById(id)
+            .get()));
   }
 
   public Optional<T1> save(T1 dto) {
-    return Optional.ofNullable(toDto(
-        getEntityService().save(toEntity(dto)).get()));
+    return Optional.of(toDto(
+        getEntityService().save(toEntity(dto))
+            .get()));
   }
 
   public void deleteById(T3 id) {
