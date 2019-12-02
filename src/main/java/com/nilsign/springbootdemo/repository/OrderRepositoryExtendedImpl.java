@@ -19,8 +19,7 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
     // TODO(nilsHeumer): Test, check whether results are as expected.
     return new HashSet<>(entityManager
         .createQuery(
-            "SELECT DISTINCT o FROM OrderEntity o"
-            + " JOIN o.products p WHERE p.id = :productId",
+            "FROM OrderEntity o JOIN o.products p WHERE p.id = :productId",
             OrderEntity.class)
         .setParameter(":productId", productId)
         .getResultList());
