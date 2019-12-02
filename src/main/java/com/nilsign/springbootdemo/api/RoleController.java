@@ -16,7 +16,7 @@ public class RoleController extends Controller<RoleDto, RoleEntity, Long> {
   private RoleDtoService roleDtoService;
 
   @Override
-  protected RoleDtoService getService() {
+  protected RoleDtoService getDtoService() {
     return roleDtoService;
   }
 }

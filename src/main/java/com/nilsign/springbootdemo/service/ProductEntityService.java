@@ -19,7 +19,7 @@ public class ProductEntityService extends EntityService<ProductEntity, Long> {
     return productRepository;
   }
 
-  public Set<ProductEntity> byMultipleIds(Set<Long> productIds) {
-    return productRepository.byMultipleIds(productIds);
+  public Set<ProductEntity> findByOrderId(Long orderId) {
+    return productRepository.findByOrderId(orderId);
   }
 }

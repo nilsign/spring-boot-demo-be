@@ -6,5 +6,8 @@ import java.util.Set;
 
 public interface ProductRepositoryExtended {
 
+  Set<ProductEntity> findByOrderId(Long orderId);
+
   Set<ProductEntity> byMultipleIds(Set<Long> productIds);
+
 }

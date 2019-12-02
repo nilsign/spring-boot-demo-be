@@ -28,19 +28,18 @@ public class ProductDto implements Dto {
   @NotNull
   private List<RatingDto> ratings;
 
-//  @NotNull
-//  private List<OrderDto> orders;
+  @NotNull
+  private List<OrderDto> orders;
 
   public static ProductDto create(ProductEntity productEntity) {
     return ProductDto.builder()
         .id(productEntity.getId())
         .name(productEntity.getName())
         .price(productEntity.getPrice())
-// TODO(nilsheumer): Reintroduce once the entities below are reintroduced.
-//        .orders(productEntity.getOrders()
-//            .stream()
-//            .map(OrderDto::create)
-//            .collect(Collectors.toList()))
+        .orders(productEntity.getOrders()
+            .stream()
+            .map(OrderDto::create)
+            .collect(Collectors.toList()))
         .ratings(productEntity.getRatings()
             .stream()
             .map(RatingDto::create)

@@ -16,7 +16,7 @@ public class ProductController extends Controller<ProductDto, ProductEntity, Lon
   private ProductDtoService productDtoService;
 
   @Override
-  protected ProductDtoService getService() {
+  protected ProductDtoService getDtoService() {
     return productDtoService;
   }
 }

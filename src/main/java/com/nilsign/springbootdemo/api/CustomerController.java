@@ -16,7 +16,7 @@ public class CustomerController extends Controller<CustomerDto, CustomerEntity, 
   private CustomerDtoService customerDtoService;
 
   @Override
-  protected CustomerDtoService getService() {
+  protected CustomerDtoService getDtoService() {
     return customerDtoService;
   }
 }

@@ -16,7 +16,7 @@ public class OrderController extends Controller<OrderDto, OrderEntity, Long> {
   private OrderDtoService orderDtoService;
 
   @Override
-  protected OrderDtoService getService() {
+  protected OrderDtoService getDtoService() {
     return orderDtoService;
   }
 }

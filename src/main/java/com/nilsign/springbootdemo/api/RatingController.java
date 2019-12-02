@@ -16,7 +16,7 @@ public class RatingController extends Controller<RatingDto, RatingEntity, Long> 
   private RatingDtoService ratingDtoService;
 
   @Override
-  protected RatingDtoService getService() {
+  protected RatingDtoService getDtoService() {
     return ratingDtoService;
   }
 }

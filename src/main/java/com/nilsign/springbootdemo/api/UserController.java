@@ -16,7 +16,7 @@ public class UserController extends Controller<UserDto, UserEntity, Long> {
   private UserDtoService userDtoService;
 
   @Override
-  protected UserDtoService getService() {
+  protected UserDtoService getDtoService() {
     return userDtoService;
   }
 }

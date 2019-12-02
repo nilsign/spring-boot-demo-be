@@ -1,7 +1,6 @@
 package com.nilsign.springbootdemo.service;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
-import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.OrderEntity;
 import com.nilsign.springbootdemo.entity.ProductEntity;
 import com.nilsign.springbootdemo.entity.UserEntity;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
@@ -34,11 +32,7 @@ public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
   @Override
   protected OrderEntity toEntity(OrderDto orderDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(orderDto.getUser().getId());
-    Set<Long> productIds = orderDto.getProducts()
-        .stream()
-        .map(ProductDto::getId)
-        .collect(Collectors.toSet());
-    Set<ProductEntity> productEntities = productEntityService.byMultipleIds(productIds);
+    Set<ProductEntity> productEntities = productEntityService.findByOrderId(orderDto.getId());
     return OrderEntity.create(orderDto, userEntity.get(), productEntities);
   }
 

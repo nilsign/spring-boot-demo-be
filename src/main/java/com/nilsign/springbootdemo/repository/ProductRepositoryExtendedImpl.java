@@ -14,10 +14,22 @@ public class ProductRepositoryExtendedImpl implements ProductRepositoryExtended 
   @Autowired
   private EntityManager entityManager;
 
-  public Set<ProductEntity> byMultipleIds(Set<Long> productIds) {
-    return new HashSet<ProductEntity>(entityManager
+  @Override
+  public Set<ProductEntity> findByOrderId(Long orderId) {
+    // TODO(nilsHeumer): Test, check whether results are as expected.
+    return new HashSet<>(entityManager
         .createQuery(
-            "select p from ProductEntity p where p.id in (:ids)",
+            "SELECT DISTINCT p FROM ProductEntity p"
+                + " JOIN p.orders o WHERE o.id = :orderId",
+            ProductEntity.class)
+        .setParameter(":orderId", orderId)
+        .getResultList());
+  }
+
+  public Set<ProductEntity> byMultipleIds(Set<Long> productIds) {
+    return new HashSet<>(entityManager
+        .createQuery(
+            "SELECT p FROM ProductEntity p WHERE p.id IN (:ids)",
             ProductEntity.class)
         .setParameter(":ids", productIds)
         .getResultList());

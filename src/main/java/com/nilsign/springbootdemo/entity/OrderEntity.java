@@ -15,8 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -49,13 +52,13 @@ public class OrderEntity extends SequencedEntity {
   private AddressEntity invoiceAddress;
 
   // Uni-directional one-to-many relation.
-//  @OneToMany(
-//      cascade = {
-//          CascadeType.DETACH,
-//          CascadeType.MERGE,
-//          CascadeType.PERSIST,
-//          CascadeType.REFRESH})
-//  private List<DeliveryEntity> deliveries;
+  @OneToMany(
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  private List<DeliveryEntity> deliveries;
 
   // Bi-directional many-to-many relation.
   @ManyToMany(
@@ -84,10 +87,10 @@ public class OrderEntity extends SequencedEntity {
         .id(orderDto.getId())
         .user(userEntity)
         .invoiceAddress(AddressEntity.create(orderDto.getInvoiceAddress()))
-//        .deliveries(orderDto.getDeliveries()
-//            .stream()
-//            .map(DeliveryEntity::create)
-//            .collect(Collectors.toList()))
+        .deliveries(orderDto.getDeliveries()
+            .stream()
+            .map(DeliveryEntity::create)
+            .collect(Collectors.toList()))
         .products(products)
         .build();
   }

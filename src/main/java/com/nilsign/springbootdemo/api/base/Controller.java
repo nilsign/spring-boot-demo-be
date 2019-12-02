@@ -19,30 +19,30 @@ import java.util.Optional;
 @RestController
 public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3> {
 
-  protected abstract DtoService<T1, T2, T3> getService();
+  protected abstract DtoService<T1, T2, T3> getDtoService();
 
   @GetMapping
   public List<T1> findAll() {
-    return getService().findAll();
+    return getDtoService().findAll();
   }
 
   @GetMapping(path = "{id}")
   public Optional<T1> findById(@NotNull @PathVariable T3 id) {
-    return getService().findById(id);
+    return getDtoService().findById(id);
   }
 
   @PostMapping
   public Optional<T1> insert(@NotNull @Valid @RequestBody T1 dto) {
-    return getService().save(dto);
+    return getDtoService().save(dto);
   }
 
   @PutMapping
   public Optional<T1> update(@NotNull @Valid @RequestBody T1 dto) {
-    return getService().save(dto);
+    return getDtoService().save(dto);
   }
 
   @DeleteMapping(path = "{id}")
   public void deleteById(@NotNull @PathVariable("id") T3 id) {
-    getService().deleteById(id);
+    getDtoService().deleteById(id);
   }
 }

@@ -16,7 +16,7 @@ public class AddressController extends Controller<AddressDto, AddressEntity, Lon
   private AddressDtoService addressDtoService;
 
   @Override
-  protected AddressDtoService getService() {
+  protected AddressDtoService getDtoService() {
     return addressDtoService;
   }
 }

@@ -22,9 +22,9 @@ public class OrderDto implements Dto {
   @NotNull
   private AddressDto invoiceAddress;
 
-//  @NotNull
-//  @NotEmpty
-//  private List<DeliveryDto> deliveries;
+  @NotNull
+  @NotEmpty
+  private List<DeliveryDto> deliveries;
 
   @NotNull
   @NotEmpty
@@ -35,10 +35,10 @@ public class OrderDto implements Dto {
         .id(orderEntity.getId())
         .user(UserDto.create(orderEntity.getUser()))
         .invoiceAddress(AddressDto.create(orderEntity.getInvoiceAddress()))
-//        .deliveries(orderEntity.getDeliveries()
-//            .stream()
-//            .map(DeliveryDto::create)
-//            .collect(Collectors.toList()))
+        .deliveries(orderEntity.getDeliveries()
+            .stream()
+            .map(DeliveryDto::create)
+            .collect(Collectors.toList()))
         .products(orderEntity.getProducts()
             .stream()
             .map(ProductDto::create)

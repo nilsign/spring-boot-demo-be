@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Data;
@@ -11,10 +12,12 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -41,32 +44,27 @@ public class ProductEntity extends SequencedEntity {
           CascadeType.REFRESH})
   private List<RatingEntity> ratings;
 
-// TODO(nilsheumer): Reintroduce once the entities below are reintroduced.
-//  // Bi-directional many-to-many relation.
-//  @ManyToMany(
-//      mappedBy = "products",
-//      cascade = {
-//          CascadeType.DETACH,
-//          CascadeType.MERGE,
-//          CascadeType.PERSIST,
-//          CascadeType.REFRESH})
-//  @JsonBackReference // Move back reference to dto?
-//  private Set<OrderEntity> orders;
+  // Bi-directional many-to-many relation.
+  @ManyToMany(
+      mappedBy = "products",
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  @JsonBackReference // Move back reference to dto?
+  private Set<OrderEntity> orders;
 
   public static ProductEntity create(
       ProductDto productDto,
-      List<RatingEntity> ratings) {
+      List<RatingEntity> ratings,
+      Set<OrderEntity> orders) {
     return ProductEntity.builder()
         .id(productDto.getId())
         .name(productDto.getName())
         .price(productDto.getPrice())
         .ratings(ratings)
-        // TODO(nilsheumer): Find a solution for this problem. Use refresh, or is this loaded lazy
-        //  anyways?
-        // .orders(productDto.getOrders()
-        //     .stream()
-        //     .map(OrderEntity::create)
-        //      .collect(Collectors.toSet()))
+        .orders(orders)
         .build();
   }
 }

@@ -19,7 +19,7 @@ public class UserRepositoryExtendedImpl implements UserRepositoryExtended {
     try {
       return Optional.of(entityManager
           .createQuery(
-              "from UserEntity user where user.email = :email",
+              "FROM UserEntity u WHERE u.email = :email",
               UserEntity.class)
           .setParameter("email", email)
           .getSingleResult());

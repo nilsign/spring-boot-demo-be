@@ -21,7 +21,7 @@ public class RoleRepositoryExtendedImpl implements RoleRepositoryExtended {
     try {
       return Optional.of(entityManager
           .createQuery(
-              "from RoleEntity role where role.roleType = :roleType",
+              "FROM RoleEntity r WHERE r.roleType = :roleType",
               RoleEntity.class)
           .setParameter("roleType", roleType)
           .getSingleResult());
