@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -23,10 +25,9 @@ public class ProductDto implements Dto {
   @Positive
   private BigDecimal price;
 
-// TODO(nilsheumer): Reintroduce once the entities below are reintroduced.
-//  @NotNull
-//  private List<RatingDto> ratings;
-//
+  @NotNull
+  private List<RatingDto> ratings;
+
 //  @NotNull
 //  private List<OrderDto> orders;
 
@@ -40,10 +41,10 @@ public class ProductDto implements Dto {
 //            .stream()
 //            .map(OrderDto::create)
 //            .collect(Collectors.toList()))
-//        .ratings(productEntity.getRatings()
-//            .stream()
-//            .map(RatingDto::create)
-//            .collect(Collectors.toList()))
+        .ratings(productEntity.getRatings()
+            .stream()
+            .map(RatingDto::create)
+            .collect(Collectors.toList()))
         .build();
   }
 }

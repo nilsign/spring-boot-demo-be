@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -28,17 +31,17 @@ public class ProductEntity extends SequencedEntity {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
+  // Bi-directional one-to-many relation.
+  @OneToMany(
+      mappedBy = "product",
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  private List<RatingEntity> ratings;
+
 // TODO(nilsheumer): Reintroduce once the entities below are reintroduced.
-//  // Bi-directional one-to-many relation.
-//  @OneToMany(
-//      mappedBy = "product",
-//      cascade = {
-//          CascadeType.DETACH,
-//          CascadeType.MERGE,
-//          CascadeType.PERSIST,
-//          CascadeType.REFRESH})
-//  private List<RatingEntity> ratings;
-//
 //  // Bi-directional many-to-many relation.
 //  @ManyToMany(
 //      mappedBy = "products",
@@ -50,17 +53,16 @@ public class ProductEntity extends SequencedEntity {
 //  @JsonBackReference // Move back reference to dto?
 //  private Set<OrderEntity> orders;
 
-  public static ProductEntity create(ProductDto productDto) {
+  public static ProductEntity create(
+      ProductDto productDto,
+      List<RatingEntity> ratings) {
     return ProductEntity.builder()
         .id(productDto.getId())
         .name(productDto.getName())
         .price(productDto.getPrice())
+        .ratings(ratings)
         // TODO(nilsheumer): Find a solution for this problem. Use refresh, or is this loaded lazy
         //  anyways?
-        // .ratings(productDto.getRatings()
-        //     .stream()
-        //     .map(RatingEntity::create)
-        //     .collect(Collectors.toList()))
         // .orders(productDto.getOrders()
         //     .stream()
         //     .map(OrderEntity::create)

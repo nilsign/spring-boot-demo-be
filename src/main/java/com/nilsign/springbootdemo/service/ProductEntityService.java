@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductEntityService extends EntityService<ProductEntity, Long> {
+
   @Autowired
   private ProductRepository productRepository;
 

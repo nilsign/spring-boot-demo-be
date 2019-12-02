@@ -26,13 +26,15 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
 
   public Optional<T1> findById(T3 id) {
     return Optional.ofNullable(toDto(
-        getEntityService().findById(id)
+        getEntityService()
+            .findById(id)
             .get()));
   }
 
   public Optional<T1> save(T1 dto) {
     return Optional.of(toDto(
-        getEntityService().save(toEntity(dto))
+        getEntityService()
+            .save(toEntity(dto))
             .get()));
   }
 
