@@ -25,10 +25,11 @@ public class ProductRepositoryExtendedImpl implements ProductRepositoryExtended 
         .getResultList());
   }
 
+  @Override
   public Set<ProductEntity> byMultipleIds(Set<Long> productIds) {
     return new HashSet<>(entityManager
         .createQuery(
-            "SELECT p FROM ProductEntity p WHERE p.id IN (:ids)",
+            "FROM ProductEntity p WHERE p.id IN (:ids)",
             ProductEntity.class)
         .setParameter(":ids", productIds)
         .getResultList());

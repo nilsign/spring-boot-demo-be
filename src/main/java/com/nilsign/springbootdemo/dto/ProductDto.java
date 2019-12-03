@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Builder
@@ -29,7 +30,7 @@ public class ProductDto implements Dto {
   private List<RatingDto> ratings;
 
   @NotNull
-  private List<OrderDto> orders;
+  private Set<OrderDto> orders;
 
   public static ProductDto create(ProductEntity productEntity) {
     return ProductDto.builder()
@@ -39,7 +40,7 @@ public class ProductDto implements Dto {
         .orders(productEntity.getOrders()
             .stream()
             .map(OrderDto::create)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toSet()))
         .ratings(productEntity.getRatings()
             .stream()
             .map(RatingDto::create)

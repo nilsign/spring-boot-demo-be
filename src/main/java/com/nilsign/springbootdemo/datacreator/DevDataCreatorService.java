@@ -68,6 +68,7 @@ public class DevDataCreatorService {
     }
   }
 
+  // TODO(nilsheumer): Remove once not longer needed.
   @Transactional
   public void check() {
     log. warn("CHECKING CROSS DEPENDENCIES...");
@@ -78,7 +79,7 @@ public class DevDataCreatorService {
     log.warn("User: " + user.get());
     log.warn("User.CUSTOMER: " + user.get().getCustomer());
 
-     log.warn("UserDto: " + UserDto.create(user.get()));
-     log.warn("CustomerDto: " + CustomerDto.create(customers.get(0)));
+    log.warn("UserDto: " + UserDto.create(user.get()));
+    log.warn("CustomerDto: " + CustomerDto.create(customers.get(0)));
   }
 }

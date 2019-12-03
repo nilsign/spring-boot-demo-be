@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Builder
@@ -28,7 +29,7 @@ public class OrderDto implements Dto {
 
   @NotNull
   @NotEmpty
-  private List<ProductDto> products;
+  private Set<ProductDto> products;
 
   public static OrderDto create(OrderEntity orderEntity) {
     return OrderDto.builder()
@@ -42,7 +43,7 @@ public class OrderDto implements Dto {
         .products(orderEntity.getProducts()
             .stream()
             .map(ProductDto::create)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toSet()))
         .build();
   }
 }

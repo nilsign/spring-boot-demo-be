@@ -29,7 +29,7 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
   public Set<OrderEntity> byMultipleIds(Set<Long> orderIds) {
     return new HashSet<>(entityManager
         .createQuery(
-            "SELECT o FROM OrderEntity o WHERE o.id IN (:ids)",
+            "FROM OrderEntity o WHERE o.id IN (:ids)",
             OrderEntity.class)
         .setParameter(":ids", orderIds)
         .getResultList());

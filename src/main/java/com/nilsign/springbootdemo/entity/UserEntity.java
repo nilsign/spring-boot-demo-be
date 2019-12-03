@@ -17,7 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -55,7 +55,7 @@ public class UserEntity extends SequencedEntity {
           name = "role_id",
           referencedColumnName = "id",
           nullable = false))
-  private List<RoleEntity> roles;
+  private Set<RoleEntity> roles;
 
   // Bi-directional one-to-one relation.
   @ToString.Exclude
@@ -78,7 +78,7 @@ public class UserEntity extends SequencedEntity {
         .roles(userDto.getRoles()
             .stream()
             .map(RoleEntity::create)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toSet()))
         .customer(customerEntity)
         .build();
   }

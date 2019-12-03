@@ -52,7 +52,8 @@ public class ProductEntity extends SequencedEntity {
           CascadeType.MERGE,
           CascadeType.PERSIST,
           CascadeType.REFRESH})
-  @JsonBackReference // Move back reference to dto?
+  // TODO(nilsheumer): Shouldn't this move to the according dto? Test and move when true.
+  @JsonBackReference
   private Set<OrderEntity> orders;
 
   public static ProductEntity create(
