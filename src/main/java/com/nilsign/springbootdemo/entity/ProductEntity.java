@@ -28,8 +28,11 @@ import java.util.Set;
 @Table(name = "tbl_product")
 public class ProductEntity extends SequencedEntity {
 
-  @Column(name = "name", nullable = false)
-  private String name;
+  @Column(name = "product_number", unique = true, nullable = false)
+  private Integer productNumber;
+
+  @Column(name = "product_name", nullable = false)
+  private String productName;
 
   @Column(name = "price", nullable = false)
   private BigDecimal price;
@@ -62,7 +65,8 @@ public class ProductEntity extends SequencedEntity {
       Set<OrderEntity> orders) {
     return ProductEntity.builder()
         .id(productDto.getId())
-        .name(productDto.getName())
+        .productNumber(productDto.getProductNumber())
+        .productName(productDto.getProductName())
         .price(productDto.getPrice())
         .ratings(ratings)
         .orders(orders)

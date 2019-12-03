@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -42,7 +42,7 @@ public class MasterDataCreatorService {
     Optional<UserEntity> user = userService.findByEmail(GLOBAL_ADMIN_EMAIL);
     if (user.isEmpty()) {
       Optional<RoleEntity> roleEntity = roleService.findByRoleType(RoleType.GLOBALADMIN);
-      List<RoleEntity> roles = new ArrayList<>();
+      Set<RoleEntity> roles = new HashSet<>();
       roles.add(roleEntity.orElseThrow(
           () -> new RuntimeException("Illegal state. Missing global admin role.")));
       entityManager.persist(UserEntity.builder()

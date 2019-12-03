@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -16,13 +17,22 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
 
   @Override
   public Set<OrderEntity> findByProductId(Long productId) {
-    // TODO(nilsHeumer): Test, check whether results are as expected.
-    return new HashSet<>(entityManager
+    // TODO(nilsHeumer): Test, check whether results are as expected, when there order products!
+    if (productId == null) {
+      return new HashSet<>();
+    }
+    List<Object[]> resultList = entityManager
         .createQuery(
-            "FROM OrderEntity o JOIN o.products p WHERE p.id = :productId",
-            OrderEntity.class)
-        .setParameter(":productId", productId)
-        .getResultList());
+            "FROM OrderEntity o JOIN o.products p WHERE p.id = :productId")
+        .setParameter("productId", productId)
+        .getResultList();
+    Set<OrderEntity> orderEntities = new HashSet<>();
+    resultList.forEach((Object[] result) -> {
+      if (result.length > 0) {
+        orderEntities.add((OrderEntity) result[0]);
+      }
+    });
+    return orderEntities;
   }
 
   @Override
@@ -31,7 +41,7 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
         .createQuery(
             "FROM OrderEntity o WHERE o.id IN (:ids)",
             OrderEntity.class)
-        .setParameter(":ids", orderIds)
+        .setParameter("ids", orderIds)
         .getResultList());
   }
 }
