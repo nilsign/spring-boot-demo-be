@@ -53,8 +53,8 @@ public class DevDataCreatorService {
   }
 
   private void createBuyerIfNotExist() {
-    log.info("Create buyer user");
     if (userService.findByEmail(BUYER_1_EMAIL).isEmpty()) {
+      log.info("Create buyer user: " + BUYER_1_EMAIL);
       Optional<RoleEntity> buyerRole = roleService.findByRoleType(RoleType.BUYER);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(
@@ -82,21 +82,30 @@ public class DevDataCreatorService {
   }
 
   private void createProductsIfNotExist() {
-    ProductEntity productEntity1 = ProductEntity.builder()
-        .name("Skateboard - Ride the lightning")
-        .price(new BigDecimal( 199.99))
-        .build();
-    productService.save(productEntity1);
-    ProductEntity productEntity2 = ProductEntity.builder()
-        .name("Video Game - Demolition Derby")
-        .price(new BigDecimal( 25.99))
-        .build();
-    productService.save(productEntity2);
-    ProductEntity productEntity3 = ProductEntity.builder()
-        .name("Book - The art of pranking")
-        .price(new BigDecimal( 11.90))
-        .build();
-    productService.save(productEntity3);
+    if (productService.findByProductNumber(1).isEmpty()) {
+      log.info("Create product 1.");
+      productService.save(ProductEntity.builder()
+          .productNumber(1)
+          .productName("Skateboard - Ride the lightning")
+          .price(new BigDecimal(199.99))
+          .build());
+    }
+    if (productService.findByProductNumber(2).isEmpty()) {
+      log.info("Create product 2.");
+      productService.save(ProductEntity.builder()
+          .productNumber(2)
+          .productName("Video Game - Demolition Derby")
+          .price(new BigDecimal( 25.99))
+          .build());
+    }
+    if (productService.findByProductNumber(3).isEmpty()) {
+      log.info("Create product 3.");
+      productService.save(ProductEntity.builder()
+          .productNumber(3)
+          .productName("Book - The art of pranking")
+          .price(new BigDecimal(11.90))
+          .build());
+    }
   }
 
   // TODO(nilsheumer): Remove once not longer needed.

@@ -50,6 +50,7 @@ CREATE INDEX idx_customer_postal_address_id ON tbl_customer(postal_address_id);
 
 CREATE TABLE IF NOT EXISTS tbl_product (
     id BIGINT CONSTRAINT cstr_product_pk PRIMARY KEY,
+    product_number INTEGER NOT NULL CONSTRAINT cstr_product_unique_number UNIQUE,
     product_name VARCHAR(1024) NOT NULL,
     price NUMERIC NOT NULL
         CONSTRAINT cstr_product_positive_price CHECK (price > 0)

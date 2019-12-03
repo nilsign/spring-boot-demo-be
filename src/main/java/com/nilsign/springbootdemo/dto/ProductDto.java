@@ -2,6 +2,7 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.ProductEntity;
+import jdk.jfr.Unsigned;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,8 +22,12 @@ public class ProductDto implements Dto {
   private Long id;
 
   @NotNull
+  @Unsigned
+  private Integer productNumber;
+
+  @NotNull
   @NotBlank
-  private String name;
+  private String productName;
 
   @NotNull
   @Positive
@@ -37,7 +42,8 @@ public class ProductDto implements Dto {
   public static ProductDto create(ProductEntity productEntity) {
     return ProductDto.builder()
         .id(productEntity.getId())
-        .name(productEntity.getName())
+        .productNumber(productEntity.getProductNumber())
+        .productName(productEntity.getProductName())
         .price(productEntity.getPrice())
         .orders(productEntity.getOrders() == null
             ? new HashSet<>()
