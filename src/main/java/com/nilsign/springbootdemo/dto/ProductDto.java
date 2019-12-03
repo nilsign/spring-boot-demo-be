@@ -2,7 +2,6 @@ package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.ProductEntity;
-import jdk.jfr.Unsigned;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,10 +18,11 @@ import java.util.stream.Collectors;
 @Builder
 @Data
 public class ProductDto implements Dto {
+
   private Long id;
 
   @NotNull
-  @Unsigned
+  @Positive
   private Integer productNumber;
 
   @NotNull
