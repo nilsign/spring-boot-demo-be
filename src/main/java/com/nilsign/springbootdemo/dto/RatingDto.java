@@ -26,14 +26,13 @@ public class RatingDto implements Dto {
   @NotBlank
   private String description;
 
-  @Override
-  public RatingEntity toEntity() {
-    return RatingEntity.builder()
-        .id(id)
-        .user(user.toEntity())
-        .product(product.toEntity())
-        .score(score)
-        .description(description)
+  public static RatingDto create(RatingEntity ratingEntity) {
+    return RatingDto.builder()
+        .id(ratingEntity.getId())
+        .user(UserDto.create(ratingEntity.getUser()))
+        .product(ProductDto.create(ratingEntity.getProduct()))
+        .score(ratingEntity.getScore())
+        .description(ratingEntity.getDescription())
         .build();
   }
 }

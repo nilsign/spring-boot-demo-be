@@ -1,20 +1,22 @@
 package com.nilsign.springbootdemo.api;
 
+import com.nilsign.springbootdemo.api.base.Controller;
 import com.nilsign.springbootdemo.dto.OrderDto;
 import com.nilsign.springbootdemo.entity.OrderEntity;
-import com.nilsign.springbootdemo.service.OrderService;
+import com.nilsign.springbootdemo.service.OrderDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/order")
-public class OrderController extends AbstractController<OrderDto, OrderEntity, Long> {
+public class OrderController extends Controller<OrderDto, OrderEntity, Long> {
+
   @Autowired
-  private OrderService orderService;
+  private OrderDtoService orderDtoService;
 
   @Override
-  protected OrderService getService() {
-    return orderService;
+  protected OrderDtoService getDtoService() {
+    return orderDtoService;
   }
 }

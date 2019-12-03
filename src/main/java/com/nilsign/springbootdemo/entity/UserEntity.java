@@ -2,10 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -18,16 +17,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_user")
 public class UserEntity extends SequencedEntity {
+
   @Column(name = "first_name")
   private String firstName;
 
@@ -39,7 +40,6 @@ public class UserEntity extends SequencedEntity {
 
   // Uni-directional many-to-many relation.
   @ManyToMany(
-      fetch = FetchType.EAGER,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -55,34 +55,31 @@ public class UserEntity extends SequencedEntity {
           name = "role_id",
           referencedColumnName = "id",
           nullable = false))
-  private List<RoleEntity> roles;
+  private Set<RoleEntity> roles;
 
   // Bi-directional one-to-one relation.
+  @ToString.Exclude
   @OneToOne(
       mappedBy = "user",
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
-          CascadeType.DETACH,
-          CascadeType.MERGE,
-          CascadeType.PERSIST,
-          CascadeType.REFRESH})
+        CascadeType.DETACH,
+        CascadeType.MERGE,
+        CascadeType.PERSIST,
+        CascadeType.REFRESH})
   private CustomerEntity customer;
 
-  public void addRole(RoleEntity role) {
-    if (roles == null) {
-      roles = new EntityArrayList();
-    }
-    roles.add(role);
-  }
-
-  @Override
-  public UserDto toDto() {
-    return UserDto.builder()
-        .id(super.getId())
-        .roles(toDtoArrayList(roles))
-        .firstName(firstName)
-        .lastName(lastName)
-        .email(email)
+  public static UserEntity create(UserDto userDto, CustomerEntity customerEntity) {
+    return UserEntity.builder()
+        .id(userDto.getId())
+        .email(userDto.getEmail())
+        .firstName(userDto.getFirstName())
+        .lastName(userDto.getLastName())
+        .roles(userDto.getRoles()
+            .stream()
+            .map(RoleEntity::create)
+            .collect(Collectors.toSet()))
+        .customer(customerEntity)
         .build();
   }
 }

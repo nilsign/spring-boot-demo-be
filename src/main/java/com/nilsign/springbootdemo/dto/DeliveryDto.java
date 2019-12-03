@@ -9,16 +9,16 @@ import lombok.NonNull;
 @Builder
 @Data
 public class DeliveryDto implements Dto {
+
   private Long id;
 
   @NonNull
   private AddressDto deliveryAddress;
 
-  @Override
-  public DeliveryEntity toEntity() {
-    return DeliveryEntity.builder()
-        .id(id)
-        .deliveryAddress(deliveryAddress.toEntity())
+  public static DeliveryDto create(DeliveryEntity deliveryEntity) {
+    return DeliveryDto.builder()
+        .id(deliveryEntity.getId())
+        .deliveryAddress(AddressDto.create(deliveryEntity.getDeliveryAddress()))
         .build();
   }
 }

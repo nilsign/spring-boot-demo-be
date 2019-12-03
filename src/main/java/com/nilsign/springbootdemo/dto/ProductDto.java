@@ -1,7 +1,6 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
-import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.ProductEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -25,19 +27,24 @@ public class ProductDto implements Dto {
   private BigDecimal price;
 
   @NotNull
-  private DtoArrayList<RatingDto> ratings;
+  private List<RatingDto> ratings;
 
   @NotNull
-  private DtoArrayList<OrderDto> orders;
+  private Set<OrderDto> orders;
 
-  @Override
-  public ProductEntity toEntity() {
-    return ProductEntity.builder()
-        .id(id)
-        .name(name)
-        .price(price)
-        .ratings(ratings.toEntities())
-        .orders(orders.toEntities())
+  public static ProductDto create(ProductEntity productEntity) {
+    return ProductDto.builder()
+        .id(productEntity.getId())
+        .name(productEntity.getName())
+        .price(productEntity.getPrice())
+        .orders(productEntity.getOrders()
+            .stream()
+            .map(OrderDto::create)
+            .collect(Collectors.toSet()))
+        .ratings(productEntity.getRatings()
+            .stream()
+            .map(RatingDto::create)
+            .collect(Collectors.toList()))
         .build();
   }
 }

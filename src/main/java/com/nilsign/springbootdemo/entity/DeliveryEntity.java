@@ -2,9 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.DeliveryDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -17,15 +17,16 @@ import javax.persistence.Table;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_delivery")
 public class DeliveryEntity extends SequencedEntity {
+
   // Uni-directional delivery address.
   @ManyToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -34,11 +35,10 @@ public class DeliveryEntity extends SequencedEntity {
   @JoinColumn(name = "delivery_address_id", nullable = false)
   private AddressEntity deliveryAddress;
 
-  @Override
-  public DeliveryDto toDto() {
-    return DeliveryDto.builder()
-        .id(super.getId())
-        .deliveryAddress(deliveryAddress.toDto())
+  public static DeliveryEntity create(DeliveryDto deliveryDto) {
+    return DeliveryEntity.builder()
+        .id(deliveryDto.getId())
+        .deliveryAddress(AddressEntity.create(deliveryDto.getDeliveryAddress()))
         .build();
   }
 }

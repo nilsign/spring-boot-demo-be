@@ -2,9 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.CustomerDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -18,15 +18,16 @@ import javax.persistence.Table;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_customer")
 public class CustomerEntity extends SequencedEntity {
+
   // Bi-directional one-to-one relation.
   @OneToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -40,7 +41,7 @@ public class CustomerEntity extends SequencedEntity {
 
   // Uni-directional one-to-one relation.
   @OneToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -49,13 +50,13 @@ public class CustomerEntity extends SequencedEntity {
   @JoinColumn(name = "postal_address_id")
   private AddressEntity postalAddress;
 
-  @Override
-  public CustomerDto toDto() {
-    return CustomerDto.builder()
-        .id(super.getId())
-        .user(user.toDto())
-        .termsAndConditionsAccepted(termsAndConditionsAccepted)
-        .postalAddress(postalAddress.toDto())
+  public static CustomerEntity create(CustomerDto customerDto) {
+    return CustomerEntity.builder()
+        .user(UserEntity.create(
+            customerDto.getUser(),
+            CustomerEntity.create(customerDto)))
+        .termsAndConditionsAccepted(customerDto.isTermsAndConditionsAccepted())
+        .postalAddress(AddressEntity.create(customerDto.getPostalAddress()))
         .build();
   }
 }

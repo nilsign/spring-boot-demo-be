@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo;
 
-import com.nilsign.springbootdemo.datacreator.DevDataCreatorComponent;
-import com.nilsign.springbootdemo.datacreator.MasterDataCreatorComponent;
+import com.nilsign.springbootdemo.datacreator.DevDataCreatorService;
+import com.nilsign.springbootdemo.datacreator.MasterDataCreatorService;
 import com.nilsign.springbootdemo.property.DataSourceProperties;
 import com.nilsign.springbootdemo.property.EnvironmentProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +13,16 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @SpringBootApplication
 public class SpringBootDemoApplication {
+
   private final EnvironmentProperties environmentProperties;
-  private final MasterDataCreatorComponent masterDataCreator;
-  private final DevDataCreatorComponent devDataCreator;
+  private final MasterDataCreatorService masterDataCreator;
+  private final DevDataCreatorService devDataCreator;
 
   public SpringBootDemoApplication(
       EnvironmentProperties environmentProperties,
       DataSourceProperties dataSourceProperties,
-      MasterDataCreatorComponent masterDataCreator,
-      DevDataCreatorComponent devDataCreator) {
+      MasterDataCreatorService masterDataCreator,
+      DevDataCreatorService devDataCreator) {
     log.info("Environment: " + environmentProperties.getEnvironment());
     log.info("Datasource url: " + dataSourceProperties.getUrl());
     log.info("Datasource user: " + dataSourceProperties.getUserName());
@@ -39,6 +40,7 @@ public class SpringBootDemoApplication {
     masterDataCreator.createIfNotExist();
     if (environmentProperties.isDev()) {
       devDataCreator.createIfNotExist();
+      devDataCreator.check();
     }
   }
 }

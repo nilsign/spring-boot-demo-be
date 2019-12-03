@@ -2,10 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.OrderDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -19,18 +18,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_order")
 public class OrderEntity extends SequencedEntity {
   // Uni-directional many-to-one relation.
   @ManyToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -41,7 +42,7 @@ public class OrderEntity extends SequencedEntity {
 
   // Uni-directional many-to-one relation.
   @ManyToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -52,7 +53,6 @@ public class OrderEntity extends SequencedEntity {
 
   // Uni-directional one-to-many relation.
   @OneToMany(
-      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -62,7 +62,6 @@ public class OrderEntity extends SequencedEntity {
 
   // Bi-directional many-to-many relation.
   @ManyToMany(
-      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -78,30 +77,21 @@ public class OrderEntity extends SequencedEntity {
           name = "product_id",
           referencedColumnName = "id",
           nullable = false))
-  private List<ProductEntity> products;
+  private Set<ProductEntity> products;
 
-  public void addDelivery(DeliveryEntity delivery) {
-    if (deliveries == null) {
-      deliveries = new EntityArrayList<>();
-    }
-    deliveries.add(delivery);
-  }
-
-  public void addProduct(ProductEntity product) {
-    if (products == null) {
-      products = new EntityArrayList<>();
-    }
-    products.add(product);
-  }
-
-  @Override
-  public OrderDto toDto() {
-    return OrderDto.builder()
-        .id(super.getId())
-        .user(user.toDto())
-        .invoiceAddress(invoiceAddress.toDto())
-        .deliveries(toDtoArrayList(deliveries))
-        .products(toDtoArrayList(products))
+  public static OrderEntity create(
+      OrderDto orderDto,
+      UserEntity userEntity,
+      Set<ProductEntity> products) {
+    return OrderEntity.builder()
+        .id(orderDto.getId())
+        .user(userEntity)
+        .invoiceAddress(AddressEntity.create(orderDto.getInvoiceAddress()))
+        .deliveries(orderDto.getDeliveries()
+            .stream()
+            .map(DeliveryEntity::create)
+            .collect(Collectors.toList()))
+        .products(products)
         .build();
   }
 }

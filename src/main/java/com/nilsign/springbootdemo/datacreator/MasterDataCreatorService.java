@@ -3,31 +3,34 @@ package com.nilsign.springbootdemo.datacreator;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
 import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.entity.helper.EntityArrayList;
-import com.nilsign.springbootdemo.service.RoleService;
-import com.nilsign.springbootdemo.service.UserService;
+import com.nilsign.springbootdemo.service.RoleEntityService;
+import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 @Slf4j
-@Component
-public class MasterDataCreatorComponent {
+@Service
+public class MasterDataCreatorService {
+
   private static final String GLOBAL_ADMIN_FIRST_NAME = "Nils";
   private static final String GLOBAL_ADMIN_LAST_NAME = "Heumer";
   private static final String GLOBAL_ADMIN_EMAIL = "nilsign@gmail.com";
 
   @Autowired
-  EntityManager entityManager;
+  private EntityManager entityManager;
 
   @Autowired
-  private UserService userService;
+  private UserEntityService userService;
 
   @Autowired
-  private RoleService roleService;
+  private RoleEntityService roleService;
 
   @Transactional
   public void createIfNotExist() {
@@ -39,12 +42,9 @@ public class MasterDataCreatorComponent {
     Optional<UserEntity> user = userService.findByEmail(GLOBAL_ADMIN_EMAIL);
     if (user.isEmpty()) {
       Optional<RoleEntity> roleEntity = roleService.findByRoleType(RoleType.GLOBALADMIN);
-      if (roleEntity.isEmpty()) {
-        throw new RuntimeException("Illegal state. Missing global admin role.");
-      }
-      entityManager.merge(roleEntity.get());
-      EntityArrayList<RoleEntity> roles = new EntityArrayList<>();
-      roles.add(roleEntity.get());
+      List<RoleEntity> roles = new ArrayList<>();
+      roles.add(roleEntity.orElseThrow(
+          () -> new RuntimeException("Illegal state. Missing global admin role.")));
       entityManager.persist(UserEntity.builder()
           .firstName(GLOBAL_ADMIN_FIRST_NAME)
           .lastName(GLOBAL_ADMIN_LAST_NAME)

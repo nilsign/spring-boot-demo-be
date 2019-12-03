@@ -1,17 +1,20 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
-import com.nilsign.springbootdemo.dto.helper.DtoArrayList;
 import com.nilsign.springbootdemo.entity.OrderEntity;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
 public class OrderDto implements Dto {
+
   private Long id;
 
   @NotNull
@@ -22,20 +25,25 @@ public class OrderDto implements Dto {
 
   @NotNull
   @NotEmpty
-  private DtoArrayList<DeliveryDto> deliveries;
+  private List<DeliveryDto> deliveries;
 
   @NotNull
   @NotEmpty
-  private DtoArrayList<ProductDto> products;
+  private Set<ProductDto> products;
 
-  @Override
-  public OrderEntity toEntity() {
-    return OrderEntity.builder()
-        .id(id)
-        .user(user.toEntity())
-        .invoiceAddress(invoiceAddress.toEntity())
-        .deliveries(deliveries.toEntities())
-        .products(products.toEntities())
+  public static OrderDto create(OrderEntity orderEntity) {
+    return OrderDto.builder()
+        .id(orderEntity.getId())
+        .user(UserDto.create(orderEntity.getUser()))
+        .invoiceAddress(AddressDto.create(orderEntity.getInvoiceAddress()))
+        .deliveries(orderEntity.getDeliveries()
+            .stream()
+            .map(DeliveryDto::create)
+            .collect(Collectors.toList()))
+        .products(orderEntity.getProducts()
+            .stream()
+            .map(ProductDto::create)
+            .collect(Collectors.toSet()))
         .build();
   }
 }

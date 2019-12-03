@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class AddressDto implements Dto {
+
   private Long id;
 
   @NotNull
@@ -29,14 +30,13 @@ public class AddressDto implements Dto {
   @NotBlank
   private String country;
 
-  @Override
-  public AddressEntity toEntity() {
-    return AddressEntity.builder()
-        .id(id)
-        .address(address)
-        .city(city)
-        .zip(zip)
-        .country(country)
+  public static AddressDto create(AddressEntity addressEntity) {
+    return AddressDto.builder()
+        .id(addressEntity.getId())
+        .address(addressEntity.getAddress())
+        .zip(addressEntity.getZip())
+        .city(addressEntity.getCity())
+        .country(addressEntity.getCountry())
         .build();
   }
 }

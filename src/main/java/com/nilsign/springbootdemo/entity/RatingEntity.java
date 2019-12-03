@@ -2,9 +2,9 @@ package com.nilsign.springbootdemo.entity;
 
 import com.nilsign.springbootdemo.dto.RatingDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -18,12 +18,13 @@ import javax.persistence.Table;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_rating")
 public class RatingEntity extends SequencedEntity {
+
   // Uni-directional many-to-one relation.
   @ManyToOne(
       fetch = FetchType.LAZY,
@@ -37,7 +38,7 @@ public class RatingEntity extends SequencedEntity {
 
   // Bi-directional many-to-one relation.
   @ManyToOne(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
@@ -52,14 +53,16 @@ public class RatingEntity extends SequencedEntity {
   @Column(name = "description")
   private String description;
 
-  @Override
-  public RatingDto toDto() {
-    return RatingDto.builder()
-        .id(super.getId())
-        .user(user.toDto())
-        .product(product.toDto())
-        .score(score)
-        .description(description)
+  public static RatingEntity create(
+      RatingDto ratingDto,
+      UserEntity userEntity,
+      ProductEntity productEntity) {
+    return RatingEntity.builder()
+        .id(ratingDto.getId())
+        .user(userEntity)
+        .product(productEntity)
+        .score(ratingDto.getScore())
+        .description(ratingDto.getDescription())
         .build();
   }
 }
