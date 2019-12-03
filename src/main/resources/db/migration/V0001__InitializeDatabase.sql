@@ -58,15 +58,21 @@ CREATE TABLE IF NOT EXISTS tbl_product (
 CREATE TABLE IF NOT EXISTS tbl_rating (
     id BIGINT CONSTRAINT cstr_rating_pk PRIMARY KEY,
     user_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
     score REAL CONSTRAINT cstr_rating_score_within_range
         CHECK (score = null OR score >= 0 AND score <= 5),
     description VARCHAR(2048),
     CONSTRAINT cstr_rating_user_fk FOREIGN KEY(user_id)
         REFERENCES tbl_user(id)
         ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cstr_rating_product_fk FOREIGN KEY(product_id)
+        REFERENCES tbl_product(id)
+        ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 CREATE INDEX idx_rating_user_id ON tbl_rating(user_id);
+CREATE INDEX idx_rating_product_id ON tbl_rating(product_id);
 
 CREATE TABLE IF NOT EXISTS tbl_order (
     id BIGINT CONSTRAINT cstr_order_pk PRIMARY KEY,

@@ -28,7 +28,7 @@ import java.util.Set;
 @Table(name = "tbl_product")
 public class ProductEntity extends SequencedEntity {
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "product_name", nullable = false)
   private String name;
 
   @Column(name = "price", nullable = false)

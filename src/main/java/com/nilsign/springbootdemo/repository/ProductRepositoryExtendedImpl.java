@@ -21,7 +21,7 @@ public class ProductRepositoryExtendedImpl implements ProductRepositoryExtended 
         .createQuery(
             "FROM ProductEntity p JOIN p.orders o WHERE o.id = :orderId",
             ProductEntity.class)
-        .setParameter(":orderId", orderId)
+        .setParameter("orderId", orderId)
         .getResultList());
   }
 
@@ -31,7 +31,7 @@ public class ProductRepositoryExtendedImpl implements ProductRepositoryExtended 
         .createQuery(
             "FROM ProductEntity p WHERE p.id IN (:ids)",
             ProductEntity.class)
-        .setParameter(":ids", productIds)
+        .setParameter("ids", productIds)
         .getResultList());
   }
 }

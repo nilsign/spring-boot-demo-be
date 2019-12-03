@@ -4,10 +4,12 @@ import com.nilsign.springbootdemo.dto.CustomerDto;
 import com.nilsign.springbootdemo.dto.UserDto;
 import com.nilsign.springbootdemo.entity.AddressEntity;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
+import com.nilsign.springbootdemo.entity.ProductEntity;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.entity.RoleType;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import com.nilsign.springbootdemo.service.CustomerEntityService;
+import com.nilsign.springbootdemo.service.ProductEntityService;
 import com.nilsign.springbootdemo.service.RoleEntityService;
 import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +18,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -38,12 +42,21 @@ public class DevDataCreatorService {
   @Autowired
   private CustomerEntityService customerService;
 
+  @Autowired
+  private ProductEntityService productService;
+
   @Transactional
   public void createIfNotExist() {
     log.info("Create DEV environment data");
+    createBuyerIfNotExist();
+    createProductsIfNotExist();
+  }
+
+  private void createBuyerIfNotExist() {
+    log.info("Create buyer user");
     if (userService.findByEmail(BUYER_1_EMAIL).isEmpty()) {
       Optional<RoleEntity> buyerRole = roleService.findByRoleType(RoleType.BUYER);
-      List<RoleEntity> roles = new ArrayList<>();
+      Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(
           () -> new RuntimeException("Illegal state. Missing buyer role.")));
       AddressEntity address = AddressEntity.builder()
@@ -66,6 +79,24 @@ public class DevDataCreatorService {
       customer.setUser(user);
       entityManager.persist(user);
     }
+  }
+
+  private void createProductsIfNotExist() {
+    ProductEntity productEntity1 = ProductEntity.builder()
+        .name("Skateboard - Ride the lightning")
+        .price(new BigDecimal( 199.99))
+        .build();
+    productService.save(productEntity1);
+    ProductEntity productEntity2 = ProductEntity.builder()
+        .name("Video Game - Demolition Derby")
+        .price(new BigDecimal( 25.99))
+        .build();
+    productService.save(productEntity2);
+    ProductEntity productEntity3 = ProductEntity.builder()
+        .name("Book - The art of pranking")
+        .price(new BigDecimal( 11.90))
+        .build();
+    productService.save(productEntity3);
   }
 
   // TODO(nilsheumer): Remove once not longer needed.

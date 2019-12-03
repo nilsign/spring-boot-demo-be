@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,14 +39,18 @@ public class ProductDto implements Dto {
         .id(productEntity.getId())
         .name(productEntity.getName())
         .price(productEntity.getPrice())
-        .orders(productEntity.getOrders()
-            .stream()
-            .map(OrderDto::create)
-            .collect(Collectors.toSet()))
-        .ratings(productEntity.getRatings()
-            .stream()
-            .map(RatingDto::create)
-            .collect(Collectors.toList()))
+        .orders(productEntity.getOrders() == null
+            ? new HashSet<>()
+            : productEntity.getOrders()
+              .stream()
+              .map(OrderDto::create)
+              .collect(Collectors.toSet()))
+        .ratings(productEntity.getRatings() == null
+            ? new ArrayList<>()
+            : productEntity.getRatings()
+              .stream()
+              .map(RatingDto::create)
+              .collect(Collectors.toList()))
         .build();
   }
 }
