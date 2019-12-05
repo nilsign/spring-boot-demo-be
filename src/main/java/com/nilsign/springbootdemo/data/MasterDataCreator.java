@@ -20,7 +20,7 @@ public class MasterDataCreator {
 
   @Transactional
   public void createMasterDataIfNotExist() {
-    log.info("Master data creation...");
+    log.info("Create master data if not existing yet");
     userDataCreator.createGlobalAdminUserIfNotExists(
         GLOBAL_ADMIN_FIRST_NAME,
         GLOBAL_ADMIN_LAST_NAME,

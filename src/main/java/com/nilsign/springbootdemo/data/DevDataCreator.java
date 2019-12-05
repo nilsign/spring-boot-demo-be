@@ -37,7 +37,7 @@ public class DevDataCreator {
 
   @Transactional
   public void createDevDataIfNotExist() {
-    log.info("Create DEV environment data");
+    log.info("Create DEV environment data if not existing yet");
     createUser();
     createProducts();
     createRatings();

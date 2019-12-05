@@ -1,8 +1,8 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
+import com.nilsign.springbootdemo.entity.OrderEntity;
 import com.nilsign.springbootdemo.entity.ProductEntity;
-import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -52,7 +52,7 @@ public class ProductDto implements Dto {
             ? new HashSet<>()
             : productEntity.getOrders()
               .stream()
-              .map(SequencedEntity::getId)
+              .map(OrderEntity::getId)
               .collect(Collectors.toSet()))
         .ratings(productEntity.getRatings() == null
             ? new ArrayList<>()
