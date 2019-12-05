@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo;
 
-import com.nilsign.springbootdemo.datacreator.DevDataCreatorService;
-import com.nilsign.springbootdemo.datacreator.MasterDataCreatorService;
+import com.nilsign.springbootdemo.data.DevDataCreator;
+import com.nilsign.springbootdemo.data.MasterDataCreator;
 import com.nilsign.springbootdemo.property.DataSourceProperties;
 import com.nilsign.springbootdemo.property.EnvironmentProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ import javax.annotation.PostConstruct;
 public class SpringBootDemoApplication {
 
   private final EnvironmentProperties environmentProperties;
-  private final MasterDataCreatorService masterDataCreator;
-  private final DevDataCreatorService devDataCreator;
+  private final MasterDataCreator masterDataCreator;
+  private final DevDataCreator devDataCreator;
 
   public SpringBootDemoApplication(
       EnvironmentProperties environmentProperties,
       DataSourceProperties dataSourceProperties,
-      MasterDataCreatorService masterDataCreator,
-      DevDataCreatorService devDataCreator) {
+      MasterDataCreator masterDataCreator,
+      DevDataCreator devDataCreator) {
     log.info("Environment: " + environmentProperties.getEnvironment());
     log.info("Datasource url: " + dataSourceProperties.getUrl());
     log.info("Datasource user: " + dataSourceProperties.getUserName());
@@ -31,16 +31,15 @@ public class SpringBootDemoApplication {
     this.devDataCreator = devDataCreator;
   }
 
-  public static void main(String[] args) {
-    SpringApplication.run(SpringBootDemoApplication.class, args);
-  }
-
   @PostConstruct
   protected void initializeData() {
-    masterDataCreator.createIfNotExist();
+    masterDataCreator.createMasterDataIfNotExist();
     if (environmentProperties.isDev()) {
-      devDataCreator.createIfNotExist();
-      devDataCreator.check();
+      devDataCreator.createDevDataIfNotExist();
     }
+  }
+
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBootDemoApplication.class, args);
   }
 }

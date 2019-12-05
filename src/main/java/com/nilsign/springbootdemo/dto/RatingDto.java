@@ -17,8 +17,10 @@ public class RatingDto implements Dto {
   @NotNull
   private UserDto user;
 
+  // Bi- directional many-to-one dependency, so use the product id here instead of the actual
+  // ProductDto in order to avoid stack overflows caused by this circular dependency.
   @NotNull
-  private ProductDto product;
+  private Long productId;
 
   @Size(min = 0, max = 5)
   private float score;
@@ -30,7 +32,7 @@ public class RatingDto implements Dto {
     return RatingDto.builder()
         .id(ratingEntity.getId())
         .user(UserDto.create(ratingEntity.getUser()))
-        .product(ProductDto.create(ratingEntity.getProduct()))
+        .productId(ratingEntity.getProduct().getId())
         .score(ratingEntity.getScore())
         .description(ratingEntity.getDescription())
         .build();
