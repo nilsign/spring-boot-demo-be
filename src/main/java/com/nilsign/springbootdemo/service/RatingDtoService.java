@@ -31,7 +31,7 @@ public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> 
   protected RatingEntity toEntity(RatingDto ratingDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(ratingDto.getUser().getId());
     Optional<ProductEntity> productEntity = productEntityService.findById(
-        ratingDto.getProduct().getId());
+        ratingDto.getProductId());
     return RatingEntity.create(ratingDto, userEntity.get(), productEntity.get());
   }
 

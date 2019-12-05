@@ -32,8 +32,19 @@ public class DeliveryEntity extends SequencedEntity {
           CascadeType.MERGE,
           CascadeType.PERSIST,
           CascadeType.REFRESH})
-  @JoinColumn(name = "delivery_address_id", nullable = false)
+  @JoinColumn(name = "address_id", nullable = false)
   private AddressEntity deliveryAddress;
+
+  // Bi-directional many-to-one relation.
+  @ManyToOne(
+      fetch = FetchType.LAZY,
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  @JoinColumn(name = "order_id", nullable = false)
+  private OrderEntity order;
 
   public static DeliveryEntity create(DeliveryDto deliveryDto) {
     return DeliveryEntity.builder()

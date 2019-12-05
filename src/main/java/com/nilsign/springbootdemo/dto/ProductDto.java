@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.dto;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
+import com.nilsign.springbootdemo.entity.OrderEntity;
 import com.nilsign.springbootdemo.entity.ProductEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -36,8 +37,10 @@ public class ProductDto implements Dto {
   @NotNull
   private List<RatingDto> ratings;
 
+  // Bi-directional many-to-many dependency, so use ids here instead of the actual OrderDto in order
+  // to avoid stack overflows caused by this circular dependency.
   @NotNull
-  private Set<OrderDto> orders;
+  private Set<Long> orderIds;
 
   public static ProductDto create(ProductEntity productEntity) {
     return ProductDto.builder()
@@ -45,11 +48,11 @@ public class ProductDto implements Dto {
         .productNumber(productEntity.getProductNumber())
         .productName(productEntity.getProductName())
         .price(productEntity.getPrice())
-        .orders(productEntity.getOrders() == null
+        .orderIds(productEntity.getOrders() == null
             ? new HashSet<>()
             : productEntity.getOrders()
               .stream()
-              .map(OrderDto::create)
+              .map(OrderEntity::getId)
               .collect(Collectors.toSet()))
         .ratings(productEntity.getRatings() == null
             ? new ArrayList<>()

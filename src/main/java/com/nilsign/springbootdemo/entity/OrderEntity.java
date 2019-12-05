@@ -51,8 +51,9 @@ public class OrderEntity extends SequencedEntity {
   @JoinColumn(name = "invoice_address_id", nullable = false)
   private AddressEntity invoiceAddress;
 
-  // Uni-directional one-to-many relation.
+  // Bi-directional one-to-many relation.
   @OneToMany(
+      mappedBy = "order",
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
