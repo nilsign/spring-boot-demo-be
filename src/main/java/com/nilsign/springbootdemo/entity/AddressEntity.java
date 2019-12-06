@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -33,7 +34,7 @@ public class AddressEntity extends SequencedEntity {
   @Column(name = "country", nullable = false)
   private String country;
 
-  public static AddressEntity create(AddressDto addressDto) {
+  public static AddressEntity create(@NotNull AddressDto addressDto) {
     return AddressEntity.builder()
         .id(addressDto.getId())
         .address(addressDto.getAddress())

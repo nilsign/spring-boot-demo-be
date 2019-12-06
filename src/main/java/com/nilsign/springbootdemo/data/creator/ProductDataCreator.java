@@ -14,14 +14,14 @@ import java.math.BigDecimal;
 public final class ProductDataCreator {
 
   @Autowired
-  private ProductEntityService productService;
+  private ProductEntityService productEntityService;
 
   public void createProductIfNotExist(
-      @NotNull @NotBlank @Positive int productNumber,
+      @NotNull @NotBlank @Positive Integer productNumber,
       @NotNull @NotBlank String productName,
       @NotNull @Positive BigDecimal price) {
-    if (productService.findByProductNumber(productNumber).isEmpty()) {
-      productService.save(ProductEntity.builder()
+    if (productEntityService.findByProductNumber(productNumber).isEmpty()) {
+      productEntityService.save(ProductEntity.builder()
           .productNumber(productNumber)
           .productName(productName)
           .price(price)

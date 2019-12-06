@@ -4,6 +4,7 @@ import com.nilsign.springbootdemo.data.creator.OrderDataCreator;
 import com.nilsign.springbootdemo.data.creator.ProductDataCreator;
 import com.nilsign.springbootdemo.data.creator.RatingDataCreator;
 import com.nilsign.springbootdemo.data.creator.UserDataCreator;
+import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ public class DevDataCreator {
   private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
   private static final String BUYER_2_EMAIL = "mad.alistoles@gmail.com";
 
-  private static final int PRODUCT_1_NUMBER = 1;
-  private static final int PRODUCT_2_NUMBER = 2;
-  private static final int PRODUCT_3_NUMBER = 3;
+  private static final Integer PRODUCT_1_NUMBER = 1;
+  private static final Integer PRODUCT_2_NUMBER = 2;
+  private static final Integer PRODUCT_3_NUMBER = 3;
 
   @Autowired
   private UserDataCreator userDataCreator;
@@ -35,17 +36,25 @@ public class DevDataCreator {
   @Autowired
   private OrderDataCreator orderDataCreator;
 
+  @Autowired
+  private UserEntityService userEntityService;
+
   @Transactional
   public void createDevDataIfNotExist() {
-    log.info("Create DEV environment data if not existing yet");
-    createUser();
+    if (userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
+        && userEntityService.findByEmail(BUYER_2_EMAIL).isPresent()) {
+      log.info("DEV data already exists - skip DEV data creation.");
+      return;
+    }
+    log.info("Creating DEV data...");
+    createUsers();
     createProducts();
     createRatings();
-    // TODO(nilsheumer): Reintroduce and fix problems.
-    // createOrders();
+    createOrders();
+    log.info("DEV data creation done.");
   }
 
-  private void createUser() {
+  private void createUsers() {
     userDataCreator.createBuyerUserIfNotExist(
         "Bud",
         "Buymann",
@@ -77,7 +86,7 @@ public class DevDataCreator {
     ratingDataCreator.createRatingIfNotExist(
         BUYER_1_EMAIL, PRODUCT_2_NUMBER, 4.5f, "Good Product!");
     ratingDataCreator.createRatingIfNotExist(
-        BUYER_1_EMAIL, PRODUCT_3_NUMBER, 2.5f, null);
+        BUYER_1_EMAIL, PRODUCT_3_NUMBER, 2.5f);
     ratingDataCreator.createRatingIfNotExist(
         BUYER_2_EMAIL, PRODUCT_3_NUMBER, 1.5f, "Really bad quality.");
   }

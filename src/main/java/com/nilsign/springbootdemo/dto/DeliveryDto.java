@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
+
 @Builder
 @Data
 public class DeliveryDto implements Dto {
@@ -15,7 +17,7 @@ public class DeliveryDto implements Dto {
   @NonNull
   private AddressDto deliveryAddress;
 
-  public static DeliveryDto create(DeliveryEntity deliveryEntity) {
+  public static DeliveryDto create(@NotNull DeliveryEntity deliveryEntity) {
     return DeliveryDto.builder()
         .id(deliveryEntity.getId())
         .deliveryAddress(AddressDto.create(deliveryEntity.getDeliveryAddress()))

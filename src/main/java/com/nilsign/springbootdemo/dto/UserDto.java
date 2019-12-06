@@ -39,7 +39,7 @@ public class UserDto implements Dto {
   // CustomerDto in order to avoid stack overflows caused by this circular dependency.
   private Long customerId;
 
-  public static UserDto create(UserEntity userEntity) {
+  public static UserDto create(@NotNull UserEntity userEntity) {
     return UserDto.builder()
         .id(userEntity.getId())
         .email(userEntity.getEmail())

@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -54,9 +55,9 @@ public class RatingEntity extends SequencedEntity {
   private String description;
 
   public static RatingEntity create(
-      RatingDto ratingDto,
-      UserEntity userEntity,
-      ProductEntity productEntity) {
+      @NotNull RatingDto ratingDto,
+      @NotNull UserEntity userEntity,
+      @NotNull ProductEntity productEntity) {
     return RatingEntity.builder()
         .id(ratingDto.getId())
         .user(userEntity)

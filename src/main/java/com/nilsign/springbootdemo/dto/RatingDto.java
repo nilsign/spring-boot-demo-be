@@ -28,7 +28,7 @@ public class RatingDto implements Dto {
   @NotBlank
   private String description;
 
-  public static RatingDto create(RatingEntity ratingEntity) {
+  public static RatingDto create(@NotNull RatingEntity ratingEntity) {
     return RatingDto.builder()
         .id(ratingEntity.getId())
         .user(UserDto.create(ratingEntity.getUser()))

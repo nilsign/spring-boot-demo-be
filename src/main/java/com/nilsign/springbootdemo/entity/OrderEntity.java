@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,9 +83,9 @@ public class OrderEntity extends SequencedEntity {
   private Set<ProductEntity> products;
 
   public static OrderEntity create(
-      OrderDto orderDto,
-      UserEntity userEntity,
-      Set<ProductEntity> products) {
+      @NotNull OrderDto orderDto,
+      @NotNull UserEntity userEntity,
+      @NotNull @NotEmpty Set<ProductEntity> products) {
     return OrderEntity.builder()
         .id(orderDto.getId())
         .user(userEntity)

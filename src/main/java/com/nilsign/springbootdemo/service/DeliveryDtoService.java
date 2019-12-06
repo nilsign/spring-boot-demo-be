@@ -6,6 +6,8 @@ import com.nilsign.springbootdemo.service.base.DtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class DeliveryDtoService extends DtoService<DeliveryDto, DeliveryEntity, Long> {
 
@@ -18,12 +20,12 @@ public class DeliveryDtoService extends DtoService<DeliveryDto, DeliveryEntity, 
   }
 
   @Override
-  protected DeliveryEntity toEntity(DeliveryDto deliveryDto) {
+  protected DeliveryEntity toEntity(@NotNull DeliveryDto deliveryDto) {
     return DeliveryEntity.create(deliveryDto);
   }
 
   @Override
-  protected DeliveryDto toDto(DeliveryEntity deliveryEntity) {
+  protected DeliveryDto toDto(@NotNull DeliveryEntity deliveryEntity) {
     return DeliveryDto.create(deliveryEntity);
   }
 }

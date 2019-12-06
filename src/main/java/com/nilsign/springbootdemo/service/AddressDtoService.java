@@ -7,6 +7,8 @@ import com.nilsign.springbootdemo.service.base.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class AddressDtoService extends DtoService<AddressDto, AddressEntity, Long> {
 
@@ -19,12 +21,12 @@ public class AddressDtoService extends DtoService<AddressDto, AddressEntity, Lon
   }
 
   @Override
-  protected AddressEntity toEntity(AddressDto dto) {
+  protected AddressEntity toEntity(@NotNull AddressDto dto) {
     return AddressEntity.create(dto);
   }
 
   @Override
-  protected AddressDto toDto(AddressEntity addressDto) {
+  protected AddressDto toDto(@NotNull AddressEntity addressDto) {
     return AddressDto.create(addressDto);
   }
 }

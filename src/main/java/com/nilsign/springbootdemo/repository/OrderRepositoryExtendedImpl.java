@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,11 +19,7 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
   private EntityManager entityManager;
 
   @Override
-  public Set<OrderEntity> findByProductId(Long productId) {
-    // TODO(nilsHeumer): Test, check whether results are as expected, when there order products!
-    if (productId == null) {
-      return new HashSet<>();
-    }
+  public Set<OrderEntity> findByProductId(@NotNull @Positive Long productId) {
     List<Object[]> resultList = entityManager
         .createQuery(
             "FROM OrderEntity o JOIN o.products p WHERE p.id = :productId")
@@ -36,7 +35,7 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
   }
 
   @Override
-  public Set<OrderEntity> byMultipleIds(Set<Long> orderIds) {
+  public Set<OrderEntity> byMultipleIds(@NotNull @NotEmpty Set<Long> orderIds) {
     return new HashSet<>(entityManager
         .createQuery(
             "FROM OrderEntity o WHERE o.id IN (:ids)",

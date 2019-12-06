@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "orders")
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_product")
@@ -60,9 +61,9 @@ public class ProductEntity extends SequencedEntity {
   private Set<OrderEntity> orders;
 
   public static ProductEntity create(
-      ProductDto productDto,
-      List<RatingEntity> ratings,
-      Set<OrderEntity> orders) {
+      @NotNull ProductDto productDto,
+      @NotNull List<RatingEntity> ratings,
+      @NotNull Set<OrderEntity> orders) {
     return ProductEntity.builder()
         .id(productDto.getId())
         .productNumber(productDto.getProductNumber())

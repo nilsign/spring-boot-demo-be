@@ -31,7 +31,7 @@ public class OrderDto implements Dto {
   @NotEmpty
   private Set<ProductDto> products;
 
-  public static OrderDto create(OrderEntity orderEntity) {
+  public static OrderDto create(@NotNull OrderEntity orderEntity) {
     return OrderDto.builder()
         .id(orderEntity.getId())
         .user(UserDto.create(orderEntity.getUser()))

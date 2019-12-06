@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -50,7 +51,7 @@ public class CustomerEntity extends SequencedEntity {
   @JoinColumn(name = "postal_address_id")
   private AddressEntity postalAddress;
 
-  public static CustomerEntity create(CustomerDto customerDto) {
+  public static CustomerEntity create(@NotNull CustomerDto customerDto) {
     return CustomerEntity.builder()
         .user(UserEntity.create(
             customerDto.getUser(),

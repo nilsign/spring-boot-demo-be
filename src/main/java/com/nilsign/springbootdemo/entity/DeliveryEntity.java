@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -46,7 +47,7 @@ public class DeliveryEntity extends SequencedEntity {
   @JoinColumn(name = "order_id", nullable = false)
   private OrderEntity order;
 
-  public static DeliveryEntity create(DeliveryDto deliveryDto) {
+  public static DeliveryEntity create(@NotNull DeliveryDto deliveryDto) {
     return DeliveryEntity.builder()
         .id(deliveryDto.getId())
         .deliveryAddress(AddressEntity.create(deliveryDto.getDeliveryAddress()))

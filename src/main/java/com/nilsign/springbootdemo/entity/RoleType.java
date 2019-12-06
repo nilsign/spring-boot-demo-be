@@ -1,5 +1,7 @@
 package com.nilsign.springbootdemo.entity;
 
+import javax.validation.constraints.NotNull;
+
 public enum RoleType {
   GLOBALADMIN("GLOBALADMIN"),
   ADMIN("ADMIN"),
@@ -9,7 +11,7 @@ public enum RoleType {
 
   private final String name;
 
-  RoleType(String name) {
+  RoleType(@NotNull String name) {
     this.name = name;
   }
 }

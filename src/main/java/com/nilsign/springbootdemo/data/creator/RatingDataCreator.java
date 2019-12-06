@@ -15,7 +15,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.Optional;
 
 @Service
 public final class RatingDataCreator {
@@ -44,11 +43,21 @@ public final class RatingDataCreator {
 
   public void createRatingIfNotExist(
       @NotNull @NotBlank @Email String email,
-      @NotNull @Positive int productNumber,
+      @NotNull @Positive Integer productNumber,
       @NotNull @DecimalMin("0.0") @DecimalMax("5.0") float score,
       String description) {
-    Optional<UserEntity> userEntity = userEntityService.findByEmail(email);
-    Optional<ProductEntity> productEntity = productEntityService.findByProductNumber(productNumber);
-    createRatingIfNotExist(userEntity.get(), productEntity.get(), score, description);
+    userEntityService.findByEmail(email).ifPresent(userEntity ->
+        productEntityService.findByProductNumber(productNumber).ifPresent(productEntity -> {
+          if (ratingEntityService.findByProductAndUser(productEntity, userEntity).isEmpty()) {
+            createRatingIfNotExist(userEntity, productEntity, score, description);
+          }
+    }));
+  }
+
+  public void createRatingIfNotExist(
+      @NotNull @NotBlank @Email String email,
+      @NotNull @Positive Integer productNumber,
+      @NotNull @DecimalMin("0.0") @DecimalMax("5.0") float score) {
+    createRatingIfNotExist(email, productNumber, score, null);
   }
 }
