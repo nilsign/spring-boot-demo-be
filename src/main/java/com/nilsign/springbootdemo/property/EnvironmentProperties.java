@@ -5,6 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 // Note, with the code below it is also possible to directly access certain property field without
 // the need to create a property binding class like this.
 // @Value("${spring.profiles.active}")
@@ -43,7 +46,7 @@ public class EnvironmentProperties {
     QA,
     PROD;
 
-    private static EnvironmentType get(String environment) {
+    private static EnvironmentType get(@NotNull @NotBlank String environment) {
       switch (environment) {
         case EnvironmentProperties.DEV:
           return EnvironmentType.DEV;

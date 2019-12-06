@@ -22,7 +22,7 @@ public class RoleDto implements Dto {
   @NotBlank
   private String roleName;
 
-  public static RoleDto create(RoleEntity roleEntity) {
+  public static RoleDto create(@NotNull RoleEntity roleEntity) {
     return RoleDto.builder()
         .id(roleEntity.getId())
         .roleType(roleEntity.getRoleType())

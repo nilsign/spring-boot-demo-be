@@ -42,7 +42,7 @@ public class ProductDto implements Dto {
   @NotNull
   private Set<Long> orderIds;
 
-  public static ProductDto create(ProductEntity productEntity) {
+  public static ProductDto create(@NotNull ProductEntity productEntity) {
     return ProductDto.builder()
         .id(productEntity.getId())
         .productNumber(productEntity.getProductNumber())

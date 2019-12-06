@@ -17,7 +17,7 @@ public final class ProductDataCreator {
   private ProductEntityService productService;
 
   public void createProductIfNotExist(
-      @NotNull @NotBlank @Positive int productNumber,
+      @NotNull @NotBlank @Positive Integer productNumber,
       @NotNull @NotBlank String productName,
       @NotNull @Positive BigDecimal price) {
     if (productService.findByProductNumber(productNumber).isEmpty()) {

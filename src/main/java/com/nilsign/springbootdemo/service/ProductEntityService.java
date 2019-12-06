@@ -6,6 +6,8 @@ import com.nilsign.springbootdemo.service.base.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,11 +22,11 @@ public class ProductEntityService extends EntityService<ProductEntity, Long> {
     return productRepository;
   }
 
-  public Optional<ProductEntity> findByProductNumber(Integer productNumber) {
+  public Optional<ProductEntity> findByProductNumber(@NotNull @Positive Integer productNumber) {
     return productRepository.findByProductNumber(productNumber);
   }
 
-  public Set<ProductEntity> findByOrderId(Long orderId) {
+  public Set<ProductEntity> findByOrderId(@NotNull @Positive Long orderId) {
     return productRepository.findByOrderId(orderId);
   }
 }

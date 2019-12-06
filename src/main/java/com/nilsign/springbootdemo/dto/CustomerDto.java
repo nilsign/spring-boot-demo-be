@@ -22,7 +22,7 @@ public class CustomerDto implements Dto {
 
   private AddressDto postalAddress;
 
-  public static CustomerDto create(CustomerEntity customerEntity) {
+  public static CustomerDto create(@NotNull CustomerEntity customerEntity) {
     return CustomerDto.builder()
         .id(customerEntity.getId())
         .user(UserDto.create(customerEntity.getUser()))

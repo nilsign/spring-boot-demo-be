@@ -8,6 +8,7 @@ import com.nilsign.springbootdemo.service.base.DtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -29,14 +30,14 @@ public class ProductDtoService extends DtoService<ProductDto, ProductEntity, Lon
   }
 
   @Override
-  protected ProductEntity toEntity(ProductDto productDto) {
+  protected ProductEntity toEntity(@NotNull ProductDto productDto) {
     List<RatingEntity> ratings = ratingEntityService.findByProductId(productDto.getId());
     Set<OrderEntity> orders = orderEntityService.findByProductId(productDto.getId());
     return ProductEntity.create(productDto, ratings, orders);
   }
 
   @Override
-  protected ProductDto toDto(ProductEntity productDto) {
+  protected ProductDto toDto(@NotNull ProductEntity productDto) {
     return ProductDto.create(productDto);
   }
 }

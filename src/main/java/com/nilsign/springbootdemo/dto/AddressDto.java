@@ -30,7 +30,7 @@ public class AddressDto implements Dto {
   @NotBlank
   private String country;
 
-  public static AddressDto create(AddressEntity addressEntity) {
+  public static AddressDto create(@NotNull AddressEntity addressEntity) {
     return AddressDto.builder()
         .id(addressEntity.getId())
         .address(addressEntity.getAddress())

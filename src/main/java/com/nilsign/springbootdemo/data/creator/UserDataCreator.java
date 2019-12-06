@@ -65,8 +65,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    Optional<UserEntity> user = userService.findByEmail(email);
-    if (user.isEmpty()) {
+    if (userService.findByEmail(email).isEmpty()) {
       Optional<RoleEntity> roleEntity = roleService.findByRoleType(RoleType.GLOBALADMIN);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(roleEntity.orElseThrow(()

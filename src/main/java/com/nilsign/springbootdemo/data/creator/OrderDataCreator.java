@@ -57,18 +57,21 @@ public final class OrderDataCreator {
   public void createOrder(
       @NotNull @NotBlank @Email String email,
       @NotNull @NotEmpty Set<Integer> productNumbers,
-      @NotNull @Positive @Min(1) int numberOfDeliveries) {
-    Optional<UserEntity> userEntity = userEntityService.findByEmail(email);
+      @NotNull @Positive @Min(1) Integer numberOfDeliveries) {
     Set<ProductEntity> productEntities = new HashSet<>();
     productNumbers.forEach(productNumber -> {
       Optional<ProductEntity> productEntity
           = productEntityService.findByProductNumber(productNumber);
       productEntity.ifPresent(product -> productEntities.add(product));
     });
-    AddressEntity addressEntity = userEntity.get().getCustomer().getPostalAddress();
-    List<DeliveryEntity> deliveryEntities = new ArrayList<>();
-    IntStream.range(1, numberOfDeliveries).forEach(i ->
-        deliveryEntities.add(DeliveryEntity.builder().deliveryAddress(addressEntity).build()));
-    createOrder(userEntity.get(), productEntities, addressEntity, deliveryEntities);
+    userEntityService.findByEmail(email).ifPresent(userEntity -> {
+      if (userEntity.getCustomer() != null) {
+        AddressEntity addressEntity = userEntity.getCustomer().getPostalAddress();
+        List<DeliveryEntity> deliveryEntities = new ArrayList<>();
+        IntStream.range(1, numberOfDeliveries).forEach(i ->
+            deliveryEntities.add(DeliveryEntity.builder().deliveryAddress(addressEntity).build()));
+        createOrder(userEntity, productEntities, addressEntity, deliveryEntities);
+      }
+    });
   }
 }

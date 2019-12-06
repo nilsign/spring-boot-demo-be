@@ -9,6 +9,7 @@ import com.nilsign.springbootdemo.service.base.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,14 +31,14 @@ public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
   }
 
   @Override
-  protected OrderEntity toEntity(OrderDto orderDto) {
+  protected OrderEntity toEntity(@NotNull OrderDto orderDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(orderDto.getUser().getId());
     Set<ProductEntity> productEntities = productEntityService.findByOrderId(orderDto.getId());
     return OrderEntity.create(orderDto, userEntity.get(), productEntities);
   }
 
   @Override
-  protected OrderDto toDto(OrderEntity orderEntity) {
+  protected OrderDto toDto(@NotNull OrderEntity orderEntity) {
     return OrderDto.create(orderEntity);
   }
 }

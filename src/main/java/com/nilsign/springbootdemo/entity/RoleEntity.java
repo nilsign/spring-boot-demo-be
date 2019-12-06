@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -30,7 +31,7 @@ public class RoleEntity extends SequencedEntity {
   @Column(name = "role_name", nullable = false)
   private String roleName;
 
-  public static RoleEntity create(RoleDto roleDto) {
+  public static RoleEntity create(@NotNull RoleDto roleDto) {
     return RoleEntity.builder()
         .id(roleDto.getId())
         .roleType(roleDto.getRoleType())

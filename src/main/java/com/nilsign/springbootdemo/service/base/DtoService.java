@@ -4,6 +4,8 @@ import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,9 +15,9 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
 
   protected abstract EntityService<T2, T3> getEntityService();
 
-  protected abstract T2 toEntity(T1 dto);
+  protected abstract T2 toEntity(@NotNull T1 dto);
 
-  protected abstract T1 toDto(T2 entity);
+  protected abstract T1 toDto(@NotNull T2 entity);
 
   public List<T1> findAll() {
     return getEntityService().findAll()
@@ -24,21 +26,21 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
         .collect(Collectors.toList());
   }
 
-  public Optional<T1> findById(T3 id) {
+  public Optional<T1> findById(@NotNull @Positive T3 id) {
     return Optional.ofNullable(toDto(
         getEntityService()
             .findById(id)
             .get()));
   }
 
-  public Optional<T1> save(T1 dto) {
+  public Optional<T1> save(@NotNull T1 dto) {
     return Optional.of(toDto(
         getEntityService()
             .save(toEntity(dto))
             .get()));
   }
 
-  public void deleteById(T3 id) {
+  public void deleteById(@NotNull @Positive T3 id) {
     getEntityService().deleteById(id);
   }
 }

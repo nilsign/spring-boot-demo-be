@@ -8,6 +8,7 @@ import com.nilsign.springbootdemo.service.base.DtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Service
@@ -28,7 +29,7 @@ public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> 
   }
 
   @Override
-  protected RatingEntity toEntity(RatingDto ratingDto) {
+  protected RatingEntity toEntity(@NotNull RatingDto ratingDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(ratingDto.getUser().getId());
     Optional<ProductEntity> productEntity = productEntityService.findById(
         ratingDto.getProductId());
@@ -36,7 +37,7 @@ public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> 
   }
 
   @Override
-  protected RatingDto toDto(RatingEntity ratingEntity) {
+  protected RatingDto toDto(@NotNull RatingEntity ratingEntity) {
     return RatingDto.create(ratingEntity);
   }
 }

@@ -17,13 +17,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "customer")
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_user")
@@ -69,7 +70,9 @@ public class UserEntity extends SequencedEntity {
         CascadeType.REFRESH})
   private CustomerEntity customer;
 
-  public static UserEntity create(UserDto userDto, CustomerEntity customerEntity) {
+  public static UserEntity create(
+      @NotNull UserDto userDto,
+      @NotNull CustomerEntity customerEntity) {
     return UserEntity.builder()
         .id(userDto.getId())
         .email(userDto.getEmail())
