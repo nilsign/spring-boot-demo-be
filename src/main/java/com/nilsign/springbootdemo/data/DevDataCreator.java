@@ -42,19 +42,19 @@ public class DevDataCreator {
   @Transactional
   public void createDevDataIfNotExist() {
     if (userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
-      && userEntityService.findByEmail(BUYER_2_EMAIL).isPresent()) {
+        && userEntityService.findByEmail(BUYER_2_EMAIL).isPresent()) {
       log.info("DEV data already exists - skip DEV data creation.");
       return;
     }
     log.info("Creating DEV data...");
-    createUser();
+    createUsers();
     createProducts();
     createRatings();
     createOrders();
     log.info("DEV data creation done.");
   }
 
-  private void createUser() {
+  private void createUsers() {
     userDataCreator.createBuyerUserIfNotExist(
         "Bud",
         "Buymann",
@@ -86,7 +86,7 @@ public class DevDataCreator {
     ratingDataCreator.createRatingIfNotExist(
         BUYER_1_EMAIL, PRODUCT_2_NUMBER, 4.5f, "Good Product!");
     ratingDataCreator.createRatingIfNotExist(
-        BUYER_1_EMAIL, PRODUCT_3_NUMBER, 2.5f, null);
+        BUYER_1_EMAIL, PRODUCT_3_NUMBER, 2.5f);
     ratingDataCreator.createRatingIfNotExist(
         BUYER_2_EMAIL, PRODUCT_3_NUMBER, 1.5f, "Really bad quality.");
   }

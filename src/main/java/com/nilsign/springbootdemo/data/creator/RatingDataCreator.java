@@ -53,4 +53,11 @@ public final class RatingDataCreator {
           }
     }));
   }
+
+  public void createRatingIfNotExist(
+      @NotNull @NotBlank @Email String email,
+      @NotNull @Positive Integer productNumber,
+      @NotNull @DecimalMin("0.0") @DecimalMax("5.0") float score) {
+    createRatingIfNotExist(email, productNumber, score, null);
+  }
 }

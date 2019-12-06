@@ -21,10 +21,10 @@ import java.util.Set;
 public final class UserDataCreator {
 
   @Autowired
-  private UserEntityService userService;
+  private UserEntityService userEntityService;
 
   @Autowired
-  private RoleEntityService roleService;
+  private RoleEntityService roleEntityService;
 
   public void createBuyerUserIfNotExist(
       @NotNull @NotBlank String firstName,
@@ -34,8 +34,8 @@ public final class UserDataCreator {
       @NotNull @NotBlank String zip,
       @NotNull @NotBlank String city,
       @NotNull @NotBlank String country) {
-    if (userService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> buyerRole = roleService.findByRoleType(RoleType.BUYER);
+    if (userEntityService.findByEmail(email).isEmpty()) {
+      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(RoleType.BUYER);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing buyer role.")));
@@ -57,7 +57,7 @@ public final class UserDataCreator {
           .customer(customerEntity)
           .build();
       customerEntity.setUser(userEntity);
-      userService.save(userEntity).get();
+      userEntityService.save(userEntity).get();
     }
   }
 
@@ -65,12 +65,12 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    if (userService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> roleEntity = roleService.findByRoleType(RoleType.GLOBALADMIN);
+    if (userEntityService.findByEmail(email).isEmpty()) {
+      Optional<RoleEntity> roleEntity = roleEntityService.findByRoleType(RoleType.GLOBALADMIN);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(roleEntity.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing global admin role.")));
-      userService.save(UserEntity.builder()
+      userEntityService.save(UserEntity.builder()
           .firstName(firstName)
           .lastName(lastName)
           .email(email)
