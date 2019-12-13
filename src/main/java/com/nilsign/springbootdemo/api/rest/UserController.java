@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.api;
+package com.nilsign.springbootdemo.api.rest;
 
 import com.nilsign.springbootdemo.api.base.Controller;
 import com.nilsign.springbootdemo.dto.UserDto;

@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.api;
+package com.nilsign.springbootdemo.api.jsp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

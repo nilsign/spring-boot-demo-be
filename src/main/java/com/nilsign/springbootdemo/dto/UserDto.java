@@ -20,16 +20,18 @@ public class UserDto implements Dto {
 
   @NotNull
   @NotBlank
-  @Email
-  private String email;
-
-  @NotNull
-  @NotBlank
   private String firstName;
 
   @NotNull
   @NotBlank
   private String lastName;
+
+  @NotNull
+  @NotBlank
+  @Email
+  private String email;
+
+  private String password;
 
   @NotNull
   @NotEmpty

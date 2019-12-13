@@ -8,11 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-// Note, with the code below it is also possible to directly access certain property field without
-// the need to create a property binding class like this.
-// @Value("${spring.profiles.active}")
-// private String activeProfile;
-
 @Configuration
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "environment")
