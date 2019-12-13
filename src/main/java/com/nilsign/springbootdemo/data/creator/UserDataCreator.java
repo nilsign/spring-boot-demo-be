@@ -30,6 +30,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email,
+      @NotNull @NotBlank String password,
       @NotNull @NotBlank String address,
       @NotNull @NotBlank String zip,
       @NotNull @NotBlank String city,
@@ -53,6 +54,7 @@ public final class UserDataCreator {
           .firstName(firstName)
           .lastName(lastName)
           .email(email)
+          .password(password)
           .roles(roles)
           .customer(customerEntity)
           .build();
@@ -64,7 +66,8 @@ public final class UserDataCreator {
   public void createGlobalAdminUserIfNotExists(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
-      @NotNull @NotBlank @Email String email) {
+      @NotNull @NotBlank @Email String email,
+      @NotNull @NotBlank String password) {
     if (userEntityService.findByEmail(email).isEmpty()) {
       Optional<RoleEntity> roleEntity = roleEntityService.findByRoleType(RoleType.GLOBALADMIN);
       Set<RoleEntity> roles = new HashSet<>();
@@ -74,6 +77,7 @@ public final class UserDataCreator {
           .firstName(firstName)
           .lastName(lastName)
           .email(email)
+          .password(password)
           .roles(roles)
           .build());
     }

@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS tbl_user (
     id BIGINT CONSTRAINT cstr_user_pk PRIMARY KEY,
     first_name VARCHAR(1024) NOT NULL,
     last_name VARCHAR(1024) NOT NULL,
-    email VARCHAR(320) NOT NULL CONSTRAINT cstr_user_unique_email UNIQUE
+    email VARCHAR(320) NOT NULL CONSTRAINT cstr_user_unique_email UNIQUE,
+    password VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tbl_customer (

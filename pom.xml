@@ -46,6 +46,20 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- Spring boot security -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <!-- Hard coded password encryption -->
+    <!-- TODO(nilsheumer): Remove when this stays unused. -->
+    <dependency>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-spring-boot-starter</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
     <!-- Spring boot dev tools -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
