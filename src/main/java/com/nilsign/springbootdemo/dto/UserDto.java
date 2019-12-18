@@ -31,7 +31,6 @@ public class UserDto implements Dto {
   @Email
   private String email;
 
-  private String password;
 
   @NotNull
   @NotEmpty

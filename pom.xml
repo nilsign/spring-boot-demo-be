@@ -52,12 +52,11 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
-    <!-- Hard coded password encryption -->
-    <!-- TODO(nilsheumer): Remove when this stays unused. -->
+    <!-- Spring Boot Keycloak -->
     <dependency>
-      <groupId>com.github.ulisesbocchio</groupId>
-      <artifactId>jasypt-spring-boot-starter</artifactId>
-      <version>3.0.0</version>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-spring-boot-starter</artifactId>
+      <version>8.0.1</version>
     </dependency>
 
     <!-- Spring boot dev tools -->
@@ -80,7 +79,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Postgres and Flyway support -->
+    <!-- Postgres and Flyway -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>

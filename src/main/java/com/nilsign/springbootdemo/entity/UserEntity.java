@@ -39,9 +39,6 @@ public class UserEntity extends SequencedEntity {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "password")
-  private String password;
-
   // Uni-directional many-to-many relation.
   @ManyToMany(
       cascade = {
@@ -85,7 +82,6 @@ public class UserEntity extends SequencedEntity {
             .stream()
             .map(RoleEntity::create)
             .collect(Collectors.toSet()))
-        .password(userDto.getPassword())
         .customer(customerEntity)
         .build();
   }
