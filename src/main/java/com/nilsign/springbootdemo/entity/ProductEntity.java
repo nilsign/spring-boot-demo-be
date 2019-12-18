@@ -1,55 +1,76 @@
 package com.nilsign.springbootdemo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import com.nilsign.springbootdemo.dto.ProductDto;
+import com.nilsign.springbootdemo.entity.base.SequencedEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
-@ToString
+@NoArgsConstructor
+@SuperBuilder
+@Data
+@EqualsAndHashCode(callSuper = true, exclude = "orders")
+@ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_product")
-public class ProductEntity extends AbstractEntity {
-  @Getter @Setter
-  @Column(name="name", nullable = false)
-  private String name;
+public class ProductEntity extends SequencedEntity {
 
-  @Getter @Setter
-  @Column(name="price", nullable = false)
+  @Column(name = "product_number", unique = true, nullable = false)
+  private Integer productNumber;
+
+  @Column(name = "product_name", nullable = false)
+  private String productName;
+
+  @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  // TODO(nilsheumer): Find out why orders is not displayed in Postmans get response.
-  @Getter @Setter
-  @ManyToMany(
-      // TODO(nilsheumer): Find out if and if a mappedBy is meaningful here.
-      // mappedBy = "products",
-      fetch = FetchType.LAZY,
+  // Bi-directional one-to-many relation.
+  @OneToMany(
+      mappedBy = "product",
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,
           CascadeType.PERSIST,
           CascadeType.REFRESH})
-  @JoinTable(
-      name= "tbl_order_tbl_product",
-      joinColumns = @JoinColumn(
-          name = "product_id",
-          referencedColumnName = "id",
-          nullable = false),
-      inverseJoinColumns = @JoinColumn(
-          name = "order_id",
-          referencedColumnName = "id",
-          nullable = false))
+  private List<RatingEntity> ratings;
+
+  // Bi-directional many-to-many relation.
+  @ManyToMany(
+      mappedBy = "products",
+      cascade = {
+          CascadeType.DETACH,
+          CascadeType.MERGE,
+          CascadeType.PERSIST,
+          CascadeType.REFRESH})
+  // TODO(nilsheumer): Shouldn't this move to the according dto? Test and move when true.
   @JsonBackReference
-  private List<OrderEntity> orders;
+  private Set<OrderEntity> orders;
+
+  public static ProductEntity create(
+      @NotNull ProductDto productDto,
+      @NotNull List<RatingEntity> ratings,
+      @NotNull Set<OrderEntity> orders) {
+    return ProductEntity.builder()
+        .id(productDto.getId())
+        .productNumber(productDto.getProductNumber())
+        .productName(productDto.getProductName())
+        .price(productDto.getPrice())
+        .ratings(ratings)
+        .orders(orders)
+        .build();
+  }
 }
