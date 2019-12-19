@@ -39,7 +39,7 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     super.configure(http);
     // Restrict API access always on controller level. The denyAll will be overridden there.
     http.authorizeRequests()
-        .antMatchers("/api/v1/*")
+        .antMatchers("/api/v1/*", "/home", "/home/*")
         .hasAnyRole("GLOBALADMIN", "ADMIN", "SELLER", "SUPPORT", "BUYER")
         .anyRequest()
         .denyAll();
