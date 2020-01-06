@@ -1,8 +1,7 @@
-Spring Boot OAuth2 with Keycloak
-================================
+Setup an OAuth2 Keycloak Docker Container
+=========================================
 
-
-(A) Setup Keyclock with Docker:
+Setup Keyclock with Docker:
 	
 	1. Get Keycloak Docker image
 
@@ -70,10 +69,9 @@ Spring Boot OAuth2 with Keycloak
 	14. All other users can be created by using the KeyCloak API or the Spring Boot Demo FE.
 
 
-(B) Test: Get Access Token with Postman
+Test: Get Access Token with Postman
 
-	URL: Postman
-	http://localhost:8100/auth/realms/SpringBootDemo/protocol/openid-connect/token
+	POST REQUEST: http://localhost:8100/auth/realms/SpringBootDemo/protocol/openid-connect/token
 
 	BODY: x-www-form-urlencoded
 
