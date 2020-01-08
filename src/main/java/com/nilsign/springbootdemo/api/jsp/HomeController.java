@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 
   @GetMapping
+  // TODO(nilsheumer): Search for RolesAllowed and remove everywhere, or implement properly. Right
+  // now, is has no functionality.
   @RolesAllowed({"GLOBALADMIN", "ADMIN", "SELLER", "SUPPORT", "BUYER"})
   public String showHome() {
     return "home";

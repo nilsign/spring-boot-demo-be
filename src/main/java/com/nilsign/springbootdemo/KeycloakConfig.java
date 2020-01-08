@@ -1,14 +1,15 @@
-package com.nilsign.springbootdemo;
-
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-public class KeycloakConfig {
-
-  @Bean
-  public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
-    return new KeycloakSpringBootConfigResolver();
-  }
-}
+// TODO(nilsheumer): Reintroduce (if still required for authorization) or remove.
+//package com.nilsign.springbootdemo;
+//
+//import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//
+//@Configuration
+//public class KeycloakConfig {
+//
+//  @Bean
+//  public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
+//    return new KeycloakSpringBootConfigResolver();
+//  }
+//}

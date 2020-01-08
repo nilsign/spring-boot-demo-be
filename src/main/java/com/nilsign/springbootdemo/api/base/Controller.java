@@ -23,7 +23,7 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
   protected abstract DtoService<T1, T2, T3> getDtoService();
 
   // TODO(nilsheumer): Find a good way to distinguish role access within the different derived
-  // controllers.
+  // controllers. A custom annotation might be a good solution for this.
   @GetMapping
   @RolesAllowed({"GLOBALADMIN"})
   public List<T1> findAll() {
