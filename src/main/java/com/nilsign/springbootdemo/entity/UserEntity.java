@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "tbl_user")
+// Your UserEntity has to extend org.springframework.security.core.userdetails.User
+// This will also simplify your loadUserByUsername-Method in UserDetailsServiceImpl
 public class UserEntity extends SequencedEntity {
 
   @Column(name = "first_name")

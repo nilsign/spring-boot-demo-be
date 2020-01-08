@@ -30,6 +30,7 @@ public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
     return orderEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected OrderEntity toEntity(@NotNull OrderDto orderDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(orderDto.getUser().getId());

@@ -20,6 +20,7 @@ public class RoleDtoService extends DtoService<RoleDto, RoleEntity, Long> {
     return roleEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected RoleEntity toEntity(@NotNull RoleDto roleDto) {
     return RoleEntity.create(roleDto);

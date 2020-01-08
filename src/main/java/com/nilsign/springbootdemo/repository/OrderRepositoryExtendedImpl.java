@@ -18,6 +18,8 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
   @Autowired
   private EntityManager entityManager;
 
+  // Springs JpaRepository supports a large amount of keywords to help you to build your queries ;)
+  // Replace by JpaRepository method -> findByProduct_Id(Long productId)
   @Override
   public Set<OrderEntity> findByProductId(@NotNull @Positive Long productId) {
     List<Object[]> resultList = entityManager
@@ -34,6 +36,8 @@ public class OrderRepositoryExtendedImpl implements OrderRepositoryExtended {
     return orderEntities;
   }
 
+  // Springs JpaRepository supports a large amount of keywords to help you to build your queries ;)
+  // Replace by JpaRepository method -> findByIdIn(Set<Long> ids)
   @Override
   public Set<OrderEntity> byMultipleIds(@NotNull @NotEmpty Set<Long> orderIds) {
     return new HashSet<>(entityManager

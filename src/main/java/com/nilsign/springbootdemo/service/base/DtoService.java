@@ -33,6 +33,7 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
             .get()));
   }
 
+  // You're making a distinction in your controllers between save and update.
   public Optional<T1> save(@NotNull T1 dto) {
     return Optional.of(toDto(
         getEntityService()

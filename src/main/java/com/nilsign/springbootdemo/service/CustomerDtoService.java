@@ -20,6 +20,7 @@ public class CustomerDtoService extends DtoService<CustomerDto, CustomerEntity, 
     return customerEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected CustomerEntity toEntity(@NotNull CustomerDto customerEntity) {
     return CustomerEntity.create(customerEntity);

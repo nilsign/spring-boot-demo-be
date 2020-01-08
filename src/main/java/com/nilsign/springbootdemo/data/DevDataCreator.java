@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @Slf4j
+// This is not a service. This should be a @Configuration and should be restricted to a certain profile only -> @Profile("dev")
 @Service
 public class DevDataCreator {
 

@@ -28,6 +28,7 @@ public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> 
     return ratingEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected RatingEntity toEntity(@NotNull RatingDto ratingDto) {
     Optional<UserEntity> userEntity = userEntityService.findById(ratingDto.getUser().getId());

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Slf4j
+// This is not a service. This should be a @Configuration
 @Service
 public class MasterDataCreator {
 

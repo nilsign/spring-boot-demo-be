@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+// Spring Boot supports out-of-the-box solutions for this. Don't reinvent the wheel -> See comment in application start class and remove this
 @Configuration
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "environment")

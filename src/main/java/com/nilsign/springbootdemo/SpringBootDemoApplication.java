@@ -23,6 +23,7 @@ public class SpringBootDemoApplication {
       DataSourceProperties dataSourceProperties,
       MasterDataCreator masterDataCreator,
       DevDataCreator devDataCreator) {
+    // Spring Boot logs all of these infos by default. Remove superfluous logging here
     log.info("Environment: " + environmentProperties.getEnvironment());
     log.info("Datasource url: " + dataSourceProperties.getUrl());
     log.info("Datasource user: " + dataSourceProperties.getUserName());
@@ -31,6 +32,8 @@ public class SpringBootDemoApplication {
     this.devDataCreator = devDataCreator;
   }
 
+  // 1. Move PostConstruct to the defined Configurations (See comment there)
+  // 2. You don't have to check your profiles here in a complicated way. Just use the Spring Boot Profile annotation
   @PostConstruct
   protected void initializeData() {
     masterDataCreator.createMasterDataIfNotExist();

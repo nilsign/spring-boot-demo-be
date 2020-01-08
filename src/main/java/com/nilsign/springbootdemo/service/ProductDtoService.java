@@ -29,6 +29,7 @@ public class ProductDtoService extends DtoService<ProductDto, ProductEntity, Lon
     return productEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected ProductEntity toEntity(@NotNull ProductDto productDto) {
     List<RatingEntity> ratings = ratingEntityService.findByProductId(productDto.getId());

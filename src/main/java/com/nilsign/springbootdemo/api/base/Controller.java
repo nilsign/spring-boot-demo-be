@@ -31,6 +31,7 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
     return getDtoService().findById(id);
   }
 
+  // Don't use database terms in your controllers. Rename methdo to 'save'.
   @PostMapping
   public Optional<T1> insert(@NotNull @Valid @RequestBody T1 dto) {
     return getDtoService().save(dto);

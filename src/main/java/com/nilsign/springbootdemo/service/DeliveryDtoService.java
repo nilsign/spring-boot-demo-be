@@ -19,6 +19,7 @@ public class DeliveryDtoService extends DtoService<DeliveryDto, DeliveryEntity, 
     return deliveryEntityService;
   }
 
+  // Here as well. See comment at AddressDtoService
   @Override
   protected DeliveryEntity toEntity(@NotNull DeliveryDto deliveryDto) {
     return DeliveryEntity.create(deliveryDto);
