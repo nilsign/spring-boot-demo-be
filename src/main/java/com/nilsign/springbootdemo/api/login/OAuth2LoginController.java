@@ -33,57 +33,24 @@ public class OAuth2LoginController {
   public ModelAndView index(Model model, OAuth2AuthenticationToken authentication) {
     OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
 
-    log.info("ClientId: " + authorizedClient.getClientRegistration().getClientId());
-    log.info("ClientName: " + authorizedClient.getClientRegistration().getClientName());
-    log.info("ClientSecret: " + authorizedClient.getClientRegistration().getClientSecret());
-    log.info("ClientScopes: " + authorizedClient.getClientRegistration().getScopes());
-    log.info("ClientAuthorizationGrandType: "
-        + authorizedClient.getClientRegistration().getAuthorizationGrantType().getValue());
-    log.info("ClientRedirectUriTemplate: "
-        + authorizedClient.getClientRegistration().getRedirectUriTemplate());
-    log.info("ClientRegistrationId: "
-        + authorizedClient.getClientRegistration().getRegistrationId());
-    log.info("ClientProviderAuthorizationUri: "
-        + authorizedClient.getClientRegistration().getProviderDetails().getAuthorizationUri());
-    log.info("ClientProviderJwkSetUri: "
-        + authorizedClient.getClientRegistration().getProviderDetails().getJwkSetUri());
-    log.info("ClientProviderTokenUri: "
-        + authorizedClient.getClientRegistration().getProviderDetails().getTokenUri());
-    log.info("ClientProviderUserInfoEndpoint: "
-        + authorizedClient.getClientRegistration().getProviderDetails().getUserInfoEndpoint());
-
+    // TODO(nilsheumer): Remove once no longer required for debugging purposes.
     log.info("AccessTokenValue: " + authorizedClient.getAccessToken().getTokenValue());
-    log.info("AccessTokenType: " + authorizedClient.getAccessToken().getTokenType().getValue());
-    log.info("AccessTokenIssued: " + authorizedClient.getAccessToken().getIssuedAt());
-    log.info("AccessTokenExpires: " + authorizedClient.getAccessToken().getExpiresAt());
-    log.info("AccessTokenScopes: " + authorizedClient.getAccessToken().getScopes());
-    log.info("RefreshTokenValue: " + authorizedClient.getRefreshToken().getTokenValue());
-    log.info("RefreshTokenIssued: " + authorizedClient.getRefreshToken().getIssuedAt());
-    log.info("RefreshTokenExpires: " + authorizedClient.getRefreshToken().getExpiresAt());
-
-    log.info("PrincipalName: " + authorizedClient.getPrincipalName());
-    log.info("AuthenticationName: " + authentication.getName());
-
 
     model.addAttribute("userName", authentication.getName());
     model.addAttribute(
         "clientName",
         authorizedClient.getClientRegistration().getClientName());
-
     return new ModelAndView("index", model.asMap());
   }
 
+  // TODO(nilsheumer): Rename to "/user-info"
   @GetMapping("/userinfo")
   public ModelAndView userInfo(Model model, OAuth2AuthenticationToken authentication) {
-
-    log.info("A) Entered: public String userInfo(Model model, OAuth2AuthenticationToken token)");
-
     OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
     Map userAttributes = Collections.emptyMap();
     String userInfoEndpointUri = authorizedClient.getClientRegistration()
         .getProviderDetails().getUserInfoEndpoint().getUri();
     if (!StringUtils.isEmpty(userInfoEndpointUri)) {	// userInfoEndpointUri is optional for OIDC Clients
-
       userAttributes = WebClient.builder()
           .filter(oauth2Credentials(authorizedClient))
           .build()
@@ -94,13 +61,12 @@ public class OAuth2LoginController {
           .block();
     }
     model.addAttribute("userAttributes", userAttributes);
-
-    return new ModelAndView("userinfo", userAttributes);
+    return new ModelAndView("user-info", userAttributes);
   }
 
   @Transactional(readOnly = true)
   public OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {
-
+    // TODO(nilsheumer): Remove once no longer required for debugging purposes.
     authentication.getPrincipal().getAuthorities().forEach(authority ->
           log.warn("AUTHORITY: " + authority.getAuthority()));
 
@@ -116,7 +82,6 @@ public class OAuth2LoginController {
           ClientRequest authorizedRequest = ClientRequest.from(clientRequest)
               .header(HttpHeaders.AUTHORIZATION, accessToken)
               .build();
-
           return Mono.just(authorizedRequest);
         });
   }

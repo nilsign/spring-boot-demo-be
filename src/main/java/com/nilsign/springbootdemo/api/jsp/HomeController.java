@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,15 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 
   @GetMapping
-  // TODO(nilsheumer): Search for RolesAllowed and remove everywhere, or implement properly. Right
-  // now, is has no functionality.
-  // @RolesAllowed({"GLOBALADMIN", "ADMIN", "SELLER", "SUPPORT", "BUYER"})
   public String showHome() {
     return "home";
   }
 
+  @PreAuthorize("isAuthenticated()")
   @GetMapping(path = "/logout")
-  @RolesAllowed({"GLOBALADMIN", "ADMIN", "SELLER", "SUPPORT", "BUYER"})
   public String logout(HttpServletRequest request) throws ServletException {
     request.logout();
     return "redirect:/home";
