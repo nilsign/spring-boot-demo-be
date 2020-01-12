@@ -31,10 +31,10 @@ public class KeycloakOauth2UserService extends OidcUserService {
   private final GrantedAuthoritiesMapper authoritiesMapper;
 
   /**
-   * Extends the {@link OidcUserService#loadUser(OidcUserRequest)} to add authorities provided by
-   * Keycloak via the JWT token as Spring Boot Security 5.2.1 does not automatically sets either the
-   * claims authority roles resources nor the resource server clients authority roles. A hook to
-   * provide custom authorities is unfortunately also missing.
+   * Extends the {@link OidcUserService#loadUser(OidcUserRequest)} to add the authorities provided
+   * by Keycloak via the send JWT token, as Spring Boot Security 5.2.1 does not automatically sets
+   * either the realm's authority roles resources nor the resource server's authority roles. A hook
+   * to provide custom authorities is unfortunately also missing.
    */
   @Override
   public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {

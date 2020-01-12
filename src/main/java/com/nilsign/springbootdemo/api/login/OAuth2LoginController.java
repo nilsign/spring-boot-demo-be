@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +43,7 @@ public class OAuth2LoginController {
   }
 
   // TODO(nilsheumer): Rename to "/user-info"
-  @GetMapping("/userinfo")
+  @GetMapping("/user-info")
   public ModelAndView userInfo(Model model, OAuth2AuthenticationToken authentication) {
     OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
     Map userAttributes = Collections.emptyMap();
@@ -64,7 +63,6 @@ public class OAuth2LoginController {
     return new ModelAndView("user-info", userAttributes);
   }
 
-  @Transactional(readOnly = true)
   public OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {
     // TODO(nilsheumer): Remove once no longer required for debugging purposes.
     authentication.getPrincipal().getAuthorities().forEach(authority ->
