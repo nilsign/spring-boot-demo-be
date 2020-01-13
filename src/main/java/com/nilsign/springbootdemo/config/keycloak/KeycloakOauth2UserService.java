@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -26,8 +27,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
 
+  private final static OAuth2Error INVALID_REQUEST
+      = new OAuth2Error(OAuth2ErrorCodes.INVALID_REQUEST);
+
   private final JwtDecoder jwtDecoder;
-  private final OAuth2Error INVALID_REQUEST = new OAuth2Error(OAuth2ErrorCodes.INVALID_REQUEST);
   private final GrantedAuthoritiesMapper authoritiesMapper;
 
   /**
@@ -52,33 +55,45 @@ public class KeycloakOauth2UserService extends OidcUserService {
   private Collection<? extends GrantedAuthority> extractKeycloakAuthoritiesFromAccessToken(
       OidcUserRequest userRequest) {
     Jwt token = parseJwt(userRequest.getAccessToken().getTokenValue());
+    String clientId = userRequest.getClientRegistration().getClientId();
 
     // TODO(nilsheumer): Also add "realm_access" roles to the mapping. Ensure the client roles are
     // all named differently than the "resource_access" role.
     // Resource server client roles. User "realm_access" to request the realm roles.
-    @SuppressWarnings("unchecked")
-    Map<String, Object> resourceMap
-        = (Map<String, Object>) token.getClaims().get("resource_access");
-    String clientId = userRequest.getClientRegistration().getClientId();
-
-    @SuppressWarnings("unchecked")
-    Map<String, Map<String, Object>> clientResource
-        = (Map<String, Map<String, Object>>) resourceMap.get(clientId);
-    if (CollectionUtils.isEmpty(clientResource)) {
-      return Collections.emptyList();
-    }
-    @SuppressWarnings("unchecked")
-    List<String> clientRoles = (List<String>) clientResource.get("roles");
-    if (CollectionUtils.isEmpty(clientRoles)) {
+    List<String> roles = getRealmRoles(token);
+    roles.addAll(getClientRoles(token, clientId));
+    if (CollectionUtils.isEmpty(roles)) {
       return Collections.emptyList();
     }
     Collection<? extends GrantedAuthority> authorities
-        = AuthorityUtils.createAuthorityList(clientRoles.toArray(new String[0]));
+        = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
     if (authoritiesMapper == null) {
       return authorities;
     }
-
     return authoritiesMapper.mapAuthorities(authorities);
+  }
+
+  private List<String> getRealmRoles(Jwt token) {
+    List<String> realmRoles = new ArrayList<>();
+    Map<String, Object> resourceMap = (Map<String, Object>) token.getClaims().get("realm_access");
+    if (!CollectionUtils.isEmpty(resourceMap)) {
+      realmRoles = (List<String>) resourceMap.get("roles");
+    }
+    return realmRoles;
+  }
+
+  private List<String> getClientRoles(Jwt token, String clientId) {
+    List<String> clientRoles = new ArrayList<>();
+    Map<String, Object> resourceMap
+        = (Map<String, Object>) token.getClaims().get("resource_access");
+    if (!CollectionUtils.isEmpty(resourceMap)) {
+      Map<String, Map<String, Object>> clientResource
+          = (Map<String, Map<String, Object>>) resourceMap.get(clientId);
+      if (!CollectionUtils.isEmpty(clientResource)) {
+        clientRoles = (List<String>) clientResource.get("roles");
+      }
+    }
+    return clientRoles;
   }
 
   private Jwt parseJwt(String accessTokenValue) {
