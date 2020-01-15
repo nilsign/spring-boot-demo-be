@@ -26,12 +26,12 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
   // TODO(nilsheumer): Find a good way to distinguish role access within the different derived
   // controllers. A custom annotation might be a good solution for this.
   @GetMapping
-  @PreAuthorize("hasRole('BUYER') OR hasRole('GLOBALADMIN')")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
   public List<T1> findAll() {
     return getDtoService().findAll();
   }
 
-  @PreAuthorize("hasRole('SELLER')")
+  @PreAuthorize("hasRole('CLIENT_ADMIN') OR hasRole('CLIENT_SELLER') OR hasRole('CLIENT_BUYER')")
   @GetMapping(path = "{id}")
   public Optional<T1> findById(@NotNull @PathVariable T3 id) {
     return getDtoService().findById(id);
