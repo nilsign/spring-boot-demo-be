@@ -22,7 +22,6 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@PreAuthorize("isAuthenticated()")
 public class OAuth2LoginController {
 
   @Autowired
@@ -31,10 +30,6 @@ public class OAuth2LoginController {
   @GetMapping("/")
   public ModelAndView index(Model model, OAuth2AuthenticationToken authentication) {
     OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
-
-    // TODO(nilsheumer): Remove once no longer required for debugging purposes.
-    log.info("AccessTokenValue: " + authorizedClient.getAccessToken().getTokenValue());
-
     model.addAttribute("userName", authentication.getName());
     model.addAttribute(
         "clientName",
@@ -42,7 +37,7 @@ public class OAuth2LoginController {
     return new ModelAndView("index", model.asMap());
   }
 
-  // TODO(nilsheumer): Rename to "/user-info"
+  @PreAuthorize("\"hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
   @GetMapping("/user-info")
   public ModelAndView userInfo(Model model, OAuth2AuthenticationToken authentication) {
     OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
@@ -63,7 +58,7 @@ public class OAuth2LoginController {
     return new ModelAndView("user-info", userAttributes);
   }
 
-  public OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {
+  private OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {
     // TODO(nilsheumer): Remove once no longer required for debugging purposes.
     authentication.getPrincipal().getAuthorities().forEach(authority ->
           log.warn("AUTHORITY: " + authority.getAuthority()));

@@ -17,7 +17,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-@PreAuthorize("isAuthenticated()")
+// TODO(nilsheumer): Convert the @PreAuthorize restrictions to a meaningful concept. Here the
+// @PreAuthorization have been only set for demo and testing purposes.
 @RestController
 public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3> {
 

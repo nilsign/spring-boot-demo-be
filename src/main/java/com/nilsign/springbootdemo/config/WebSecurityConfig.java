@@ -30,9 +30,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // create a session itself but will use one if it already exists, as the Spring Boot application
     // still may create sessions.
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-        .and().antMatcher("/**").authorizeRequests().anyRequest().permitAll()
+        .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
+        .and().cors()
+        .and().csrf()
         .and().logout().addLogoutHandler(keycloakLogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
+
   }
 
   @Bean
