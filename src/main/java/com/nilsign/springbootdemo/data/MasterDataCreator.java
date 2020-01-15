@@ -17,9 +17,6 @@ public class MasterDataCreator {
   private static final String GLOBAL_ADMIN_LAST_NAME = "Heumer";
   private static final String GLOBAL_ADMIN_EMAIL = "nilsign@gmail.com";
 
-  @Value("${user.globaladmin.default.password}")
-  private String globalAdminPassword;
-
   @Autowired
   private UserDataCreator userDataCreator;
 
@@ -36,8 +33,7 @@ public class MasterDataCreator {
     userDataCreator.createGlobalAdminUserIfNotExists(
         GLOBAL_ADMIN_FIRST_NAME,
         GLOBAL_ADMIN_LAST_NAME,
-        GLOBAL_ADMIN_EMAIL,
-        globalAdminPassword);
+        GLOBAL_ADMIN_EMAIL);
     log.info("Master data creation done.");
   }
 }

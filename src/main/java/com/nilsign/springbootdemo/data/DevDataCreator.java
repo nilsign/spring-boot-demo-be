@@ -7,7 +7,6 @@ import com.nilsign.springbootdemo.data.creator.UserDataCreator;
 import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,10 +23,6 @@ public class DevDataCreator {
   private static final Integer PRODUCT_1_NUMBER = 1;
   private static final Integer PRODUCT_2_NUMBER = 2;
   private static final Integer PRODUCT_3_NUMBER = 3;
-
-
-  @Value("${user.buyer.default.password}")
-  private String buyerPassword;
 
   @Autowired
   private UserDataCreator userDataCreator;
@@ -64,7 +59,6 @@ public class DevDataCreator {
         "Bud",
         "Buymann",
         BUYER_1_EMAIL,
-        buyerPassword,
         "Buttmens Street 13",
         "48308",
         "Buttington",
@@ -73,7 +67,6 @@ public class DevDataCreator {
         "Mad",
         "Alistoles",
         BUYER_2_EMAIL,
-        buyerPassword,
         "Notenough Way 66",
         "69693",
         "Greedcreek",
