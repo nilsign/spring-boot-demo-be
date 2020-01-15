@@ -26,7 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private KeycloakLogoutHandler keycloakLogoutHandler;
 
   protected void configure(final HttpSecurity http) throws Exception {
-    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+    // By setting the SessionCreationPolicy to NEVER, it is ensured that Spring Security will never
+    // create a session itself but will use one if it already exists, as the Spring Boot application
+    // still may create sessions.
+    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and().antMatcher("/**").authorizeRequests().anyRequest().permitAll()
         .and().logout().addLogoutHandler(keycloakLogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
