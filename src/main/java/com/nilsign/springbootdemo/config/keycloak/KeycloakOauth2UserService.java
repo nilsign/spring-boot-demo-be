@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -70,6 +71,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
     if (authoritiesMapper == null) {
       return authorities;
     }
+    ((SimpleAuthorityMapper)authoritiesMapper).setConvertToUpperCase(true);
     return authoritiesMapper.mapAuthorities(authorities);
   }
 

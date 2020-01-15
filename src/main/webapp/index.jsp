@@ -19,7 +19,7 @@
         </div>
         <div>&nbsp;</div>
         <div>
-            <a href="/userinfo">Display User Info</a>
+            <a href="/user-info">Display User Info</a>
         </div>
         <div>&nbsp;</div>
         <div>
