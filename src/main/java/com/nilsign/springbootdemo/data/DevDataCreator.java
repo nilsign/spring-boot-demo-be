@@ -7,14 +7,16 @@ import com.nilsign.springbootdemo.data.creator.UserDataCreator;
 import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Slf4j
-@Service
+@Profile("DEV")
+@Configuration
 public class DevDataCreator {
 
   private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
