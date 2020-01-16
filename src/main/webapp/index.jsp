@@ -27,7 +27,7 @@
         </div>
         <div>&nbsp;</div>
         <div>
-            <a href="/home/logout">Logout</a>
+            <a href="auth/logout">Logout</a>
         </div>
     </body>
 </html>

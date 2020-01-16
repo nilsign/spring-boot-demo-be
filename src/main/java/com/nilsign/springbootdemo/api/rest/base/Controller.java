@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.api.base;
+package com.nilsign.springbootdemo.api.rest.base;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;

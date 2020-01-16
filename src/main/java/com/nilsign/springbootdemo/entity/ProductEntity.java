@@ -1,6 +1,5 @@
 package com.nilsign.springbootdemo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nilsign.springbootdemo.dto.ProductDto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
 import lombok.Data;
@@ -18,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -56,14 +54,12 @@ public class ProductEntity extends SequencedEntity {
           CascadeType.MERGE,
           CascadeType.PERSIST,
           CascadeType.REFRESH})
-  // TODO(nilsheumer): Shouldn't this move to the according dto? Test and move when true.
-  @JsonBackReference
-  private Set<OrderEntity> orders;
+  private List<OrderEntity> orders;
 
   public static ProductEntity create(
       @NotNull ProductDto productDto,
       @NotNull List<RatingEntity> ratings,
-      @NotNull Set<OrderEntity> orders) {
+      @NotNull List<OrderEntity> orders) {
     return ProductEntity.builder()
         .id(productDto.getId())
         .productNumber(productDto.getProductNumber())

@@ -32,7 +32,7 @@ public class ProductDtoService extends DtoService<ProductDto, ProductEntity, Lon
   @Override
   protected ProductEntity toEntity(@NotNull ProductDto productDto) {
     List<RatingEntity> ratings = ratingEntityService.findByProductId(productDto.getId());
-    Set<OrderEntity> orders = orderEntityService.findByProductId(productDto.getId());
+    List<OrderEntity> orders = orderEntityService.findByProductId(productDto.getId());
     return ProductEntity.create(productDto, ratings, orders);
   }
 

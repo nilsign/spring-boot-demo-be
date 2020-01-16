@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -80,12 +79,12 @@ public class OrderEntity extends SequencedEntity {
           name = "product_id",
           referencedColumnName = "id",
           nullable = false))
-  private Set<ProductEntity> products;
+  private List<ProductEntity> products;
 
   public static OrderEntity create(
       @NotNull OrderDto orderDto,
       @NotNull UserEntity userEntity,
-      @NotNull @NotEmpty Set<ProductEntity> products) {
+      @NotNull @NotEmpty List<ProductEntity> products) {
     return OrderEntity.builder()
         .id(orderDto.getId())
         .user(userEntity)
