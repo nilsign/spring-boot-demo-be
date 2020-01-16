@@ -57,10 +57,6 @@ public class KeycloakOauth2UserService extends OidcUserService {
       OidcUserRequest userRequest) {
     Jwt token = parseJwt(userRequest.getAccessToken().getTokenValue());
     String clientId = userRequest.getClientRegistration().getClientId();
-
-    // TODO(nilsheumer): Also add "realm_access" roles to the mapping. Ensure the client roles are
-    // all named differently than the "resource_access" role.
-    // Resource server client roles. User "realm_access" to request the realm roles.
     List<String> roles = getRealmRoles(token);
     roles.addAll(getClientRoles(token, clientId));
     if (CollectionUtils.isEmpty(roles)) {
