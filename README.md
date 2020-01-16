@@ -5,7 +5,7 @@ stack, or just can be used to write POCs in order to test new technologies or po
 for certain Spring Boot related problems.
 
 One main focus is on Spring Security's OAuth2 authentication and authorization, including login and
-logout. The implemented solution does only rely on the the OAuth2 (including OpenId Connect)
+logout. The implemented solution does only rely on the the OAuth2 (including OpenID Connect)
 protocol, in order to be able to easily exchange the OAuth2 provider, which is here Keycloak running
 locally in a Docker container.
 

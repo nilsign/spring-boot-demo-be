@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ProductEntityService extends EntityService<ProductEntity, Long> {
@@ -26,7 +26,7 @@ public class ProductEntityService extends EntityService<ProductEntity, Long> {
     return productRepository.findByProductNumber(productNumber);
   }
 
-  public Set<ProductEntity> findByOrderId(@NotNull @Positive Long orderId) {
+  public List<ProductEntity> findByOrderId(@NotNull @Positive Long orderId) {
     return productRepository.findByOrderId(orderId);
   }
 }

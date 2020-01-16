@@ -1,6 +1,6 @@
 package com.nilsign.springbootdemo.api.rest;
 
-import com.nilsign.springbootdemo.api.base.Controller;
+import com.nilsign.springbootdemo.api.rest.base.Controller;
 import com.nilsign.springbootdemo.dto.RoleDto;
 import com.nilsign.springbootdemo.entity.RoleEntity;
 import com.nilsign.springbootdemo.service.RoleDtoService;

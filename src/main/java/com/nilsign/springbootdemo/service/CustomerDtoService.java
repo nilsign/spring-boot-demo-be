@@ -21,8 +21,8 @@ public class CustomerDtoService extends DtoService<CustomerDto, CustomerEntity, 
   }
 
   @Override
-  protected CustomerEntity toEntity(@NotNull CustomerDto customerEntity) {
-    return CustomerEntity.create(customerEntity);
+  protected CustomerEntity toEntity(@NotNull CustomerDto customerDto) {
+    return CustomerEntity.create(customerDto);
   }
 
   @Override

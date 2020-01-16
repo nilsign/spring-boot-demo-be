@@ -26,7 +26,7 @@ public class AddressDtoService extends DtoService<AddressDto, AddressEntity, Lon
   }
 
   @Override
-  protected AddressDto toDto(@NotNull AddressEntity addressDto) {
-    return AddressDto.create(addressDto);
+  protected AddressDto toDto(@NotNull AddressEntity addressEntity) {
+    return AddressDto.create(addressEntity);
   }
 }

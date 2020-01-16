@@ -38,12 +38,12 @@ public final class OrderDataCreator {
 
   public void createOrder(
       @NotNull UserEntity userEntity,
-      @NotNull @NotEmpty Set<ProductEntity> productEntities,
+      @NotNull @NotEmpty List<ProductEntity> productEntities,
       @NotNull AddressEntity invoiceAddress,
       @NotNull @NotEmpty List<DeliveryEntity> deliveryEntities) {
     Optional<OrderEntity> orderEntity = orderEntityService.save(OrderEntity.builder()
         .user(userEntity)
-        .products(productEntities)
+        .products(new HashSet<>(productEntities))
         .deliveries(new ArrayList<>())
         .invoiceAddress(invoiceAddress)
         .build());
@@ -58,7 +58,7 @@ public final class OrderDataCreator {
       @NotNull @NotBlank @Email String email,
       @NotNull @NotEmpty Set<Integer> productNumbers,
       @NotNull @Positive @Min(1) Integer numberOfDeliveries) {
-    Set<ProductEntity> productEntities = new HashSet<>();
+    List<ProductEntity> productEntities = new ArrayList<>();
     productNumbers.forEach(productNumber -> {
       Optional<ProductEntity> productEntity
           = productEntityService.findByProductNumber(productNumber);

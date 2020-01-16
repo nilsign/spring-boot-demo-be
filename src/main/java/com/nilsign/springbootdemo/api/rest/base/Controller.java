@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.api.base;
+package com.nilsign.springbootdemo.api.rest.base;
 
 import com.nilsign.springbootdemo.dto.base.Dto;
 import com.nilsign.springbootdemo.entity.base.SequencedEntity;
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-@PreAuthorize("isAuthenticated()")
+// TODO(nilsheumer): Convert the @PreAuthorize restrictions to a meaningful concept. Here the
+// @PreAuthorization have been only set for demo and testing purposes.
 @RestController
 public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3> {
 
@@ -38,12 +38,7 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
   }
 
   @PostMapping
-  public Optional<T1> insert(@NotNull @Valid @RequestBody T1 dto) {
-    return getDtoService().save(dto);
-  }
-
-  @PutMapping
-  public Optional<T1> update(@NotNull @Valid @RequestBody T1 dto) {
+  public Optional<T1> save(@NotNull @Valid @RequestBody T1 dto) {
     return getDtoService().save(dto);
   }
 

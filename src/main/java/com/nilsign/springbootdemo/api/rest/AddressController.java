@@ -1,6 +1,6 @@
 package com.nilsign.springbootdemo.api.rest;
 
-import com.nilsign.springbootdemo.api.base.Controller;
+import com.nilsign.springbootdemo.api.rest.base.Controller;
 import com.nilsign.springbootdemo.dto.AddressDto;
 import com.nilsign.springbootdemo.entity.AddressEntity;
 import com.nilsign.springbootdemo.service.AddressDtoService;
