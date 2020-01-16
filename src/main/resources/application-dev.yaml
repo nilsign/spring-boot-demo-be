@@ -1,0 +1,55 @@
+environment:
+  name: DEV
+log4j:
+  appender:
+    stdout: org.apache.log4j.ConsoleAppender
+    stdout.Target: System.out
+    stdout.layout: org.apache.log4j.PatternLayout
+    stdout.layout.ConversionPattern: '%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n'
+  logger:
+    org:
+      hibernate: trace
+  rootLogger: DEBUG, stdout
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
+      springframework: error
+spring:
+  datasource:
+    password: root
+    url: jdbc:postgresql://localhost:5432/demoprojectdb
+    username: postgres
+  jpa:
+    properties:
+      hibernate:
+        SQL: debug
+        format_sql: true
+        generate_statistics: false
+        show_sql: true
+        type:
+          descriptor:
+            sql: trace
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/auth
+            jwk-set-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/certs
+            token-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            authorization-grant-type: authorization_code
+            client-id: DemoProjectRestApiClient
+            client-secret: 6a06b69f-8108-4d40-af64-ed1325385c5d
+            clientName: DemoProjectRestApiClient
+            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            scope: email,openid,profile

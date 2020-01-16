@@ -1,0 +1,23 @@
+environment:
+  name: QA
+log4j:
+  appender:
+    stdout: org.apache.log4j.ConsoleAppender
+    stdout.Target: System.out
+    stdout.layout: org.apache.log4j.PatternLayout
+    stdout.layout.ConversionPattern: '%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n'
+  logger:
+    org:
+      hibernate: TRACE
+  rootLogger: ERROR, stdout
+logging:
+  level:
+    org:
+      springframework: error
+spring:
+  datasource:
+    password: root
+    url: jdbc:postgresql://localhost:5432/demoprojectdb
+    username: postgres
+  jpa:
+    show-sql: false

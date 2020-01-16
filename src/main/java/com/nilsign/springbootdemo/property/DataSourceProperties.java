@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @Getter
 @Setter
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yaml")
 @ConfigurationProperties(prefix = "spring.datasource")
 public class DataSourceProperties {
 
