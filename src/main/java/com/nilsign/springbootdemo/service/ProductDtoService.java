@@ -37,7 +37,7 @@ public class ProductDtoService extends DtoService<ProductDto, ProductEntity, Lon
   }
 
   @Override
-  protected ProductDto toDto(@NotNull ProductEntity productDto) {
-    return ProductDto.create(productDto);
+  protected ProductDto toDto(@NotNull ProductEntity productEntity) {
+    return ProductDto.create(productEntity);
   }
 }
