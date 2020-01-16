@@ -17,7 +17,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -37,32 +40,17 @@ public class OAuth2LoginController {
     return new ModelAndView("index", model.asMap());
   }
 
-  @PreAuthorize("\"hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
   @GetMapping("/user-info")
   public ModelAndView userInfo(Model model, OAuth2AuthenticationToken authentication) {
-    OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
-    Map userAttributes = Collections.emptyMap();
-    String userInfoEndpointUri = authorizedClient.getClientRegistration()
-        .getProviderDetails().getUserInfoEndpoint().getUri();
-    if (!StringUtils.isEmpty(userInfoEndpointUri)) {	// userInfoEndpointUri is optional for OIDC Clients
-      userAttributes = WebClient.builder()
-          .filter(oauth2Credentials(authorizedClient))
-          .build()
-          .get()
-          .uri(userInfoEndpointUri)
-          .retrieve()
-          .bodyToMono(Map.class)
-          .block();
-    }
-    model.addAttribute("userAttributes", userAttributes);
-    return new ModelAndView("user-info", userAttributes);
+    Map<String, Object> userInfo = new HashMap<>();
+    userInfo.put("userAttributes", getUserAttributes(authentication));
+    userInfo.put("userAuthorities", getUserAuthorities(authentication));
+    model.addAttribute("userInfo", userInfo);
+    return new ModelAndView("user-info", userInfo);
   }
 
   private OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {
-    // TODO(nilsheumer): Remove once no longer required for debugging purposes.
-    authentication.getPrincipal().getAuthorities().forEach(authority ->
-          log.warn("AUTHORITY: " + authority.getAuthority()));
-
     return this.authorizedClientService.loadAuthorizedClient(
         authentication.getAuthorizedClientRegistrationId(),
         authentication.getName());
@@ -77,5 +65,30 @@ public class OAuth2LoginController {
               .build();
           return Mono.just(authorizedRequest);
         });
+  }
+
+  private Map<String, ?> getUserAttributes(OAuth2AuthenticationToken authentication) {
+    OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
+    Map<String, ?> userAttributes = Collections.emptyMap();
+    String userInfoEndpointUri = authorizedClient.getClientRegistration()
+        .getProviderDetails().getUserInfoEndpoint().getUri();
+    if (!StringUtils.isEmpty(userInfoEndpointUri)) {
+      userAttributes = WebClient.builder()
+          .filter(oauth2Credentials(authorizedClient))
+          .build()
+          .get()
+          .uri(userInfoEndpointUri)
+          .retrieve()
+          .bodyToMono(Map.class)
+          .block();
+    }
+    return userAttributes;
+  }
+
+  private List<String> getUserAuthorities(OAuth2AuthenticationToken authentication) {
+    List<String> authorities = new ArrayList<>();
+    authentication.getPrincipal().getAuthorities().forEach(
+        authority -> authorities.add(authority.getAuthority()));
+    return authorities;
   }
 }
