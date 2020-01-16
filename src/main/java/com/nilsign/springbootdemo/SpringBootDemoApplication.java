@@ -13,9 +13,9 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 public class SpringBootDemoApplication {
 
-  private EnvironmentProperties environmentProperties;
-  private MasterDataCreator masterDataCreator;
-  private DevDataCreator devDataCreator;
+  private final EnvironmentProperties environmentProperties;
+  private final MasterDataCreator masterDataCreator;
+  private final DevDataCreator devDataCreator;
 
   public SpringBootDemoApplication(
       EnvironmentProperties environmentProperties,

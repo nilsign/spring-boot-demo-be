@@ -16,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -54,7 +56,7 @@ public class ProductEntity extends SequencedEntity {
           CascadeType.MERGE,
           CascadeType.PERSIST,
           CascadeType.REFRESH})
-  private List<OrderEntity> orders;
+  private Set<OrderEntity> orders;
 
   public static ProductEntity create(
       @NotNull ProductDto productDto,
@@ -66,7 +68,7 @@ public class ProductEntity extends SequencedEntity {
         .productName(productDto.getProductName())
         .price(productDto.getPrice())
         .ratings(ratings)
-        .orders(orders)
+        .orders(new HashSet<>(orders))
         .build();
   }
 }

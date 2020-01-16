@@ -19,7 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -79,7 +81,7 @@ public class OrderEntity extends SequencedEntity {
           name = "product_id",
           referencedColumnName = "id",
           nullable = false))
-  private List<ProductEntity> products;
+  private Set<ProductEntity> products;
 
   public static OrderEntity create(
       @NotNull OrderDto orderDto,
@@ -93,7 +95,7 @@ public class OrderEntity extends SequencedEntity {
             .stream()
             .map(DeliveryEntity::create)
             .collect(Collectors.toList()))
-        .products(products)
+        .products(new HashSet(products))
         .build();
   }
 }

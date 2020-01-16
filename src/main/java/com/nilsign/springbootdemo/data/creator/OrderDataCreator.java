@@ -18,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,7 +43,7 @@ public final class OrderDataCreator {
       @NotNull @NotEmpty List<DeliveryEntity> deliveryEntities) {
     Optional<OrderEntity> orderEntity = orderEntityService.save(OrderEntity.builder()
         .user(userEntity)
-        .products(productEntities)
+        .products(new HashSet<>(productEntities))
         .deliveries(new ArrayList<>())
         .invoiceAddress(invoiceAddress)
         .build());
