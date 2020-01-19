@@ -13,6 +13,10 @@ As database a Postgres instance has been chosen, running in a local Docker conta
 that the relational model might be a bit constructed in order to reflect all table relationships
 and the resulting Hibernate entity representations.
 
+A Swagger API documentation can be found here once the project is running (locally) on the DEV
+environment.
+- http://localhost:8080/swagger-ui.html
+
 ### Major Tech-Stack
 - Spring Boot
 - OAuth2 with Keycloak
