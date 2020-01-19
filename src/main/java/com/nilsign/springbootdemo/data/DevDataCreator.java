@@ -19,8 +19,12 @@ import java.util.Set;
 @Configuration
 public class DevDataCreator {
 
-  private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
+  // TODO(nilsheumer): Ada Mistrate is missing here, but there is an according Keycloak user with
+  // the ADMIN client role.
+  // TODO(nilsheumer): This should be a seller. Ensure there is also an according Keycloak user and
+  // do not forget to update the Keycloak Docker image, after updating the container.
   private static final String BUYER_2_EMAIL = "mad.alistoles@gmail.com";
+  private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
 
   private static final Integer PRODUCT_1_NUMBER = 1;
   private static final Integer PRODUCT_2_NUMBER = 2;

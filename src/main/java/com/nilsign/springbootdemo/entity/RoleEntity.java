@@ -26,7 +26,7 @@ public class RoleEntity extends SequencedEntity {
 
   @Column(name = "role_type", nullable = false)
   @Enumerated(EnumType.STRING)
-  private RoleType roleType;
+  private JpaRoleType roleType;
 
   @Column(name = "role_name", nullable = false)
   private String roleName;

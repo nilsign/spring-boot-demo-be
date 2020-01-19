@@ -3,7 +3,7 @@ package com.nilsign.springbootdemo.data.creator;
 import com.nilsign.springbootdemo.entity.AddressEntity;
 import com.nilsign.springbootdemo.entity.CustomerEntity;
 import com.nilsign.springbootdemo.entity.RoleEntity;
-import com.nilsign.springbootdemo.entity.RoleType;
+import com.nilsign.springbootdemo.entity.JpaRoleType;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import com.nilsign.springbootdemo.service.RoleEntityService;
 import com.nilsign.springbootdemo.service.UserEntityService;
@@ -35,7 +35,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String city,
       @NotNull @NotBlank String country) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(RoleType.BUYER);
+      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(JpaRoleType.JPA_BUYER);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing buyer role.")));
@@ -66,7 +66,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> roleEntity = roleEntityService.findByRoleType(RoleType.GLOBALADMIN);
+      Optional<RoleEntity> roleEntity = roleEntityService.findByRoleType(JpaRoleType.JPA_GLOBALADMIN);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(roleEntity.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing global admin role.")));

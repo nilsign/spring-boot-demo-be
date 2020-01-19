@@ -28,8 +28,7 @@
                     </li>
                 </c:forEach>
             </ul>
-
-            <span style="font-weight:bold">User Attributes:</span>
+            <span style="font-weight:bold">User Authorities:</span>
             <ul>
                 <c:forEach items="${userAuthorities}" var="authority">
                     <li>
