@@ -35,7 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and().csrf()
         .and().logout().addLogoutHandler(keycloakLogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
-
   }
 
   @Bean

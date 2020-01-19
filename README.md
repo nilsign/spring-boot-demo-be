@@ -13,6 +13,10 @@ As database a Postgres instance has been chosen, running in a local Docker conta
 that the relational model might be a bit constructed in order to reflect all table relationships
 and the resulting Hibernate entity representations.
 
+A Swagger API documentation can be found here once the project is running (locally) on the DEV
+environment.
+- http://localhost:8080/swagger-ui.html
+
 ### Major Tech-Stack
 - Spring Boot
 - OAuth2 with Keycloak
@@ -79,9 +83,9 @@ User and restart Keycloak with port mapping (localhost:8100->8080).
     - Enable Service Accounts: ON
     - Enable Authorization: ON
 
-8. Account setup up is not fully completed yet, as a temporary password was used for the Keycloak
-admin user "nilsign@gmail.com". To finish the setup navigate to the following URL and enter the
-final password. Otherwise Keycloak requests will return "error": "invalid_grant - Account is not
+8. The Keycloak setup up is not fully completed yet, as a temporary password was used for the
+Keycloak admin user "nilsign@gmail.com". To finish the setup navigate to the following URL and enter
+the final password. Otherwise Keycloak requests will return "error": "invalid_grant - Account is not
 fully set up"!
 
     http://localhost:8100/auth/realms/DemoProjectRealm/account/
