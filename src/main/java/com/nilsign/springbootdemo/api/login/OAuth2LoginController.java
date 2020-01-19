@@ -87,8 +87,8 @@ public class OAuth2LoginController {
 
   private List<String> getUserAuthorities(OAuth2AuthenticationToken authentication) {
     List<String> authorities = new ArrayList<>();
-    authentication.getPrincipal().getAuthorities().forEach(
-        authority -> authorities.add(authority.getAuthority()));
+    authentication.getPrincipal().getAuthorities()
+        .forEach(authority -> authorities.add(authority.getAuthority()));
     return authorities;
   }
 }

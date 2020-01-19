@@ -1,6 +1,9 @@
 package com.nilsign.springbootdemo.config.keycloak;
 
+import com.nilsign.springbootdemo.entity.UserEntity;
+import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -17,16 +20,22 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
+
+  @Autowired
+  private UserEntityService userEntityService;
 
   private final static OAuth2Error INVALID_REQUEST
       = new OAuth2Error(OAuth2ErrorCodes.INVALID_REQUEST);
@@ -40,12 +49,14 @@ public class KeycloakOauth2UserService extends OidcUserService {
    * either the realm's authority roles resources nor the resource server's authority roles. A hook
    * to provide custom authorities is unfortunately also missing.
    */
+  @Transactional
   @Override
   public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
     OidcUser user = super.loadUser(userRequest);
     Set<GrantedAuthority> authorities = new LinkedHashSet<>();
     authorities.addAll(user.getAuthorities());
     authorities.addAll(extractKeycloakAuthoritiesFromAccessToken(userRequest));
+    authorities.addAll(getClientRolesFromDataSource(user));
     return new DefaultOidcUser(
         authorities,
         userRequest.getIdToken(),
@@ -62,13 +73,19 @@ public class KeycloakOauth2UserService extends OidcUserService {
     if (CollectionUtils.isEmpty(roles)) {
       return Collections.emptyList();
     }
-    Collection<? extends GrantedAuthority> authorities
-        = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
-    if (authoritiesMapper == null) {
-      return authorities;
+    return toGrantedAuthorities(roles);
+  }
+
+  private Collection<? extends GrantedAuthority> getClientRolesFromDataSource(OidcUser user) {
+    List<String> clientRoles = new ArrayList<>();
+    Optional<UserEntity> userEntity = userEntityService.findByEmail(user.getEmail());
+    if (userEntity.isPresent()) {
+      clientRoles.addAll(userEntity.get().getRoles()
+          .stream()
+          .map(role -> role.getRoleType().name())
+          .collect(Collectors.toList()));
     }
-    ((SimpleAuthorityMapper)authoritiesMapper).setConvertToUpperCase(true);
-    return authoritiesMapper.mapAuthorities(authorities);
+    return toGrantedAuthorities(clientRoles);
   }
 
   private List<String> getRealmRoles(Jwt token) {
@@ -92,6 +109,16 @@ public class KeycloakOauth2UserService extends OidcUserService {
       }
     }
     return clientRoles;
+  }
+
+  private Collection<? extends GrantedAuthority> toGrantedAuthorities(List<String> roles) {
+    Collection<? extends GrantedAuthority> authorities
+        = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
+    if (authoritiesMapper == null) {
+      return authorities;
+    }
+    ((SimpleAuthorityMapper) authoritiesMapper).setConvertToUpperCase(true);
+    return authoritiesMapper.mapAuthorities(authorities);
   }
 
   private Jwt parseJwt(String accessTokenValue) {

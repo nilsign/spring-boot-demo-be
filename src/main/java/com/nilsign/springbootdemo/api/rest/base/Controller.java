@@ -31,7 +31,7 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
     return getDtoService().findAll();
   }
 
-  @PreAuthorize("hasRole('CLIENT_ADMIN') OR hasRole('CLIENT_SELLER') OR hasRole('CLIENT_BUYER')")
+  @PreAuthorize("hasRole('LOCAL_GLOBALADMIN') OR hasRole('ROLE_LOCAL_GLOBALADMIN')")
   @GetMapping(path = "{id}")
   public Optional<T1> findById(@NotNull @PathVariable T3 id) {
     return getDtoService().findById(id);
