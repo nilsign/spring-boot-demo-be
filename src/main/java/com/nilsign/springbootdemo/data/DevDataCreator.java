@@ -19,12 +19,12 @@ import java.util.Set;
 @Configuration
 public class DevDataCreator {
 
-  // TODO(nilsheumer): Ada Mistrate is missing here, but there is an according Keycloak user with
-  // the ADMIN client role.
-  // TODO(nilsheumer): This should be a seller. Ensure there is also an according Keycloak user and
-  // do not forget to update the Keycloak Docker image, after updating the container.
-  private static final String BUYER_2_EMAIL = "mad.alistoles@gmail.com";
+  private static final String ADMIN_EMAIL = "ada.mistrate@gmail.com";
+  private static final String SELLER_EMAIL = "selma.sellington@gmail.com";
   private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
+  // TODO(nilsheumer): Add Mad Allistoles to the keycloak users. All other listed are are already
+  // added there. (Do not forget to update the Keycloak Docker image accordingly.
+  private static final String BUYER_2_EMAIL = "mad.allistoles@gmail.com";
 
   private static final Integer PRODUCT_1_NUMBER = 1;
   private static final Integer PRODUCT_2_NUMBER = 2;
@@ -47,7 +47,9 @@ public class DevDataCreator {
 
   @Transactional
   public void createDevDataIfNotExist() {
-    if (userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
+    if (userEntityService.findByEmail(ADMIN_EMAIL).isPresent()
+        && userEntityService.findByEmail(SELLER_EMAIL).isPresent()
+        && userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
         && userEntityService.findByEmail(BUYER_2_EMAIL).isPresent()) {
       log.info("DEV data already exists - skip DEV data creation.");
       return;
@@ -61,6 +63,14 @@ public class DevDataCreator {
   }
 
   private void createUsers() {
+    userDataCreator.createAdminUserIfNotExists(
+        "Ada",
+        "Mistrate",
+        ADMIN_EMAIL);
+    userDataCreator.createSellerUserIfNotExists(
+        "Selma",
+        "Sellington",
+        SELLER_EMAIL);
     userDataCreator.createBuyerUserIfNotExist(
         "Bud",
         "Buymann",
@@ -77,6 +87,7 @@ public class DevDataCreator {
         "69693",
         "Greedcreek",
         "USA");
+
   }
 
   private void createProducts() {

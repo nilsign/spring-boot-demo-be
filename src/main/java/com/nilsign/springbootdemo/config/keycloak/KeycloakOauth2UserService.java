@@ -3,7 +3,6 @@ package com.nilsign.springbootdemo.config.keycloak;
 import com.nilsign.springbootdemo.entity.UserEntity;
 import com.nilsign.springbootdemo.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -32,7 +31,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
 

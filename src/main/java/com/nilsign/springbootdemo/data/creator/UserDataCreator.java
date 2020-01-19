@@ -26,6 +26,27 @@ public final class UserDataCreator {
   @Autowired
   private RoleEntityService roleEntityService;
 
+  public void createGlobalAdminUserIfNotExists(
+      @NotNull @NotBlank String firstName,
+      @NotNull @NotBlank String lastName,
+      @NotNull @NotBlank @Email String email) {
+    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_GLOBALADMIN);
+  }
+
+  public void createAdminUserIfNotExists(
+      @NotNull @NotBlank String firstName,
+      @NotNull @NotBlank String lastName,
+      @NotNull @NotBlank @Email String email) {
+    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_ADMIN);
+  }
+
+  public void createSellerUserIfNotExists(
+      @NotNull @NotBlank String firstName,
+      @NotNull @NotBlank String lastName,
+      @NotNull @NotBlank @Email String email) {
+    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_SELLER);
+  }
+
   public void createBuyerUserIfNotExist(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
@@ -35,7 +56,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String city,
       @NotNull @NotBlank String country) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(JpaRoleType.JPA_BUYER);
+      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(JpaRoleType.ROLE_JPA_BUYER);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing buyer role.")));
@@ -61,12 +82,14 @@ public final class UserDataCreator {
     }
   }
 
-  public void createGlobalAdminUserIfNotExists(
+  private void createNonBuyerUser(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
-      @NotNull @NotBlank @Email String email) {
+      @NotNull @NotBlank @Email String email,
+      @NotNull JpaRoleType roleType) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> roleEntity = roleEntityService.findByRoleType(JpaRoleType.JPA_GLOBALADMIN);
+      Optional<RoleEntity> roleEntity =
+          roleEntityService.findByRoleType(roleType);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(roleEntity.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing global admin role.")));

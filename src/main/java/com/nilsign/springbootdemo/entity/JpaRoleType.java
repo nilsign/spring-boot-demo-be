@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
  * excluded here.
  */
 public enum JpaRoleType {
-  JPA_GLOBALADMIN("ROLE_JPA_GLOBALADMIN"),
-  JPA_ADMIN("ROLE_JPA_ADMIN"),
-  JPA_SELLER("ROLE_JPA_SELLER"),
-  JPA_BUYER("ROLE_JPA_BUYER");
+  ROLE_JPA_GLOBALADMIN("ROLE_JPA_GLOBALADMIN"),
+  ROLE_JPA_ADMIN("ROLE_JPA_ADMIN"),
+  ROLE_JPA_SELLER("ROLE_JPA_SELLER"),
+  ROLE_JPA_BUYER("ROLE_JPA_BUYER");
 
   private final String name;
 
