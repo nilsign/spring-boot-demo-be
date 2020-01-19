@@ -22,8 +22,6 @@ public class DevDataCreator {
   private static final String ADMIN_EMAIL = "ada.mistrate@gmail.com";
   private static final String SELLER_EMAIL = "selma.sellington@gmail.com";
   private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
-  // TODO(nilsheumer): Add Mad Allistoles to the keycloak users. All other listed are are already
-  // added there. (Do not forget to update the Keycloak Docker image accordingly.
   private static final String BUYER_2_EMAIL = "mad.allistoles@gmail.com";
 
   private static final Integer PRODUCT_1_NUMBER = 1;
