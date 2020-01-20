@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class KeycloakLogoutHandler extends SecurityContextLogoutHandler {
 
-  private static final String ISSUER_LOGOUT_PATH = "/protocol/openid-connect/logout" ;
-
   private final RestTemplate restTemplate;
 
   @Override
@@ -34,7 +32,7 @@ public class KeycloakLogoutHandler extends SecurityContextLogoutHandler {
   }
 
   private void redirectLogoutToKeycloak(OidcUser user) {
-    String endSessionEndpoint = user.getIssuer() + ISSUER_LOGOUT_PATH;
+    String endSessionEndpoint = user.getIssuer() + "/protocol/openid-connect/logout";
     UriComponentsBuilder builder = UriComponentsBuilder
         .fromUriString(endSessionEndpoint)
         .queryParam("id_token_hint", user.getIdToken().getTokenValue());
