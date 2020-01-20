@@ -22,8 +22,12 @@ environment.
 - OAuth2 with Keycloak
 - Hibernate
 - Flyway
+- JSP
 - Postgres
 - Docker
+- Swagger API Documentation
+- Sonarqube
+
 
 ### Setup Keycloak Docker Container
 
@@ -187,3 +191,22 @@ id.
 5. Disconnect from database "demoprojectdb"
 
         postgres=# \q
+
+### Setup Sonarqube
+
+1. Get Sonarqube Docker image and run it in a Docker container.
+
+        $ docker pull sonarqube
+        $ docker run -d --name sonarqube -p 9000:9000 sonarqube
+
+2. Execute Sonarqube's code analyses
+
+        $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=the-generated-token
+
+3. Navigate to the to http:localhost:9000 and enter the default credentials
+- Username: admin
+- Password: admin
+
+More detailed information can be found on the official Sonarqube pages.
+- https://docs.sonarqube.org/latest/
+- https://hub.docker.com/_/sonarqube/
