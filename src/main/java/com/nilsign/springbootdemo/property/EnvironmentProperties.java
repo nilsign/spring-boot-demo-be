@@ -49,8 +49,9 @@ public class EnvironmentProperties {
           return EnvironmentType.QA;
         case EnvironmentProperties.PROD:
           return EnvironmentType.PROD;
+        default:
       }
-      throw new RuntimeException("Unknown environment or unsupported environment profile.");
+      throw new EnumConstantNotPresentException(EnvironmentType.class, environment);
     }
   }
 }

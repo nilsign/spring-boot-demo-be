@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 @Service
 public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> {
@@ -30,10 +29,18 @@ public class RatingDtoService extends DtoService<RatingDto, RatingEntity, Long> 
 
   @Override
   protected RatingEntity toEntity(@NotNull RatingDto ratingDto) {
-    Optional<UserEntity> userEntity = userEntityService.findById(ratingDto.getUser().getId());
-    Optional<ProductEntity> productEntity = productEntityService.findById(
-        ratingDto.getProductId());
-    return RatingEntity.create(ratingDto, userEntity.get(), productEntity.get());
+    UserEntity userEntity = userEntityService.findById(ratingDto.getUser().getId())
+        .orElseThrow(() -> new IllegalStateException(String.format(
+            "RatingDto has an unknown user id '%d'. UserEntity can not be null.",
+            ratingDto.getUser().getId())));
+    ProductEntity productEntity = productEntityService.findById(ratingDto.getProductId())
+        .orElseThrow(() -> new IllegalStateException(String.format(
+            "RatingDto has an unknown product id '%d'. ProductEntity can not be null.",
+            ratingDto.getProductId())));
+    return RatingEntity.create(
+        ratingDto,
+        userEntity,
+        productEntity);
   }
 
   @Override

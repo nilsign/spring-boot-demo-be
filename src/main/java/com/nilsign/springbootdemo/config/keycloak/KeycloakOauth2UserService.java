@@ -37,7 +37,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
   @Autowired
   private UserEntityService userEntityService;
 
-  private final static OAuth2Error INVALID_REQUEST
+  private static final OAuth2Error INVALID_REQUEST
       = new OAuth2Error(OAuth2ErrorCodes.INVALID_REQUEST);
 
   private final JwtDecoder jwtDecoder;
@@ -51,7 +51,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
    */
   @Transactional
   @Override
-  public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+  public OidcUser loadUser(OidcUserRequest userRequest) {
     OidcUser user = super.loadUser(userRequest);
     Set<GrantedAuthority> authorities = new LinkedHashSet<>();
     authorities.addAll(user.getAuthorities());

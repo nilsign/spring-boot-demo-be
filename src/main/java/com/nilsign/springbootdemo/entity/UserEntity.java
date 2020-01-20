@@ -72,7 +72,7 @@ public class UserEntity extends SequencedEntity {
 
   public static UserEntity create(
       @NotNull UserDto userDto,
-      @NotNull CustomerEntity customerEntity) {
+      CustomerEntity customerEntity) {
     return UserEntity.builder()
         .id(userDto.getId())
         .email(userDto.getEmail())

@@ -1,7 +1,6 @@
 package com.nilsign.springbootdemo.config.swagger;
 
 import com.nilsign.springbootdemo.property.EnvironmentProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -14,13 +13,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Swagger2Config {
 
-  @Autowired
-  private EnvironmentProperties environment;
-
   @Bean
-  public Docket api() {
+  public Docket api(EnvironmentProperties environment) {
     return new Docket(DocumentationType.SWAGGER_2)
-        .enable(!environment.isDev())
+        .enable(environment.isDev())
         .select()
         .apis(RequestHandlerSelectors.any())
         .paths(PathSelectors.any())

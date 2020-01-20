@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
@@ -32,9 +31,12 @@ public class OrderDtoService extends DtoService<OrderDto, OrderEntity, Long> {
 
   @Override
   protected OrderEntity toEntity(@NotNull OrderDto orderDto) {
-    Optional<UserEntity> userEntity = userEntityService.findById(orderDto.getUser().getId());
+    UserEntity userEntity = userEntityService.findById(orderDto.getUser().getId())
+        .orElseThrow(() -> new IllegalStateException((String.format(
+            "OrderDto has an unknown user id '%d'. UserEntity can not be null.",
+            orderDto.getUser().getId()))));
     List<ProductEntity> productEntities = productEntityService.findByOrderId(orderDto.getId());
-    return OrderEntity.create(orderDto, userEntity.get(), productEntities);
+    return OrderEntity.create(orderDto, userEntity, productEntities);
   }
 
   @Override

@@ -62,7 +62,7 @@ public final class OrderDataCreator {
     productNumbers.forEach(productNumber -> {
       Optional<ProductEntity> productEntity
           = productEntityService.findByProductNumber(productNumber);
-      productEntity.ifPresent(product -> productEntities.add(product));
+      productEntity.ifPresent(productEntities::add);
     });
     userEntityService.findByEmail(email).ifPresent(userEntity -> {
       if (userEntity.getCustomer() != null) {
