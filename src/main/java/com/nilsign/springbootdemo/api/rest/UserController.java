@@ -1,9 +1,9 @@
 package com.nilsign.springbootdemo.api.rest;
 
 import com.nilsign.springbootdemo.api.rest.base.Controller;
-import com.nilsign.springbootdemo.dto.UserDto;
-import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.service.UserDtoService;
+import com.nilsign.springbootdemo.domain.user.dto.UserDto;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,9 +1,9 @@
 package com.nilsign.springbootdemo.api.rest;
 
 import com.nilsign.springbootdemo.api.rest.base.Controller;
-import com.nilsign.springbootdemo.dto.RatingDto;
-import com.nilsign.springbootdemo.entity.RatingEntity;
-import com.nilsign.springbootdemo.service.RatingDtoService;
+import com.nilsign.springbootdemo.domain.rating.dto.RatingDto;
+import com.nilsign.springbootdemo.domain.rating.entity.RatingEntity;
+import com.nilsign.springbootdemo.domain.rating.service.RatingDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

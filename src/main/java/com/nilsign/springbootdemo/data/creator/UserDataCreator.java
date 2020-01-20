@@ -1,12 +1,12 @@
 package com.nilsign.springbootdemo.data.creator;
 
-import com.nilsign.springbootdemo.entity.AddressEntity;
-import com.nilsign.springbootdemo.entity.CustomerEntity;
-import com.nilsign.springbootdemo.entity.RoleEntity;
-import com.nilsign.springbootdemo.entity.JpaRoleType;
-import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.service.RoleEntityService;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.address.entity.AddressEntity;
+import com.nilsign.springbootdemo.domain.customer.entity.CustomerEntity;
+import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
+import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.role.service.RoleEntityService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

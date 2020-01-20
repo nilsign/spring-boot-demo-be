@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo.config.keycloak;
 
-import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

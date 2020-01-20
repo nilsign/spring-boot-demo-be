@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo.data.creator;
 
-import com.nilsign.springbootdemo.entity.ProductEntity;
-import com.nilsign.springbootdemo.service.ProductEntityService;
+import com.nilsign.springbootdemo.domain.product.entity.ProductEntity;
+import com.nilsign.springbootdemo.domain.product.service.ProductEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
