@@ -27,17 +27,17 @@ public abstract class DtoService<T1 extends Dto, T2 extends SequencedEntity, T3>
   }
 
   public Optional<T1> findById(@NotNull @Positive T3 id) {
-    return Optional.ofNullable(toDto(
-        getEntityService()
-            .findById(id)
-            .get()));
+    Optional<T2> result = getEntityService().findById(id);
+    return result.isEmpty()
+      ? Optional.empty()
+      : Optional.of(toDto(result.get()));
   }
 
   public Optional<T1> save(@NotNull T1 dto) {
-    return Optional.of(toDto(
-        getEntityService()
-            .save(toEntity(dto))
-            .get()));
+    Optional<T2> result = getEntityService().save(toEntity(dto));
+    return result.isEmpty()
+        ? Optional.empty()
+        : Optional.of(toDto(result.get()));
   }
 
   public void deleteById(@NotNull @Positive T3 id) {

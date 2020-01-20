@@ -78,7 +78,7 @@ public final class UserDataCreator {
           .customer(customerEntity)
           .build();
       customerEntity.setUser(userEntity);
-      userEntityService.save(userEntity).get();
+      userEntityService.save(userEntity);
     }
   }
 
