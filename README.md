@@ -203,7 +203,7 @@ id.
 
         $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=the-generated-token
 
-3. Navigate to the to http:localhost:9000 and enter the default credentials
+3. Navigate to the to http://localhost:9000 and enter the default credentials
 - Username: admin
 - Password: admin
 
