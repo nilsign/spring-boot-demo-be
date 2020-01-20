@@ -4,7 +4,7 @@ import com.nilsign.springbootdemo.data.creator.OrderDataCreator;
 import com.nilsign.springbootdemo.data.creator.ProductDataCreator;
 import com.nilsign.springbootdemo.data.creator.RatingDataCreator;
 import com.nilsign.springbootdemo.data.creator.UserDataCreator;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

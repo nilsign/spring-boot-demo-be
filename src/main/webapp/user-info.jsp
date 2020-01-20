@@ -12,7 +12,9 @@
     <body>
         <h1>OAuth 2.0 User Info</h1>
         <div>
-            <span style="font-weight:bold">User Attributes:</span>
+            <h3>
+                <span style="font-weight:bold">User Attributes</span>
+            </h3>
             <ul>
                 <c:forEach items="${userAttributes}" var="attribute">
                     <li>
@@ -28,7 +30,9 @@
                     </li>
                 </c:forEach>
             </ul>
-            <span style="font-weight:bold">User Authorities:</span>
+            <h3>
+                <span style="font-weight:bold">User Authorities</span>
+            </h3>
             <ul>
                 <c:forEach items="${userAuthorities}" var="authority">
                     <li>

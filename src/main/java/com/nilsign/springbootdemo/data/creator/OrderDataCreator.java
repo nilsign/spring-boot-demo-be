@@ -1,13 +1,13 @@
 package com.nilsign.springbootdemo.data.creator;
 
-import com.nilsign.springbootdemo.entity.AddressEntity;
-import com.nilsign.springbootdemo.entity.DeliveryEntity;
-import com.nilsign.springbootdemo.entity.OrderEntity;
-import com.nilsign.springbootdemo.entity.ProductEntity;
-import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.service.OrderEntityService;
-import com.nilsign.springbootdemo.service.ProductEntityService;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.address.entity.AddressEntity;
+import com.nilsign.springbootdemo.domain.delivery.entity.DeliveryEntity;
+import com.nilsign.springbootdemo.domain.order.entity.OrderEntity;
+import com.nilsign.springbootdemo.domain.product.entity.ProductEntity;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.order.service.OrderEntityService;
+import com.nilsign.springbootdemo.domain.product.service.ProductEntityService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
