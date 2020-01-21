@@ -1,13 +1,13 @@
 package com.nilsign.springbootdemo.data.creator;
 
-import com.nilsign.springbootdemo.entity.AddressEntity;
-import com.nilsign.springbootdemo.entity.DeliveryEntity;
-import com.nilsign.springbootdemo.entity.OrderEntity;
-import com.nilsign.springbootdemo.entity.ProductEntity;
-import com.nilsign.springbootdemo.entity.UserEntity;
-import com.nilsign.springbootdemo.service.OrderEntityService;
-import com.nilsign.springbootdemo.service.ProductEntityService;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.address.entity.AddressEntity;
+import com.nilsign.springbootdemo.domain.delivery.entity.DeliveryEntity;
+import com.nilsign.springbootdemo.domain.order.entity.OrderEntity;
+import com.nilsign.springbootdemo.domain.product.entity.ProductEntity;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.order.service.OrderEntityService;
+import com.nilsign.springbootdemo.domain.product.service.ProductEntityService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +38,12 @@ public final class OrderDataCreator {
 
   public void createOrder(
       @NotNull UserEntity userEntity,
-      @NotNull @NotEmpty Set<ProductEntity> productEntities,
+      @NotNull @NotEmpty List<ProductEntity> productEntities,
       @NotNull AddressEntity invoiceAddress,
       @NotNull @NotEmpty List<DeliveryEntity> deliveryEntities) {
     Optional<OrderEntity> orderEntity = orderEntityService.save(OrderEntity.builder()
         .user(userEntity)
-        .products(productEntities)
+        .products(new HashSet<>(productEntities))
         .deliveries(new ArrayList<>())
         .invoiceAddress(invoiceAddress)
         .build());
@@ -58,11 +58,11 @@ public final class OrderDataCreator {
       @NotNull @NotBlank @Email String email,
       @NotNull @NotEmpty Set<Integer> productNumbers,
       @NotNull @Positive @Min(1) Integer numberOfDeliveries) {
-    Set<ProductEntity> productEntities = new HashSet<>();
+    List<ProductEntity> productEntities = new ArrayList<>();
     productNumbers.forEach(productNumber -> {
       Optional<ProductEntity> productEntity
           = productEntityService.findByProductNumber(productNumber);
-      productEntity.ifPresent(product -> productEntities.add(product));
+      productEntity.ifPresent(productEntities::add);
     });
     userEntityService.findByEmail(email).ifPresent(userEntity -> {
       if (userEntity.getCustomer() != null) {

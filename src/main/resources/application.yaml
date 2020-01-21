@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Spring Boot Demo
+  profiles:
+    active: DEV
+  mvc:
+    view:
+      suffix: .jsp

@@ -1,9 +1,9 @@
 package com.nilsign.springbootdemo.api.rest;
 
-import com.nilsign.springbootdemo.api.base.Controller;
-import com.nilsign.springbootdemo.dto.DeliveryDto;
-import com.nilsign.springbootdemo.entity.DeliveryEntity;
-import com.nilsign.springbootdemo.service.DeliveryDtoService;
+import com.nilsign.springbootdemo.api.rest.base.Controller;
+import com.nilsign.springbootdemo.domain.delivery.dto.DeliveryDto;
+import com.nilsign.springbootdemo.domain.delivery.entity.DeliveryEntity;
+import com.nilsign.springbootdemo.domain.delivery.service.DeliveryDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

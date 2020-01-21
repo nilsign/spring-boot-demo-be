@@ -2,7 +2,6 @@ package com.nilsign.springbootdemo;
 
 import com.nilsign.springbootdemo.data.DevDataCreator;
 import com.nilsign.springbootdemo.data.MasterDataCreator;
-import com.nilsign.springbootdemo.property.DataSourceProperties;
 import com.nilsign.springbootdemo.property.EnvironmentProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -20,12 +19,8 @@ public class SpringBootDemoApplication {
 
   public SpringBootDemoApplication(
       EnvironmentProperties environmentProperties,
-      DataSourceProperties dataSourceProperties,
       MasterDataCreator masterDataCreator,
       DevDataCreator devDataCreator) {
-    log.info("Environment: " + environmentProperties.getEnvironment());
-    log.info("Datasource url: " + dataSourceProperties.getUrl());
-    log.info("Datasource user: " + dataSourceProperties.getUserName());
     this.environmentProperties = environmentProperties;
     this.masterDataCreator = masterDataCreator;
     this.devDataCreator = devDataCreator;

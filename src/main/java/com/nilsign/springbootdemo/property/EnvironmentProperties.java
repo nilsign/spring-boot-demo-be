@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yaml")
 @ConfigurationProperties(prefix = "environment")
 public class EnvironmentProperties {
 
@@ -49,8 +49,9 @@ public class EnvironmentProperties {
           return EnvironmentType.QA;
         case EnvironmentProperties.PROD:
           return EnvironmentType.PROD;
+        default:
       }
-      throw new RuntimeException("Unknown environment or unsupported environment profile.");
+      throw new EnumConstantNotPresentException(EnvironmentType.class, environment);
     }
   }
 }

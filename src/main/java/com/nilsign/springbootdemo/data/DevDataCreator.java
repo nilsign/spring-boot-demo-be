@@ -4,30 +4,29 @@ import com.nilsign.springbootdemo.data.creator.OrderDataCreator;
 import com.nilsign.springbootdemo.data.creator.ProductDataCreator;
 import com.nilsign.springbootdemo.data.creator.RatingDataCreator;
 import com.nilsign.springbootdemo.data.creator.UserDataCreator;
-import com.nilsign.springbootdemo.service.UserEntityService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Slf4j
-@Service
+@Profile("DEV")
+@Configuration
 public class DevDataCreator {
 
+  private static final String ADMIN_EMAIL = "ada.mistrate@gmail.com";
+  private static final String SELLER_EMAIL = "selma.sellington@gmail.com";
   private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
-  private static final String BUYER_2_EMAIL = "mad.alistoles@gmail.com";
+  private static final String BUYER_2_EMAIL = "mad.allistoles@gmail.com";
 
   private static final Integer PRODUCT_1_NUMBER = 1;
   private static final Integer PRODUCT_2_NUMBER = 2;
   private static final Integer PRODUCT_3_NUMBER = 3;
-
-
-  @Value("${user.buyer.default.password}")
-  private String buyerPassword;
 
   @Autowired
   private UserDataCreator userDataCreator;
@@ -46,7 +45,9 @@ public class DevDataCreator {
 
   @Transactional
   public void createDevDataIfNotExist() {
-    if (userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
+    if (userEntityService.findByEmail(ADMIN_EMAIL).isPresent()
+        && userEntityService.findByEmail(SELLER_EMAIL).isPresent()
+        && userEntityService.findByEmail(BUYER_1_EMAIL).isPresent()
         && userEntityService.findByEmail(BUYER_2_EMAIL).isPresent()) {
       log.info("DEV data already exists - skip DEV data creation.");
       return;
@@ -60,11 +61,18 @@ public class DevDataCreator {
   }
 
   private void createUsers() {
+    userDataCreator.createAdminUserIfNotExists(
+        "Ada",
+        "Mistrate",
+        ADMIN_EMAIL);
+    userDataCreator.createSellerUserIfNotExists(
+        "Selma",
+        "Sellington",
+        SELLER_EMAIL);
     userDataCreator.createBuyerUserIfNotExist(
         "Bud",
         "Buymann",
         BUYER_1_EMAIL,
-        buyerPassword,
         "Buttmens Street 13",
         "48308",
         "Buttington",
@@ -73,11 +81,11 @@ public class DevDataCreator {
         "Mad",
         "Alistoles",
         BUYER_2_EMAIL,
-        buyerPassword,
         "Notenough Way 66",
         "69693",
         "Greedcreek",
         "USA");
+
   }
 
   private void createProducts() {
