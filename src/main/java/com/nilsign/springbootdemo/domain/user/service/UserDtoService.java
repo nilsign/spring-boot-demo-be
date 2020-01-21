@@ -31,7 +31,7 @@ public class UserDtoService extends DtoService<UserDto, UserEntity, Long> {
             ? null
             : customerEntityService.findById(userDto.getCustomerId())
                 .orElseThrow(()-> new IllegalStateException(String.format(
-                    "UserDto has an unknown customer id '%d'. CustomerEntity can not be null",
+                    "UserDto has an unknown customer id '%d'. CustomerEntity can not be null.",
                     userDto.getCustomerId()))));
   }
 
