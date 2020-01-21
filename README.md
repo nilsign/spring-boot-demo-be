@@ -5,13 +5,15 @@ stack, or just can be used to write POCs in order to test new technologies or po
 for certain Spring Boot related problems.
 
 One main focus is on Spring Security's OAuth2 authentication and authorization, including login and
-logout. The implemented solution does only rely on the the OAuth2 (including OpenID Connect)
-protocol, in order to be able to easily exchange the OAuth2 provider, which is here Keycloak running
-locally in a Docker container.
+logout. The implemented solution does only rely on the OAuth2 (including OpenID Connect) protocol,
+in order to keep the ability to easily exchange the OAuth2 provider, which is here Keycloak running
+locally in a Docker container. Especially the authorization role model is not really a typical real
+project model. The aim was here to restrict the REST Api to user roles provided by Keycloak and to
+roles provided by a JPA datasource (Postgres).
 
-As database a Postgres instance has been chosen, running in a local Docker container. Note,
-that the relational model might be a bit constructed in order to reflect all table relationships
-and the resulting Hibernate entity representations.
+As database a Postgres instance has been chosen, running in a local Docker container. Note, that the
+relational model might be a bit 'constructed' in order to reflect all relevant table relationships 
+and the resulting Hibernate uni- and bi-directional entity representations.
 
 A Swagger API documentation can be found here once the project is running (locally) on the DEV
 environment.
@@ -27,7 +29,6 @@ environment.
 - Docker
 - Swagger API Documentation
 - Sonarqube
-
 
 ### Setup Keycloak Docker Container
 
@@ -68,7 +69,7 @@ User and restart Keycloak with port mapping (localhost:8100->8080).
     7.6 DemoProjectRealm->Configure->Manage->Users->nilsign->Credentials
 
     - Enter temporary password and press "Set Password"
-    - Repeat, 7.5 and 7.6 with the email addresses: ada.mistrate@gmail.com,
+    - Repeat, 7.5 and 7.6 with the email addresses: ada.mistrate@gmail.com
     - Repeat, 7.5 and 7.6 with the email addresses: selma.sellington@gmail.com
     - Repeat, 7.5 and 7.6 with the email addresses: bud.buyman@gmail.com
 
@@ -81,7 +82,7 @@ User and restart Keycloak with port mapping (localhost:8100->8080).
     - ... selma->Role Mappings->Client Roles->DemoProjectRestApiClient
         - Select ROLE_CLIENT_SELLER and press "Add selected"
     - ... bud->Role Mappings->Client Roles->DemoProjectRestApiClient
-        - Select ROLE_CLIENT_BUYSER and press "Add selected"
+        - Select ROLE_CLIENT_BUYER and press "Add selected"
 
     7.9 DemoProjectRealm>Configure->Clients->Account
     - Enable Service Accounts: ON
@@ -95,13 +96,13 @@ fully set up"!
     http://localhost:8100/auth/realms/DemoProjectRealm/account/
 
 9. (Optional) Commit the running Keycloak Docker container to a new Docker image. ("4cfca7c93d87" is
-the Container ID)
+the Container ID).
 
         $ docker ps -a
         $ docker commit 4cfca7c93d87 jboss/keycloak:demo-project-v1
 
 10. (Requires: 9) To start the new jboss/keycloak:demo-project-v1 Docker image again when it was
-shut down execute.
+shut down execute
 
         $ docker run -p 8100:8080 jboss/keycloak:demo-project-v1
 
@@ -176,7 +177,7 @@ id.
 
         postgres=# \du
 
-2. Create a the Demo Project Postgres database. (Do not forget the semicolon!)
+2. Create a the Demo Project Postgres database (Do not forget the semicolon!)
 
         postgres=# CREATE DATABASE demoprojectdb;
 
@@ -194,19 +195,26 @@ id.
 
 ### Setup Sonarqube
 
-1. Get Sonarqube Docker image and run it in a Docker container.
+1. Get Sonarqube Docker image and run it in a Docker container
 
         $ docker pull sonarqube
         $ docker run -d --name sonarqube -p 9000:9000 sonarqube
 
-2. Execute Sonarqube's code analyses
+2. Execute Sonarqube's code analyses.
 
         $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=the-generated-token
 
-3. Navigate to the to http://localhost:9000 and enter the default credentials
+3. Navigate to the to http://localhost:9000 and enter the default credentials to inspect the results
 - Username: admin
 - Password: admin
 
 More detailed information can be found on the official Sonarqube pages.
 - https://docs.sonarqube.org/latest/
 - https://hub.docker.com/_/sonarqube/
+
+### Road Map
+
++ Angular Frontend (will be done in a separate repository)
++ RestAPI Request Error Handling
++ Unit tests
++ Integration tests
