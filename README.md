@@ -29,21 +29,21 @@ relationships and the resulting Hibernate uni- and bi-directional entity represe
 
 ### Setup Keycloak Docker Container
 
-The are two options to setup a Keycloak Docker running container. The easy one is the pre-configured
-option. Here the creation of the Keycloak realm, clients, secrets, users, roles and the all the
-other configuration is already done and out of the bo available. Also, there is not need to exchange
-the secret in the source code, as they are correct already.
+The are two options to setup a Keycloak instance running in a Docker container. The easy one is the
+pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles and
+all the other configuration work is already done and out of the box available. Also, there is no
+need to exchange the client secret in the source code, as they are correct already.
 
-If you what to get more used to Keycloak and Docker I recommend the manual configuration option.
+If you want to get more used to Keycloak and Docker I recommend the manual configuration option.
 
 #### Pre-configured Keycloak Docker Image
 
 1. [Download](https://drive.google.com/uc?id=1-clZHNr_8btaPAqoFr_m0L_JdLyC6Cxc&export=download)
 a fully pre-configured Docker Keycloak image as tar.
 
-2. Load the tar and just run it in a Docker container.
+2. Load the tar and then just run it in a Docker container.
 
-        $ docker load < [Path to downloaded Docker image]/boss-keycloak-demo-project-docker-image-v3.tar
+        $ docker load < [Path to downloaded tar]/boss-keycloak-demo-project-docker-image-v3.tar
         $ docker run --name demo-project-keycloak -p 8100:8080 jboss/keycloak
 
 3. To access the Keycloak Administration Console navigate to http://localhost:8100 and enter the
