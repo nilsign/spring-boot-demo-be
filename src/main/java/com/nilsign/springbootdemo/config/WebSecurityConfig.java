@@ -32,7 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // still may create sessions.
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
-        .and().cors()
         .and().csrf()
         .and().logout().addLogoutHandler(keycloakLogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
