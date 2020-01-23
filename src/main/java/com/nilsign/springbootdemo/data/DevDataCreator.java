@@ -19,10 +19,10 @@ import java.util.Set;
 @Configuration
 public class DevDataCreator {
 
-  private static final String ADMIN_EMAIL = "ada.mistrate@gmail.com";
-  private static final String SELLER_EMAIL = "selma.sellington@gmail.com";
-  private static final String BUYER_1_EMAIL = "bud.buyman@gmail.com";
-  private static final String BUYER_2_EMAIL = "mad.allistoles@gmail.com";
+  private static final String ADMIN_EMAIL = "ada.mistrate@nilsign.com";
+  private static final String SELLER_EMAIL = "selma.sellington@nilsign.com";
+  private static final String BUYER_1_EMAIL = "bud.buyman@nilsign.com";
+  private static final String BUYER_2_EMAIL = "mad.allistoles@nilsign.com";
 
   private static final Integer PRODUCT_1_NUMBER = 1;
   private static final Integer PRODUCT_2_NUMBER = 2;
