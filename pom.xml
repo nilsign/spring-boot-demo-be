@@ -14,7 +14,7 @@
 
   <groupId>com.nilsign</groupId>
   <artifactId>spring-boot-demo</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.3.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Spring Boot Demo Project</name>
   <description>Demo project for Spring Boot</description>
@@ -154,6 +154,36 @@
               <id>PROD</id>
             </profile>
           </profiles>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>2.19.577</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <mapClasses>asClasses</mapClasses>
+          <mapEnum>asEnum</mapEnum>
+          <mapDate>asDate</mapDate>
+          <nonConstEnums>true</nonConstEnums>
+          <stringQuotes>singleQuotes</stringQuotes>
+          <classPatterns>
+            <pattern>com.nilsign.springbootdemo.domain.*</pattern>
+            <pattern>com.nilsign.springbootdemo.domain.*.dto.*</pattern>
+          </classPatterns>
+          <outputFile>generated/dto-models.d.ts</outputFile>
+          <outputFileType>implementationFile</outputFileType>
+          <outputKind>module</outputKind>
         </configuration>
       </plugin>
 
