@@ -183,7 +183,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 #### Update Keycloaks Client Authenticator Secret in the Code
 
-1. Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
+Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
 "client-secret".
 
 Note, the client secret can be found at
@@ -191,16 +191,16 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 
 #### Keycloak Docker Management
 
-9. (Optional) Commit the running Keycloak Docker container to a new Docker image.
+1. (Optional) Commit the running Keycloak Docker container to a new Docker image.
 
         $ docker ps -a
         $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v4
 
-10. (Requires: 9) To start the new jboss/keycloak:demo-project-v3 Docker image execute
+2. (Requires: 9) To start the new jboss/keycloak:demo-project-v3 Docker image execute
 
         $ docker run -p 8100:8080 jboss/keycloak:demo-project-v4
 
-11. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
+3. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
 container name or id.
 
         $ docker ps -a
