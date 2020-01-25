@@ -20,6 +20,7 @@ relationships and the resulting Hibernate uni- and bi-directional entity represe
 - Spring Boot
 - OAuth2 with Keycloak
 - Hibernate
+- Lombok
 - Flyway
 - REST Api
 - JSP
