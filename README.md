@@ -209,20 +209,20 @@ container name or id.
 
 #### Test Keycloak DemoProjectRestApiClient with Postman
 
-1. Test the Keycloak instance with [Postman](https://www.getpostman.com/)
+Test the Keycloak instance with [Postman](https://www.getpostman.com/)
 
-    POST REQUEST: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
+POST REQUEST: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
 
-    REQUEST BODY: x-www-form-urlencoded
+REQUEST BODY: x-www-form-urlencoded
 
-    KEY: `client_id` => VALUE: `DemoProjectRestApiClient`<br>
-    KEY: `username` => VALUE: `nilsign@nilsign.com`<br>
-    KEY: `password` => VALUE: `root`<br>
-    KEY: `grant_type` => VALUE: `password`<br>
-    KEY: `client_secret` => VALUE: `6a06b69f-8108-4d40-af64-ed1325385c5d` <br>
+KEY: `client_id` => VALUE: `DemoProjectRestApiClient`<br>
+KEY: `username` => VALUE: `nilsign@nilsign.com`<br>
+KEY: `password` => VALUE: `root`<br>
+KEY: `grant_type` => VALUE: `password`<br>
+KEY: `client_secret` => VALUE: `6a06b69f-8108-4d40-af64-ed1325385c5d` <br>
 
-    Note, the correct client secret can be found at
-    DemoProjectRealm->Configure->Clients->Account->Credentials
+Note, the correct client secret can be found at
+DemoProjectRealm->Configure->Clients->Account->Credentials
 
 ### Setup Postgres
 
@@ -289,7 +289,7 @@ container name or id.
 
 ### Setup Sonarqube
 
-1. Get Sonarqube Docker image and run it in a Docker container
+Get Sonarqube Docker image and run it in a Docker container
 
         $ docker pull sonarqube
         $ docker run -d --name sonarqube -p 9000:9000 sonarqube
@@ -329,12 +329,14 @@ DTO model generation path-scanner.
     and [Sonarqube Docker](https://hub.docker.com/_/sonarqube/) pages
 
 ### Swagger
+
 A Swagger API documentation can be found here once the project is running (locally) on the DEV
 environment.
 
 - http://localhost:8080/swagger-ui.html
 
 ## ROAD MAP
+
 + Angular Frontend (will be done in a separate repository)
 + RestAPI extensions depending on the concrete FE needs
 + RestAPI Request Error Handling
