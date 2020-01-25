@@ -8,12 +8,12 @@ for certain Spring Boot related problems.
 One main focus is on Spring Security's OAuth2 authentication and authorization, including login and
 logout. The implemented solution does only rely on the OAuth2 (including OpenID Connect) protocol,
 in order to keep the ability to easily exchange the OAuth2 provider, which is here Keycloak running
-locally in a Docker container. Especially the authorization role model is not really a typical real
-project model. The aim was here to restrict the REST Api to user roles provided by Keycloak and to
-roles provided by a JPA datasource (Postgres).
+locally in a Docker container. Be aware, that especially the authorization role model is not really
+a typical real-world model. The intention was here to restrict the REST Api to user roles provided
+by Keycloak and to roles provided by a JPA datasource (Postgres).
 
 As database a Postgres instance has been chosen, running also in a local Docker container. Note,
-that the relational model might be a bit 'constructed' in order to reflect all relevant table
+that the relational model might also be a bit 'constructed' in order to reflect all relevant table
 relationships and the resulting Hibernate uni- and bi-directional entity representations.
 
 ### Major Tech-Stack
@@ -34,10 +34,10 @@ relationships and the resulting Hibernate uni- and bi-directional entity represe
 
 ### Setup Keycloak Docker Container
 
-The are two options to setup a Keycloak instance running in a Docker container. The easy one is the
-pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles and
-all the other configuration work is already done and out of the box available. Also, there is no
-need to exchange the client secret in the source code, as they are correct already.
+There are two options to setup a Keycloak instance running in a Docker container. The easy one is
+the pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles
+and all the other configuration work is already done and out of the box available. Also, there is
+no need to exchange the client secret in the source code, as they are correct already.
 
 If you want to get more used to Keycloak and Docker I recommend the manual configuration option.
 
