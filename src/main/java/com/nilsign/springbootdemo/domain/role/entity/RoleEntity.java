@@ -1,6 +1,6 @@
 package com.nilsign.springbootdemo.domain.role.entity;
 
-import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
 import com.nilsign.springbootdemo.domain.SequencedEntity;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class RoleEntity extends SequencedEntity {
 
   @Column(name = "role_type", nullable = false)
   @Enumerated(EnumType.STRING)
-  private JpaRoleType roleType;
+  private RoleType roleType;
 
   @Column(name = "role_name", nullable = false)
   private String roleName;

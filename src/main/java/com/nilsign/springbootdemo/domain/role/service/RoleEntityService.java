@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo.domain.role.service;
 
 import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
-import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.repository.RoleRepository;
 import com.nilsign.springbootdemo.domain.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class RoleEntityService extends EntityService<RoleEntity, Long> {
     return roleRepository;
   }
 
-  public Optional<RoleEntity> findByRoleType(@NotNull JpaRoleType type) {
+  public Optional<RoleEntity> findByRoleType(@NotNull RoleType type) {
     return getRepository().findByRoleType(type);
   }
 }

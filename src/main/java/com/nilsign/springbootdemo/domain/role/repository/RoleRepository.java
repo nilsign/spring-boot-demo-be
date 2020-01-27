@@ -1,7 +1,7 @@
 package com.nilsign.springbootdemo.domain.role.repository;
 
 import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
-import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.role.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
   Optional<RoleEntity> findByRoleType(
-      @NotNull JpaRoleType roleType);
+      @NotNull RoleType roleType);
 }
