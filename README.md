@@ -8,18 +8,19 @@ for certain Spring Boot related problems.
 One main focus is on Spring Security's OAuth2 authentication and authorization, including login and
 logout. The implemented solution does only rely on the OAuth2 (including OpenID Connect) protocol,
 in order to keep the ability to easily exchange the OAuth2 provider, which is here Keycloak running
-locally in a Docker container. Especially the authorization role model is not really a typical real
-project model. The aim was here to restrict the REST Api to user roles provided by Keycloak and to
-roles provided by a JPA datasource (Postgres).
+locally in a Docker container. Be aware, that especially the authorization role model is not really
+a typical real-world model. The intention was here to restrict the REST Api to user roles provided
+by Keycloak and to roles provided by a JPA datasource (Postgres).
 
 As database a Postgres instance has been chosen, running also in a local Docker container. Note,
-that the relational model might be a bit 'constructed' in order to reflect all relevant table
+that the relational model might also be a bit 'constructed' in order to reflect all relevant table
 relationships and the resulting Hibernate uni- and bi-directional entity representations.
 
 ### Major Tech-Stack
 - Spring Boot
 - OAuth2 with Keycloak
 - Hibernate
+- Lombok
 - Flyway
 - REST Api
 - JSP
@@ -33,10 +34,10 @@ relationships and the resulting Hibernate uni- and bi-directional entity represe
 
 ### Setup Keycloak Docker Container
 
-The are two options to setup a Keycloak instance running in a Docker container. The easy one is the
-pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles and
-all the other configuration work is already done and out of the box available. Also, there is no
-need to exchange the client secret in the source code, as they are correct already.
+There are two options to setup a Keycloak instance running in a Docker container. The easy one is
+the pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles
+and all the other configuration work is already done and out of the box available. Also, there is
+no need to exchange the client secret in the source code, as they are correct already.
 
 If you want to get more used to Keycloak and Docker I recommend the manual configuration option.
 
@@ -183,7 +184,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 #### Update Keycloaks Client Authenticator Secret in the Code
 
-1. Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
+Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
 "client-secret".
 
 Note, the client secret can be found at
@@ -191,16 +192,16 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 
 #### Keycloak Docker Management
 
-9. (Optional) Commit the running Keycloak Docker container to a new Docker image.
+1. (Optional) Commit the running Keycloak Docker container to a new Docker image.
 
         $ docker ps -a
         $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v4
 
-10. (Requires: 9) To start the new jboss/keycloak:demo-project-v3 Docker image execute
+2. (Requires: 9) To start the new jboss/keycloak:demo-project-v3 Docker image execute
 
         $ docker run -p 8100:8080 jboss/keycloak:demo-project-v4
 
-11. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
+3. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
 container name or id.
 
         $ docker ps -a
@@ -209,20 +210,20 @@ container name or id.
 
 #### Test Keycloak DemoProjectRestApiClient with Postman
 
-1. Test the Keycloak instance with [Postman](https://www.getpostman.com/)
+Test the Keycloak instance with [Postman](https://www.getpostman.com/)
 
-    POST REQUEST: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
+POST REQUEST: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
 
-    REQUEST BODY: x-www-form-urlencoded
+REQUEST BODY: x-www-form-urlencoded
 
-    KEY: `client_id` => VALUE: `DemoProjectRestApiClient`<br>
-    KEY: `username` => VALUE: `nilsign@nilsign.com`<br>
-    KEY: `password` => VALUE: `root`<br>
-    KEY: `grant_type` => VALUE: `password`<br>
-    KEY: `client_secret` => VALUE: `6a06b69f-8108-4d40-af64-ed1325385c5d` <br>
+KEY: `client_id` => VALUE: `DemoProjectRestApiClient`<br>
+KEY: `username` => VALUE: `nilsign@nilsign.com`<br>
+KEY: `password` => VALUE: `root`<br>
+KEY: `grant_type` => VALUE: `password`<br>
+KEY: `client_secret` => VALUE: `6a06b69f-8108-4d40-af64-ed1325385c5d` <br>
 
-    Note, the correct client secret can be found at
-    DemoProjectRealm->Configure->Clients->Account->Credentials
+Note, the correct client secret can be found at
+DemoProjectRealm->Configure->Clients->Account->Credentials
 
 ### Setup Postgres
 
@@ -289,7 +290,7 @@ container name or id.
 
 ### Setup Sonarqube
 
-1. Get Sonarqube Docker image and run it in a Docker container
+Get Sonarqube Docker image and run it in a Docker container
 
         $ docker pull sonarqube
         $ docker run -d --name sonarqube -p 9000:9000 sonarqube
@@ -329,12 +330,14 @@ DTO model generation path-scanner.
     and [Sonarqube Docker](https://hub.docker.com/_/sonarqube/) pages
 
 ### Swagger
+
 A Swagger API documentation can be found here once the project is running (locally) on the DEV
 environment.
 
 - http://localhost:8080/swagger-ui.html
 
 ## ROAD MAP
+
 + Angular Frontend (will be done in a separate repository)
 + RestAPI extensions depending on the concrete FE needs
 + RestAPI Request Error Handling
