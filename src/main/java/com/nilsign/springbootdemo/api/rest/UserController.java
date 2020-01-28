@@ -5,7 +5,6 @@ import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import com.nilsign.springbootdemo.domain.user.service.LoggedInUserDtoService;
 import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

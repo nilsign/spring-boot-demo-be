@@ -46,7 +46,7 @@ If you want to get more used to Keycloak and Docker I recommend the manual confi
 If you want to manually setup the docker container skip this chapter and instead follow the
 instructions of the manual configuration.
 
-1. [Download](https://drive.google.com/uc?id=1-clZHNr_8btaPAqoFr_m0L_JdLyC6Cxc&export=download)
+1. [Download](https://drive.google.com/file/d/1syQ0qR7WjD2oNkev5vQFCtMAFVkWl1sD/view?usp=sharing)
 a fully pre-configured Docker Keycloak image as tar.
 
 2. Load the tar and then just run it in a Docker container.
@@ -70,8 +70,8 @@ Note, that the password for all other Keycloak Realm users is also `root`.
 
         $ docker pull jboss/keycloak
 
-2. Start Keycloak in a Docker container named "demo-project-keycloak" and add the Keycloak Admin
-User and restart Keycloak with port mapping (localhost:8100->8080).
+2. Start Keycloak in a Docker container named "demo-project-keycloak", add the Keycloak Admin User
+and restart Keycloak with port mapping (localhost:8100->8080).
 
         $ docker images
         $ docker run --name demo-project-keycloak -e KEYCLOAK_USER=nilsign@gmail.com -e KEYCLOAK_PASSWORD=root -p 8100:8080 jboss/keycloak
@@ -82,9 +82,9 @@ User and restart Keycloak with port mapping (localhost:8100->8080).
 navigate to the Administration Console.
 
 5. If Keycloak responds to http requests with this payload `"error": "invalid_grant - Account is not
-fully set up"`, ensure that you do not still have you temporary Keycloak password! You can test, and
-if required set your permanent password, by a logout and re-login or browse http://localhost:8100
-to with Incognito-Mode.
+fully set up"`, ensure that you do not still have your temporary Keycloak password! You can test
+this, and if required set your permanent password, by a logout and re-login or browse to
+http://localhost:8100 in Incognito-Mode.
 
 #### Create a Keycloak Realm
 
@@ -131,7 +131,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 #### Create a Keycloak DemoProjectRealm Client Roles and Users
 
-1. Click to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->"Roles"<br>
+1. Click to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->Roles->"Add Role"<br>
 
     Role Name: `ROLE_REALM_CLIENT_ADMIN`
 
@@ -144,7 +144,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
     Email: `nilsign@nilsign.com`<br>
     Temporary Password: `root`<br>
 
-    Do NOT this user mix up this with Keycloak administrator "nilsign@gmail.com".
+    Do NOT this user mix up this with the Keycloak administrator "nilsign@gmail.com".
 
     Repeat 2. with:<br>
 
@@ -164,31 +164,31 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
     Email: `mad.allistoles@nilsign.com`<br>
     Temporary Password: `root`<br>
 
-3. Click to DemoProjectRealm>Configure->Manage->Users-> ...
+3. Click to DemoProjectRealm->Manage->Users-> ...
 
-    ... nilsign->Role Mappings->Client Roles->DemoProjectRestApiClient
-
-    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
-
-    ... ada->Role Mappings->Client Roles->DemoProjectRestApiClient
+    ... nilsign->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
     Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
 
-    ... selma->Role Mappings->Client Roles->DemoProjectRestApiClient
+    ... ada->Role Mappings->Client Roles->"DemoProjectRestApiClient"
+
+    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
+
+    ... selma->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
     Select `ROLE_REALM_CLIENT_SELLER` and press "Add selected"
 
-    ... bud->Role Mappings->Client Roles->DemoProjectRestApiClient
+    ... bud->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
     Select `ROLE_REALM_CLIENT_BUYER` and press "Add selected"
 
 #### Update Keycloak's Client Authenticator Secret in the Code
 
-Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
-"client-secret".
+Open the `application.yaml(s)` in the project's 'resources' folder and set the correct (your)
+Keycloak's "client-secret".
 
-Note, the client secret can be found at
-DemoProjectRealm->Configure->Clients->Account->Credentials
+Note, that the correct client secret can be found at
+DemoProjectRealm->Configure->Clients->Account->"Credentials"
 
 #### Keycloak Docker Management
 
@@ -197,7 +197,7 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
         $ docker ps -a
         $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v4
 
-2. (Requires: 9) To start the new jboss/keycloak:demo-project-v3 Docker image execute
+2. (Requires: 9) To start the new jboss/keycloak:demo-project-v4 Docker image execute
 
         $ docker run -p 8100:8080 jboss/keycloak:demo-project-v4
 
@@ -222,7 +222,7 @@ KEY: `password` => VALUE: `root`<br>
 KEY: `grant_type` => VALUE: `password`<br>
 KEY: `client_secret` => VALUE: `6a06b69f-8108-4d40-af64-ed1325385c5d` <br>
 
-Note, the correct client secret can be found at
+Note, that the correct client secret can be found at
 DemoProjectRealm->Configure->Clients->Account->Credentials
 
 ### Setup Postgres
@@ -236,7 +236,8 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
         $ docker pull postgres:11-alpine
 
 2. Run the image named "postgres:11.0-alpine" in detached mode in a container named
-"demo-project-postgres" with "root" as Postgres password.
+"demo-project-postgres" with "root" as Postgres password for the Postgres super admin user (named
+"postgres"). 
 
         $ docker images
         $ docker run --name demo-project-postgres -e POSTGRES_PASSWORD=root -d -p 5432:5432 postgres:11-alpine
@@ -303,11 +304,12 @@ Get Sonarqube Docker image and run it in a Docker container
 "[typescript-generator](https://github.com/vojtechhabarta/typescript-generator) is a tool for
 generating TypeScript definition files (.d.ts) from Java JSON classes. If you have REST service
 written in Java using object to JSON (wire format) mapping you can use typescript-generator to
-generate TypeScript interfaces from Java classes."
+generate TypeScript interfaces or classes from Java classes."
 
 Execute the following maven goal and a directory named 'generated' will appear with a Typescript
-file containing all Typescript DTO models. Copy the `dto-models.d.ts` file into your REST API client
-(e.g. a Frontend) project and use it there to communicate with this backend via the REST API.
+file containing all Typescript DTO models. Copy the `dto-models.ts` file into your REST API client
+(e.g. a Angular Frontend) project and use it there to communicate with this backend via the REST
+API.
 
 Adapt the [typescript-generator Maven plugIn](http://www.habarta.cz/typescript-generator/maven/typescript-generator-maven-plugin/plugin-info.html)
 values in the the `pom.xml` to e.g. mark additional java packages to be including in the Typescript
