@@ -102,7 +102,7 @@ to with Incognito-Mode.
 
 #### Create a Keycloak Realm Roles and Users
 
-1. Click to DemoProjectRealm>Configure->Roles->"Add roles"<br>
+1. Click to DemoProjectRealm->Configure->Roles->Realm Roles->"Add roles"<br>
 
     Role Name: `ROLE_REALM_GLOBALADMIN`
 
@@ -133,10 +133,10 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 1. Click to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->"Roles"<br>
 
-    Role Name: `ROLE_CLIENT_ADMIN`
+    Role Name: `ROLE_REALM_CLIENT_ADMIN`
 
-    Repeat 1. with Role Name: `ROLE_CLIENT_SELLER`<br>
-    Repeat 1. with the Role Name: `ROLE_CLIENT_BUYER`<br>
+    Repeat 1. with Role Name: `ROLE_REALM_CLIENT_SELLER`<br>
+    Repeat 1. with the Role Name: `ROLE_REALM_CLIENT_BUYER`<br>
 
 2.  Click to DemoProjectRealm->Configure->Manage->Users->"Add user"
 
@@ -168,21 +168,21 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
     ... nilsign->Role Mappings->Client Roles->DemoProjectRestApiClient
 
-    Select `ROLE_CLIENT_ADMIN` and press "Add selected"
+    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
 
     ... ada->Role Mappings->Client Roles->DemoProjectRestApiClient
 
-    Select `ROLE_CLIENT_ADMIN` and press "Add selected"
+    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
 
     ... selma->Role Mappings->Client Roles->DemoProjectRestApiClient
 
-    Select `ROLE_CLIENT_SELLER` and press "Add selected"
+    Select `ROLE_REALM_CLIENT_SELLER` and press "Add selected"
 
     ... bud->Role Mappings->Client Roles->DemoProjectRestApiClient
 
-    Select `ROLE_CLIENT_BUYER` and press "Add selected"
+    Select `ROLE_REALM_CLIENT_BUYER` and press "Add selected"
 
-#### Update Keycloaks Client Authenticator Secret in the Code
+#### Update Keycloak's Client Authenticator Secret in the Code
 
 Open the `application.yaml(s)` in the project's root folder and set the correct (your) Keycloak's
 "client-secret".

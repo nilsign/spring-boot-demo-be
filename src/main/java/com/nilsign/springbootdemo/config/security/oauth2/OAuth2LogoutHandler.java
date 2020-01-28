@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.config.keycloak;
+package com.nilsign.springbootdemo.config.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class KeycloakLogoutHandler extends SecurityContextLogoutHandler {
+public class OAuth2LogoutHandler extends SecurityContextLogoutHandler {
 
   private final RestTemplate restTemplate;
 

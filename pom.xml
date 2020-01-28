@@ -177,11 +177,14 @@
           <mapDate>asDate</mapDate>
           <nonConstEnums>true</nonConstEnums>
           <stringQuotes>singleQuotes</stringQuotes>
+          <classes>
+              <class>com.nilsign.springbootdemo.domain.Dto</class>
+          </classes>
           <classPatterns>
-            <pattern>com.nilsign.springbootdemo.domain.*</pattern>
+            <class>com.nilsign.springbootdemo.domain.dto</class>
             <pattern>com.nilsign.springbootdemo.domain.*.dto.*</pattern>
           </classPatterns>
-          <outputFile>generated/dto-models.d.ts</outputFile>
+          <outputFile>generated/dto-models.ts</outputFile>
           <outputFileType>implementationFile</outputFileType>
           <outputKind>module</outputKind>
         </configuration>

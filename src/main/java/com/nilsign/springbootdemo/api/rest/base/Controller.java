@@ -26,7 +26,7 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
   // TODO(nilsheumer): Find a good way to distinguish role access within the different derived
   // controllers.
   @GetMapping
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public List<T1> findAll() {
     return getDtoService().findAll();
   }
