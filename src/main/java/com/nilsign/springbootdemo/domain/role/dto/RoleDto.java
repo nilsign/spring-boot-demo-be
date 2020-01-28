@@ -2,7 +2,7 @@ package com.nilsign.springbootdemo.domain.role.dto;
 
 import com.nilsign.springbootdemo.domain.Dto;
 import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
-import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.role.RoleType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class RoleDto implements Dto {
   private Long id;
 
   @NotNull
-  private JpaRoleType roleType;
+  private RoleType roleType;
 
   @NotNull
   @NotBlank

@@ -3,7 +3,7 @@ package com.nilsign.springbootdemo.data.creator;
 import com.nilsign.springbootdemo.domain.address.entity.AddressEntity;
 import com.nilsign.springbootdemo.domain.customer.entity.CustomerEntity;
 import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
-import com.nilsign.springbootdemo.domain.role.JpaRoleType;
+import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import com.nilsign.springbootdemo.domain.role.service.RoleEntityService;
 import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
@@ -30,21 +30,21 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_GLOBALADMIN);
+    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_GLOBALADMIN);
   }
 
   public void createAdminUserIfNotExists(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_ADMIN);
+    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_ADMIN);
   }
 
   public void createSellerUserIfNotExists(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, JpaRoleType.ROLE_JPA_SELLER);
+    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_SELLER);
   }
 
   public void createBuyerUserIfNotExist(
@@ -56,7 +56,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String city,
       @NotNull @NotBlank String country) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(JpaRoleType.ROLE_JPA_BUYER);
+      Optional<RoleEntity> buyerRole = roleEntityService.findByRoleType(RoleType.ROLE_JPA_BUYER);
       Set<RoleEntity> roles = new HashSet<>();
       roles.add(buyerRole.orElseThrow(()
           -> new RuntimeException("Illegal state. Missing buyer role.")));
@@ -86,7 +86,7 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email,
-      @NotNull JpaRoleType roleType) {
+      @NotNull RoleType roleType) {
     if (userEntityService.findByEmail(email).isEmpty()) {
       Optional<RoleEntity> roleEntity =
           roleEntityService.findByRoleType(roleType);

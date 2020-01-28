@@ -1,4 +1,4 @@
-package com.nilsign.springbootdemo.config.keycloak;
+package com.nilsign.springbootdemo.config.security.oauth2;
 
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class KeycloakOauth2UserService extends OidcUserService {
+public class OAuth2LoggedInUserLoader extends OidcUserService {
 
   @Autowired
   private UserEntityService userEntityService;
@@ -55,7 +55,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
     OidcUser user = super.loadUser(userRequest);
     Set<GrantedAuthority> authorities = new LinkedHashSet<>();
     authorities.addAll(user.getAuthorities());
-    authorities.addAll(extractKeycloakAuthoritiesFromAccessToken(userRequest));
+    authorities.addAll(extractOAuth2ProviderAuthoritiesFromAccessToken(userRequest));
     authorities.addAll(getClientRolesFromDataSource(user));
     return new DefaultOidcUser(
         authorities,
@@ -64,7 +64,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
         "preferred_username");
   }
 
-  private Collection<? extends GrantedAuthority> extractKeycloakAuthoritiesFromAccessToken(
+  private Collection<? extends GrantedAuthority> extractOAuth2ProviderAuthoritiesFromAccessToken(
       OidcUserRequest userRequest) {
     Jwt token = parseJwt(userRequest.getAccessToken().getTokenValue());
     String clientId = userRequest.getClientRegistration().getClientId();

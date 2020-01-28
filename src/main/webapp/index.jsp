@@ -23,7 +23,7 @@
         </div>
         <div>&nbsp;</div>
         <div>
-            <a href="/user-info">Display User Info</a>
+            <a href="logged-in-user-info">Display User Info</a>
         </div>
         <div>&nbsp;</div>
         <div>

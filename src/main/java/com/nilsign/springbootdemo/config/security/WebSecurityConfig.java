@@ -1,7 +1,7 @@
-package com.nilsign.springbootdemo.config;
+package com.nilsign.springbootdemo.config.security;
 
-import com.nilsign.springbootdemo.config.keycloak.KeycloakLogoutHandler;
-import com.nilsign.springbootdemo.config.keycloak.KeycloakOauth2UserService;
+import com.nilsign.springbootdemo.config.security.oauth2.OAuth2LogoutHandler;
+import com.nilsign.springbootdemo.config.security.oauth2.OAuth2LoggedInUserLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +20,10 @@ import org.springframework.web.client.RestTemplate;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private KeycloakOauth2UserService keycloakOidcUserService;
+  private OAuth2LoggedInUserLoader keycloakOidcUserService;
 
   @Autowired
-  private KeycloakLogoutHandler keycloakLogoutHandler;
+  private OAuth2LogoutHandler oAuth2LogoutHandler;
 
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
@@ -33,21 +33,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
         .and().csrf()
-        .and().logout().addLogoutHandler(keycloakLogoutHandler)
+        .and().logout().addLogoutHandler(oAuth2LogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
   }
 
   @Bean
-  KeycloakOauth2UserService keycloakOidcUserService(OAuth2ClientProperties oauth2ClientProperties) {
+  OAuth2LoggedInUserLoader keycloakOidcUserService(OAuth2ClientProperties oauth2ClientProperties) {
     JwtDecoder jwtDecoder = NimbusJwtDecoder
         .withJwkSetUri(oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri())
         .build();
     SimpleAuthorityMapper authoritiesMapper = new SimpleAuthorityMapper();
-    return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper);
+    return new OAuth2LoggedInUserLoader(jwtDecoder, authoritiesMapper);
   }
 
   @Bean
-  KeycloakLogoutHandler keycloakLogoutHandler() {
-    return new KeycloakLogoutHandler(new RestTemplate());
+  OAuth2LogoutHandler keycloakLogoutHandler() {
+    return new OAuth2LogoutHandler(new RestTemplate());
   }
 }
