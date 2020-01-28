@@ -40,14 +40,14 @@ public class OAuth2LoginController {
     return new ModelAndView("index", model.asMap());
   }
 
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('CLIENT_ADMIN')")
-  @GetMapping("/user-info")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('RELAM_CLIENT_ADMIN')")
+  @GetMapping("/logged-in-user-info")
   public ModelAndView userInfo(Model model, OAuth2AuthenticationToken authentication) {
     Map<String, Object> userInfo = new HashMap<>();
     userInfo.put("userAttributes", getUserAttributes(authentication));
     userInfo.put("userAuthorities", getUserAuthorities(authentication));
     model.addAttribute("userInfo", userInfo);
-    return new ModelAndView("user-info", userInfo);
+    return new ModelAndView("logged-in-user-info", userInfo);
   }
 
   private OAuth2AuthorizedClient getAuthorizedClient(OAuth2AuthenticationToken authentication) {

@@ -10,7 +10,7 @@
         <link rel="manifest" href="/site.webmanifest">
     </head>
     <body>
-        <h1>OAuth 2.0 User Info</h1>
+        <h1>OAuth 2.0 Logged-In-User Info</h1>
         <div>
             <h3>
                 <span style="font-weight:bold">User Attributes</span>

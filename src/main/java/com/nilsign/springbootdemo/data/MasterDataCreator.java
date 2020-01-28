@@ -14,7 +14,7 @@ public class MasterDataCreator {
 
   private static final String GLOBAL_ADMIN_FIRST_NAME = "Nils";
   private static final String GLOBAL_ADMIN_LAST_NAME = "Heumer";
-  private static final String GLOBAL_ADMIN_EMAIL = "nilsign@nilslign.com";
+  private static final String GLOBAL_ADMIN_EMAIL = "nilsign@nilsign.com";
 
   @Autowired
   private UserDataCreator userDataCreator;
