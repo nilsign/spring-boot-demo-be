@@ -321,7 +321,7 @@ DTO model generation path-scanner.
 
 1. Execute Sonarqube's code analyses.
 
-        $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=the-generated-token
+        $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login="admin" -Dsonar.password="admin"
 
 2. Navigate to the to http://localhost:9000 and enter the default credentials to inspect the results
 

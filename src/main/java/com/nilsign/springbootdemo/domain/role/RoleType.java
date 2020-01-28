@@ -20,7 +20,7 @@ public enum RoleType {
   ROLE_OFFLINE_ACCESS("ROLE_OFFLINE_ACCESS"),
   ROLE_UMA_AUTHORIZATION("ROLE_UMA_AUTHORIZATION");
 
-  public static String ROLE_TYPE_NAME_PREFIX = "ROLE_";
+  public static final String ROLE_TYPE_NAME_PREFIX = "ROLE_";
 
   private final String name;
 

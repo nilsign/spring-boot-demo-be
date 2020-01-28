@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private OAuth2LoggedInUserLoader keycloakOidcUserService;
 
   @Autowired
-  private OAuth2LogoutHandler OAuth2LogoutHandler;
+  private OAuth2LogoutHandler oAuth2LogoutHandler;
 
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
         .and().csrf()
-        .and().logout().addLogoutHandler(OAuth2LogoutHandler)
+        .and().logout().addLogoutHandler(oAuth2LogoutHandler)
         .and().oauth2Login().userInfoEndpoint().oidcUserService(keycloakOidcUserService);
   }
 
