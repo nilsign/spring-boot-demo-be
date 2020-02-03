@@ -97,7 +97,8 @@ http://localhost:8100 in Incognito-Mode.
 3. Click to DemoProjectRealm->Configure->Clients->"Account"
    http://localhost:8100/auth/realms/DemoProjectRealm/account
 
-   Enable Service Accounts: ON
+   Enabled: ON<br>
+   Enable Service Accounts: ON<br>
    Enable Authorization: ON
 
 #### Create a Keycloak Realm Roles and Users
