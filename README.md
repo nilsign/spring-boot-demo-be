@@ -97,7 +97,6 @@ http://localhost:8100 in Incognito-Mode.
 3. Click to DemoProjectRealm->Configure->Clients->"Account"
    http://localhost:8100/auth/realms/DemoProjectRealm/account
 
-   Enabled: ON<br>
    Enable Service Accounts: ON<br>
    Enable Authorization: ON
 
@@ -128,7 +127,9 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 2. Click to DemoProjectRealm->Configure->Clients->"DemoProjectRestApiClient"<br>
 
-    Valid Redirect URIs: `http://localhost:8080/*`
+    Enabled: ON<br>
+    Valid Redirect URIs: `http://localhost:8080/*`<br>
+    Web Origins: `+`
 
 #### Create a Keycloak DemoProjectRealm Client Roles and Users
 
