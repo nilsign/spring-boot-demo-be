@@ -174,7 +174,8 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
     ... ada->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
-    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"
+    Select `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"<br>
+    Select `ROLE_REALM_CLIENT_SELLER` and press "Add selected"
 
     ... selma->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
