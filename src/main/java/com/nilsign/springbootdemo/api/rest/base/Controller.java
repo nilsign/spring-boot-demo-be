@@ -1,9 +1,8 @@
 package com.nilsign.springbootdemo.api.rest.base;
 
 import com.nilsign.springbootdemo.domain.Dto;
-import com.nilsign.springbootdemo.domain.SequencedEntity;
 import com.nilsign.springbootdemo.domain.DtoService;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.nilsign.springbootdemo.domain.SequencedEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +25,12 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
   // TODO(nilsheumer): Find a good way to distinguish role access within the different derived
   // controllers.
   @GetMapping
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
+  // @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public List<T1> findAll() {
     return getDtoService().findAll();
   }
 
-  @PreAuthorize("hasRole('JPA_GLOBALADMIN') OR hasRole('JPA_ADMIN')")
+  // @PreAuthorize("hasRole('JPA_GLOBALADMIN') OR hasRole('JPA_ADMIN')")
   @GetMapping(path = "{id}")
   public Optional<T1> findById(@NotNull @PathVariable T3 id) {
     return getDtoService().findById(id);

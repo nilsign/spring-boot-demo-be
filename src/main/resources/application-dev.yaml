@@ -1,5 +1,7 @@
 environment:
   name: DEV
+server:
+  port: 8080
 log4j:
   appender:
     stdout: org.apache.log4j.ConsoleAppender
@@ -35,21 +37,41 @@ spring:
           descriptor:
             sql: trace
     show-sql: true
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            authorization-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/auth
-            jwk-set-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/certs
-            token-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
-            user-info-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/userinfo
-            user-name-attribute: preferred_username
-        registration:
-          keycloak:
-            authorization-grant-type: authorization_code
-            client-id: DemoProjectRestApiClient
-            client-secret: 6a06b69f-8108-4d40-af64-ed1325385c5d
-            clientName: DemoProjectRestApiClient
-            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
-            scope: email,openid,profile
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          keycloak:
+#            authorization-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/auth
+#            jwk-set-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/certs
+#            token-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
+#            user-info-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/userinfo
+#            user-name-attribute: preferred_username
+#        registration:
+#          keycloak:
+#            authorization-grant-type: authorization_code
+#            client-id: DemoProjectRestApiClient
+#            client-secret: 6a06b69f-8108-4d40-af64-ed1325385c5d
+#            clientName: DemoProjectRestApiClient
+#            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
+#            scope: email,openid,profile
+# Keycloak Configuration
+keycloak:
+  auth-server-url: http://localhost:8100/auth
+  realm: DemoProjectRealm
+  resource: DemoProjectRestApiClient
+  public-client: true
+  bearer-only: true
+  use-resource-role-mappings: true
+  cors: true
+
+  security-constraints[0].authRoles[0]: user
+  security-constraints[0].authRoles[1]: admin
+  security-constraints[0].authRoles[2]: ROLE_REALM_CLIENT_ADMIN
+  security-constraints[0].authRoles[3]: REALM_CLIENT_ADMIN
+  security-constraints[0].authRoles[4]: ROLE_REALM_SUPERADMIN
+  security-constraints[0].authRoles[5]: REALM_SUPERADMIN
+  security-constraints[0].securityCollections[0].methods[0]: GET
+  security-constraints[0].securityCollections[0].methods[1]: POST
+  security-constraints[0].securityCollections[0].methods[2]: PUT
+  security-constraints[0].securityCollections[0].patterns[0]: /api/v1/user/*
