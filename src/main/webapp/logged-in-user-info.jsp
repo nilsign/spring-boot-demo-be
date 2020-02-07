@@ -13,7 +13,7 @@
         <h1>OAuth 2.0 Logged-In-User Info</h1>
         <div>
             <h3>
-                <span style="font-weight:bold">User Attributes</span>
+                <span style="font-weight:bold">Keycloak User Attributes</span>
             </h3>
             <ul>
                 <c:forEach items="${userAttributes}" var="attribute">
@@ -31,10 +31,34 @@
                 </c:forEach>
             </ul>
             <h3>
-                <span style="font-weight:bold">User Authorities</span>
+                <span style="font-weight:bold">Keycloak User Realm Roles</span>
             </h3>
             <ul>
-                <c:forEach items="${userAuthorities}" var="authority">
+                <c:forEach items="${userKeycloakRealmRoles}" var="role">
+                    <li>
+                        <span>
+                            ${role}
+                        </span>
+                    </li>
+                </c:forEach>
+            </ul>
+            <h3>
+            <span style="font-weight:bold">Keycloak User Realm Client Roles</span>
+        </h3>
+            <ul>
+                <c:forEach items="${userKeycloakRealmClientRoles}" var="role">
+                    <li>
+                        <span>
+                            ${role}
+                        </span>
+                    </li>
+                </c:forEach>
+            </ul>
+            <h3>
+                <span style="font-weight:bold">Spring Security User Authorities (including Keycloak and JPA Roles)</span>
+            </h3>
+            <ul>
+                <c:forEach items="${useSpringSecurityAuthorities}" var="authority">
                     <li>
                         <span>
                             ${authority}

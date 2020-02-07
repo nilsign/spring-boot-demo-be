@@ -34,12 +34,6 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!-- Hibernate, includes spring-boot-starter-jdbc -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-
     <!-- Spring boot properties annotation processor -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -48,29 +42,14 @@
     </dependency>
 
     <!-- Spring boot security -->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-starter-security</artifactId>-->
-<!--    </dependency>-->
-
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security</groupId>-->
-<!--      <artifactId>spring-security-oauth2-jose</artifactId>-->
-<!--    </dependency>-->
-
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security</groupId>-->
-<!--      <artifactId>spring-security-oauth2-client</artifactId>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-spring-boot-starter</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
     <!-- JSP, and embed jasper -->
@@ -85,6 +64,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- Hibernate, includes spring-boot-starter-jdbc -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
     <!-- Postgres and Flyway -->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -97,18 +82,17 @@
       <artifactId>flyway-core</artifactId>
     </dependency>
 
-    <!-- Useful libs -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-
     <!-- Spring boot dev tools -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
 

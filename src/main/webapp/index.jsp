@@ -10,13 +10,13 @@
         <link rel="manifest" href="/site.webmanifest">
     </head>
     <body>
-        <h1>OAuth 2.0 Login with Spring Security</h1>
+        <h1>OAuth 2.0 Login</h1>
         <div>
-            You are successfully logged in
+            You are successfully logged in as
             <span style="font-weight:bold">
                 ${userName}
             </span>
-            via the OAuth 2.0 Client
+            via the OAuth2 Keycloak Client
             <span style="font-weight:bold">
                 ${clientName}
             </span>
