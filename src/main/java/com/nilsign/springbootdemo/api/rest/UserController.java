@@ -26,8 +26,8 @@ public class UserController extends Controller<UserDto, UserEntity, Long> {
     return userDtoService;
   }
 
+  @GetMapping("/logged-in-user")
   @PreAuthorize("isAuthenticated()")
-  @GetMapping(path = "logged-in-user")
   public UserDto getLoggedInUser() {
     return loggedInUserDtoService.getLoggedInUserDto();
   }

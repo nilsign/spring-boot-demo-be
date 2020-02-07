@@ -34,8 +34,7 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     // still may create sessions.
     super.configure(http);
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-        .and().antMatcher("/**").authorizeRequests().anyRequest()
-        .authenticated()
+        .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
         .and().csrf();
   }
 
@@ -46,7 +45,7 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
   /**
    * Ensures that the Keycloak roles and the JPA roles of a logged in user are added to the Spring
-   * Security Context Authorities. This is required in order to user the @PreAuthorize annotation
+   * Security Context Authorities. This is required in order to use the @PreAuthorize annotation
    * (activated via the @EnableGlobalMethodSecurity annotation) on controller level.
    */
   @Override

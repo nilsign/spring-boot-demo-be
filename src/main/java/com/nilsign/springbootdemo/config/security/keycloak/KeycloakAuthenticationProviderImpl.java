@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * Ensures that the Keycloak roles and the JPA roles of a logged in user are added to the Spring
- * Security Context Authorities. This is required in order to user the @PreAuthorize annotation
+ * Security Context Authorities. This is required in order to use the @PreAuthorize annotation
  * (activated via the @EnableGlobalMethodSecurity annotation) on controller level.
  */
 @RequiredArgsConstructor
@@ -46,19 +46,19 @@ public class KeycloakAuthenticationProviderImpl extends KeycloakAuthenticationPr
   }
 
   private Collection<? extends GrantedAuthority> getKeycloakRealmRolesToAuthorities() {
-    AccessToken accessToken = KeycloakHelper.getLoggedInOidcUserToken();
+    AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Set<String> realmRoles = accessToken.getRealmAccess().getRoles();
     return toGrantedAuthorities(realmRoles);
   }
 
   private Collection<? extends GrantedAuthority> getKeycloakRealmClientRolesToAuthorities() {
-    AccessToken accessToken = KeycloakHelper.getLoggedInOidcUserToken();
+    AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Set<String> realmClientRoles = accessToken.getResourceAccess(accessToken.issuedFor).getRoles();
     return toGrantedAuthorities(realmClientRoles);
   }
 
   Collection<? extends GrantedAuthority> getRolesFromJpaDataSource() {
-    AccessToken accessToken = KeycloakHelper.getLoggedInOidcUserToken();
+    AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Optional<UserEntity> userEntity = userEntityService.findByEmail(accessToken.getEmail());
     return userEntity.isPresent()
         ? toGrantedAuthorities(userEntity.get().getRoles()

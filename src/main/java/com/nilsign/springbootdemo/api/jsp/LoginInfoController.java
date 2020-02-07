@@ -13,24 +13,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInOidcUserToken;
+import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInKeycloakUserAccessToken;
 
 @Controller
 public class LoginInfoController {
 
-  @PreAuthorize("isAuthenticated()")
   @GetMapping("/")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView index(Model model) {
-    AccessToken token = getLoggedInOidcUserToken();
+    AccessToken token = getLoggedInKeycloakUserAccessToken();
     model.addAttribute("userName", token.getName());
     model.addAttribute("clientName", token.getIssuedFor());
     return new ModelAndView("index", model.asMap());
   }
 
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   @GetMapping("/logged-in-user-info")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public ModelAndView userInfo(Model model) {
-    AccessToken token = getLoggedInOidcUserToken();
+    AccessToken token = getLoggedInKeycloakUserAccessToken();
     Map<String, Object> userInfo = new HashMap<>();
     userInfo.put("userAttributes", getUserAttributes(token));
     userInfo.put("userKeycloakRealmRoles", getUserRealmRoles(token));

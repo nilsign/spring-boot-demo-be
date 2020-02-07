@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInOidcUserToken;
+import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInKeycloakUserAccessToken;
 
 
 @Slf4j
@@ -25,7 +25,7 @@ public class LoggedInUserDtoService {
   private UserEntityService userEntityService;
 
   public UserDto getLoggedInUserDto() {
-    AccessToken token = getLoggedInOidcUserToken();
+    AccessToken token = getLoggedInKeycloakUserAccessToken();
     UserEntity userEntity = userEntityService.findByEmail(token.getEmail())
         .orElseThrow(() -> new IllegalStateException(String.format(
             "No user found with the email address '%s'.",

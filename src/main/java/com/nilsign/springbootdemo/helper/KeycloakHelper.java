@@ -10,16 +10,16 @@ public final class KeycloakHelper {
   private KeycloakHelper() {
   }
 
-  public static KeycloakPrincipal<KeycloakSecurityContext> getLoggedInOidcUser() {
+  public static KeycloakPrincipal<KeycloakSecurityContext> getLoggedInKeycloakUser() {
     return (KeycloakPrincipal<KeycloakSecurityContext>)
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  public static KeycloakSecurityContext getLoggedInOidcUserSecurityContext() {
-    return getLoggedInOidcUser().getKeycloakSecurityContext();
+  public static KeycloakSecurityContext getLoggedInKeycloakUserSecurityContext() {
+    return getLoggedInKeycloakUser().getKeycloakSecurityContext();
   }
 
-  public static AccessToken getLoggedInOidcUserToken() {
-    return getLoggedInOidcUserSecurityContext().getToken();
+  public static AccessToken getLoggedInKeycloakUserAccessToken() {
+    return getLoggedInKeycloakUserSecurityContext().getToken();
   }
 }

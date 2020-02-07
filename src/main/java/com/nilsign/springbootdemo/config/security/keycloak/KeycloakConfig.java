@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Ensures that Keycloak reads its configuration from the application.yml. Note, this must be a
+ * Ensures that Keycloak reads its configuration from the application.yaml. Note, this must be a
  * separated @Configuration annotated class.
  */
 @Configuration
