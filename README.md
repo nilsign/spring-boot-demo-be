@@ -46,12 +46,12 @@ If you want to get more used to Keycloak and Docker I recommend the manual confi
 If you want to manually setup the docker container skip this chapter and instead follow the
 instructions of the manual configuration.
 
-1. [Download](https://drive.google.com/file/d/1syQ0qR7WjD2oNkev5vQFCtMAFVkWl1sD/view?usp=sharing)
+1. [Download](https://drive.google.com/file/d/1W2CSAh0-wIyBZzPUvUd9G_KfJ_1iAtMd/view?usp=sharing)
 a fully pre-configured Docker Keycloak image as tar.
 
 2. Load the tar and then just run it in a Docker container.
 
-        $ docker load < [Path to downloaded tar]/boss-keycloak-demo-project-docker-image-v3.tar
+        $ docker load < [Path to downloaded tar]/boss-keycloak-demo-project-docker-image-v5.tar
         $ docker run --name demo-project-keycloak -p 8100:8080 jboss/keycloak
 
 3. To access the Keycloak Administration Console navigate to http://localhost:8100 and enter the
@@ -195,11 +195,11 @@ DemoProjectRealm->Configure->Clients->Account->"Credentials"
 1. (Optional) Commit the running Keycloak Docker container to a new Docker image.
 
         $ docker ps -a
-        $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v4
+        $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v5
 
-2. (Requires: 9) To start the new jboss/keycloak:demo-project-v4 Docker image execute
+2. (Requires: 9) To start the new jboss/keycloak:demo-project-v5 Docker image execute
 
-        $ docker run -p 8100:8080 jboss/keycloak:demo-project-v4
+        $ docker run -p 8100:8080 jboss/keycloak:demo-project-v5
 
 3. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
 container name or id.
