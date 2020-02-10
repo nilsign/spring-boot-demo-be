@@ -234,8 +234,8 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 ##### Get a Postgres Docker Image and start a Container
 
 1. Get Postgres alpine image.<br>
-    Note, that the selected Postgres must be supported by Flyway. Check [here which postgres version
-    is supported](https://flywaydb.org/documentation/database/postgresql).
+    Note, that the selected Postgres version must be supported by Flyway. Check [here which postgres
+    version is supported](https://flywaydb.org/documentation/database/postgresql).
 
         $ docker pull postgres:11-alpine
 
