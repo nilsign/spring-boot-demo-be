@@ -8,10 +8,8 @@ import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticatio
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 
 import java.util.Collection;
@@ -29,11 +27,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class KeycloakAuthenticationProviderImpl extends KeycloakAuthenticationProvider {
 
-  private final GrantedAuthoritiesMapper grantedAuthorityMapper;
+  private final SimpleAuthorityMapper grantedAuthorityMapper;
   private final UserEntityService userEntityService;
 
   @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  public Authentication authenticate(Authentication authentication) {
     KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) authentication;
     Set<GrantedAuthority> authorities = new HashSet<>();
     authorities.addAll(getKeycloakRealmRolesToAuthorities());
@@ -45,19 +43,19 @@ public class KeycloakAuthenticationProviderImpl extends KeycloakAuthenticationPr
         authorities);
   }
 
-  private Collection<? extends GrantedAuthority> getKeycloakRealmRolesToAuthorities() {
+  private Collection<GrantedAuthority> getKeycloakRealmRolesToAuthorities() {
     AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Set<String> realmRoles = accessToken.getRealmAccess().getRoles();
     return toGrantedAuthorities(realmRoles);
   }
 
-  private Collection<? extends GrantedAuthority> getKeycloakRealmClientRolesToAuthorities() {
+  private Collection<GrantedAuthority> getKeycloakRealmClientRolesToAuthorities() {
     AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Set<String> realmClientRoles = accessToken.getResourceAccess(accessToken.issuedFor).getRoles();
     return toGrantedAuthorities(realmClientRoles);
   }
 
-  Collection<? extends GrantedAuthority> getRolesFromJpaDataSource() {
+  Collection<GrantedAuthority> getRolesFromJpaDataSource() {
     AccessToken accessToken = KeycloakHelper.getLoggedInKeycloakUserAccessToken();
     Optional<UserEntity> userEntity = userEntityService.findByEmail(accessToken.getEmail());
     return userEntity.isPresent()
@@ -68,10 +66,10 @@ public class KeycloakAuthenticationProviderImpl extends KeycloakAuthenticationPr
         : Collections.emptySet();
   }
 
-  private Collection<? extends GrantedAuthority> toGrantedAuthorities(Set<String> roles) {
+  private Collection<GrantedAuthority> toGrantedAuthorities(Set<String> roles) {
     Collection<GrantedAuthority> authorities = AuthorityUtils
         .createAuthorityList(roles.toArray(new String[0]));
-    ((SimpleAuthorityMapper) grantedAuthorityMapper).setConvertToUpperCase(true);
+    grantedAuthorityMapper.setConvertToUpperCase(true);
     return grantedAuthorityMapper.mapAuthorities(authorities);
   }
 }

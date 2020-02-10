@@ -2,6 +2,7 @@ package com.nilsign.springbootdemo.domain.user.service;
 
 import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
+import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -72,11 +73,7 @@ public class LoggedInUserDtoService {
   private Set<RoleDto> combineJpaRolesAndOAuth2ProviderRoles(UserEntity userEntity) {
     Set<RoleType> jpaRoles = userEntity.getRoles()
         .stream()
-        // TODO(nilsheumer): Is the RoleDto creation here really required? Remove if not!
-        .map(RoleDto::create)
-        .collect(Collectors.toSet())
-        .stream()
-        .map(roleDto -> RoleType.valueOf(roleDto.getRoleType().name()))
+        .map(RoleEntity::getRoleType)
         .collect(Collectors.toSet());
     Set<RoleDto> combinedRoleDtos = userEntity.getRoles()
         .stream()
