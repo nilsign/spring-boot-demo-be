@@ -311,9 +311,9 @@ written in Java using object to JSON (wire format) mapping you can use typescrip
 generate TypeScript interfaces or classes from Java classes."
 
 Execute the following maven goal and a directory named 'generated' will appear with a Typescript
-file containing all Typescript DTO models. Copy the `dto-models.ts` file into corresponding REST API
-client (e.g. a Angular Frontend) project and use it there to communicate with this backend through
-the REST API.
+file containing all Typescript DTO models. Copy the `dto-models.ts` file into the corresponding REST
+API client (e.g. a Angular Frontend) project and use it there to communicate with this backend through
+its REST API.
 
 Adapt the [typescript-generator Maven plugIn](http://www.habarta.cz/typescript-generator/maven/typescript-generator-maven-plugin/plugin-info.html)
 values in the the `pom.xml` to e.g. mark additional java packages to be including in the Typescript
