@@ -2,19 +2,20 @@
 
 This Spring Boot demo application demonstrates several aspects of Spring Boot and surrounding
 technologies. It might be a good starting point for Spring Boot projects with a similar technology
-stack, or just can be used to write PoCs in order to test new technologies or potential solutions
-for certain Spring Boot related problems.
+stack, or just can be used as a quickstart to test new technologies or potential solution for
+certain Spring Boot related problems.
 
-One main focus is on Spring Security's OAuth2 authentication and authorization, including login and
-logout. The implemented solution does only rely on the OAuth2 (including OpenID Connect) protocol,
-in order to keep the ability to easily exchange the OAuth2 provider, which is here Keycloak running
-locally in a Docker container. Be aware, that especially the authorization role model is not really
-a typical real-world model. The intention was here to restrict the REST Api to user roles provided
-by Keycloak and to roles provided by a JPA datasource (Postgres).
+One main focus is on Keycloak, which acts as authentication (OpenID Connect) and authorization
+(OAuth2) provider. Keycloak's authorization is combined with Spring Security's controller function
+annotation based role and authority management framework. Be aware, that especially the
+authorization role model is not necessarily a typical real-world model. The core intention is here to
+restrict the REST Api to user roles provided by Keycloak and to roles provided by a JPA datasource
+(Postgres).
 
-As database a Postgres instance has been chosen, running also in a local Docker container. Note,
-that the relational model might also be a bit 'constructed' in order to reflect all relevant table
-relationships and the resulting Hibernate uni- and bi-directional entity representations.
+As database a Postgres instance is running also (as Keycloak) in a local Docker container. Note,
+that the relational model might be as well a bit 'constructed' in order to reflect all relevant
+database table relationships and the resulting Hibernate uni- and bi-directional entity
+representations.
 
 ### Major Tech-Stack
 - Spring Boot
@@ -39,12 +40,12 @@ the pre-configured option. Here the creation of the Keycloak realm, clients, sec
 and all the other configuration work is already done and out of the box available. Also, there is
 no need to exchange the client secret in the source code, as they are correct already.
 
-If you want to get more used to Keycloak and Docker I recommend the manual configuration option.
+To get more used to Keycloak and Docker the manual configuration option is recommended.
 
 #### Pre-configured Keycloak Docker Image
 
-If you want to manually setup the docker container skip this chapter and instead follow the
-instructions of the manual configuration.
+For a manual setup of the docker container skip this chapter and instead follow the instructions of
+the manual configuration.
 
 1. [Download](https://drive.google.com/file/d/1syQ0qR7WjD2oNkev5vQFCtMAFVkWl1sD/view?usp=sharing)
 a fully pre-configured Docker Keycloak image as tar.
@@ -82,9 +83,9 @@ and restart Keycloak with port mapping (localhost:8100->8080).
 navigate to the Administration Console.
 
 5. If Keycloak responds to http requests with this payload `"error": "invalid_grant - Account is not
-fully set up"`, ensure that you do not still have your temporary Keycloak password! You can test
-this, and if required set your permanent password, by a logout and re-login or browse to
-http://localhost:8100 in Incognito-Mode.
+fully set up"`, ensure that the temporary Keycloak password is not active anymore! This can be
+tested by a Keycloak logout and re-login or by simply browsing to http://localhost:8100 in the
+web browsers Incognito-Mode. If required, there will be a prompt to enter a permanent password.
 
 #### Create a Keycloak Realm
 
@@ -233,8 +234,8 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 ##### Get a Postgres Docker Image and start a Container
 
 1. Get Postgres alpine image.<br>
-    Note, that if you want to use Flyway as well, check here [which postgres version is supported](
-    https://flywaydb.org/documentation/database/postgresql).
+    Note, that the selected Postgres version must be supported by Flyway. Check [here which postgres
+    version is supported](https://flywaydb.org/documentation/database/postgresql).
 
         $ docker pull postgres:11-alpine
 
@@ -310,9 +311,9 @@ written in Java using object to JSON (wire format) mapping you can use typescrip
 generate TypeScript interfaces or classes from Java classes."
 
 Execute the following maven goal and a directory named 'generated' will appear with a Typescript
-file containing all Typescript DTO models. Copy the `dto-models.ts` file into your REST API client
-(e.g. a Angular Frontend) project and use it there to communicate with this backend via the REST
-API.
+file containing all Typescript DTO models. Copy the `dto-models.ts` file into the corresponding REST
+API client (e.g. a Angular Frontend) project and use it there to communicate with this backend through
+its REST API.
 
 Adapt the [typescript-generator Maven plugIn](http://www.habarta.cz/typescript-generator/maven/typescript-generator-maven-plugin/plugin-info.html)
 values in the the `pom.xml` to e.g. mark additional java packages to be including in the Typescript

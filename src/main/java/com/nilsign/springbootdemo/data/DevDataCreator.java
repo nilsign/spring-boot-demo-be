@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -71,7 +71,7 @@ public class DevDataCreator {
         SELLER_EMAIL);
     userDataCreator.createBuyerUserIfNotExist(
         "Bud",
-        "Buymann",
+        "Buyman",
         BUYER_1_EMAIL,
         "Buttmens Street 13",
         "48308",
@@ -85,7 +85,6 @@ public class DevDataCreator {
         "69693",
         "Greedcreek",
         "USA");
-
   }
 
   private void createProducts() {

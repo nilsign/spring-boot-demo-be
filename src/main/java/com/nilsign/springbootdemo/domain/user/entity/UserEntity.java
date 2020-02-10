@@ -1,9 +1,9 @@
 package com.nilsign.springbootdemo.domain.user.entity;
 
+import com.nilsign.springbootdemo.domain.SequencedEntity;
 import com.nilsign.springbootdemo.domain.customer.entity.CustomerEntity;
 import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
-import com.nilsign.springbootdemo.domain.SequencedEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -43,6 +43,7 @@ public class UserEntity extends SequencedEntity {
 
   // Uni-directional many-to-many relation.
   @ManyToMany(
+      fetch = FetchType.EAGER,
       cascade = {
           CascadeType.DETACH,
           CascadeType.MERGE,

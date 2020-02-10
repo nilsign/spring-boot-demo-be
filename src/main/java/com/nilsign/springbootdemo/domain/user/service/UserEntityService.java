@@ -1,8 +1,8 @@
 package com.nilsign.springbootdemo.domain.user.service;
 
+import com.nilsign.springbootdemo.domain.EntityService;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import com.nilsign.springbootdemo.domain.user.repository.UserRepository;
-import com.nilsign.springbootdemo.domain.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
