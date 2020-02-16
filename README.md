@@ -87,7 +87,7 @@ fully set up"`, ensure that the temporary Keycloak password is not active anymor
 tested by a Keycloak logout and re-login or by simply browsing to http://localhost:8100 in the
 web browsers Incognito-Mode. If required, there will be a prompt to enter a permanent password.
 
-#### Create a Keycloak Realm
+##### Create a Keycloak Realm
 
 1. Navigate to http://localhost:8100/auth/admin/master/console
 
@@ -101,7 +101,7 @@ web browsers Incognito-Mode. If required, there will be a prompt to enter a perm
    Enable Service Accounts: ON<br>
    Enable Authorization: ON
 
-#### Create a Keycloak Realm Roles and Users
+##### Create a Keycloak Realm Roles and Users
 
 1. Click to DemoProjectRealm->Configure->Roles->Realm Roles->"Add roles"<br>
 
@@ -120,7 +120,7 @@ password and press "Set Password".
 4. Click to DemoProjectRealm->Configure->Manage->Users->nilsign->Role Mappings->"Realm Roles",
 select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
-#### Create a Keycloak Realm Client
+##### Create a Keycloak Realm Client
 
 1. Click to DemoProjectRealm->Configure->Clients->"Create"<br>
 
@@ -132,7 +132,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
     Valid Redirect URIs: `http://localhost:8080/*`<br>
     Web Origins: `+`
 
-#### Create a Keycloak DemoProjectRealm Client Roles and Users
+##### Create a Keycloak DemoProjectRealm Client Roles and Users
 
 1. Click to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->Roles->"Add Role"<br>
 
@@ -186,7 +186,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
     Select `ROLE_REALM_CLIENT_BUYER` and press "Add selected"
 
-#### Update Keycloak's Client Authenticator Secret in the Code
+##### Update Keycloak's Client Authenticator Secret in the Code
 
 Open the `application.yaml(s)` in the project's 'resources' folder and set the correct (your)
 Keycloak's "client-secret".
