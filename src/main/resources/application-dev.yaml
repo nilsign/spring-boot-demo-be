@@ -43,3 +43,4 @@ keycloak:
   realm: DemoProjectRealm
   resource: DemoProjectRestApiClient
   cors: true
+  connection-pool-size: 100

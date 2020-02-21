@@ -41,7 +41,7 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Spring boot security -->
+    <!-- Spring boot security and Keycloak -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
@@ -50,6 +50,13 @@
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-spring-boot-starter</artifactId>
+      <version>${keycloak.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-admin-client</artifactId>
+      <version>${keycloak.version}</version>
     </dependency>
 
     <!-- JSP, and embed jasper -->
@@ -62,6 +69,12 @@
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- WebFlux -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
     <!-- Hibernate, includes spring-boot-starter-jdbc -->
