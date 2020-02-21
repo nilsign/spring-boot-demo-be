@@ -2,10 +2,10 @@ package com.nilsign.springbootdemo.data.creator;
 
 import com.nilsign.springbootdemo.domain.address.entity.AddressEntity;
 import com.nilsign.springbootdemo.domain.customer.entity.CustomerEntity;
-import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
 import com.nilsign.springbootdemo.domain.role.RoleType;
-import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
+import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
 import com.nilsign.springbootdemo.domain.role.service.RoleEntityService;
+import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,21 +30,23 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_GLOBALADMIN);
+    createNonBuyerUser(firstName, lastName, email, Set.of(RoleType.ROLE_JPA_GLOBALADMIN));
   }
 
-  public void createAdminUserIfNotExists(
+  public void createAdminSellerUserIfNotExists(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_ADMIN);
+    createNonBuyerUser(firstName, lastName, email, Set.of(
+        RoleType.ROLE_JPA_ADMIN,
+        RoleType.ROLE_JPA_SELLER));
   }
 
   public void createSellerUserIfNotExists(
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email) {
-    createNonBuyerUser(firstName, lastName, email, RoleType.ROLE_JPA_SELLER);
+    createNonBuyerUser(firstName, lastName, email, Set.of(RoleType.ROLE_JPA_SELLER));
   }
 
   public void createBuyerUserIfNotExist(
@@ -86,13 +88,16 @@ public final class UserDataCreator {
       @NotNull @NotBlank String firstName,
       @NotNull @NotBlank String lastName,
       @NotNull @NotBlank @Email String email,
-      @NotNull RoleType roleType) {
+      @NotNull Set<RoleType> roleTypes) {
     if (userEntityService.findByEmail(email).isEmpty()) {
-      Optional<RoleEntity> roleEntity =
-          roleEntityService.findByRoleType(roleType);
       Set<RoleEntity> roles = new HashSet<>();
-      roles.add(roleEntity.orElseThrow(()
-          -> new RuntimeException("Illegal state. Missing global admin role.")));
+      roleTypes.forEach(roleType -> {
+        Optional<RoleEntity> roleEntity =
+            roleEntityService.findByRoleType(roleType);
+        roles.add(roleEntity.orElseThrow(()
+            -> new RuntimeException("Illegal state. Missing jpa role.")));
+      });
+
       userEntityService.save(UserEntity.builder()
           .firstName(firstName)
           .lastName(lastName)

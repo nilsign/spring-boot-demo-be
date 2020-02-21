@@ -61,7 +61,7 @@ public class DevDataCreator {
   }
 
   private void createUsers() {
-    userDataCreator.createAdminUserIfNotExists(
+    userDataCreator.createAdminSellerUserIfNotExists(
         "Ada",
         "Mistrate",
         ADMIN_EMAIL);
