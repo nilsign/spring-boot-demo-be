@@ -47,12 +47,12 @@ To get more used to Keycloak and Docker the manual configuration option is recom
 For a manual setup of the docker container skip this chapter and instead follow the instructions of
 the manual configuration.
 
-1. [Download](https://drive.google.com/file/d/1syQ0qR7WjD2oNkev5vQFCtMAFVkWl1sD/view?usp=sharing)
+1. [Download](https://drive.google.com/file/d/1Ovp6dMJ2ZbuEsO03lVeuuDIgr6wG6c_O/view?usp=sharing)
 a fully pre-configured Docker Keycloak image as tar.
 
 2. Load the tar and then just run it in a Docker container.
 
-        $ docker load < [Path to downloaded tar]/boss-keycloak-demo-project-docker-image-v3.tar
+        $ docker load < [Path to downloaded tar]/jboss-keycloak-demo-project-docker-image-v6.tar
         $ docker run --name demo-project-keycloak-v6 -p 8100:8080 jboss/keycloak:demo-project-v6
 
 
