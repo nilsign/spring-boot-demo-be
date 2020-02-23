@@ -53,7 +53,8 @@ a fully pre-configured Docker Keycloak image as tar.
 2. Load the tar and then just run it in a Docker container.
 
         $ docker load < [Path to downloaded tar]/boss-keycloak-demo-project-docker-image-v3.tar
-        $ docker run --name demo-project-keycloak -p 8100:8080 jboss/keycloak
+        $ docker run --name demo-project-keycloak-v6 -p 8100:8080 jboss/keycloak:demo-project-v6
+
 
 3. To access the Keycloak Administration Console navigate to http://localhost:8100 and enter the
 following credentials
@@ -323,8 +324,8 @@ API client (e.g. a Angular Frontend) project and use it there to communicate wit
 its REST API.
 
 Adapt the [typescript-generator Maven plugIn](http://www.habarta.cz/typescript-generator/maven/typescript-generator-maven-plugin/plugin-info.html)
-values in the the `pom.xml` to e.g. mark additional java packages to be including in the Typescript
-DTO model generation path-scanner.
+values in the the `pom.xml` to e.g. mark additional java packages to be included in the Typescript
+DTO model generation.
 
         $ mvn typescript-generator:generate
 
