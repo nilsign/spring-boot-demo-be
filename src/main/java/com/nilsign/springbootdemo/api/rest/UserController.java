@@ -53,10 +53,11 @@ public class UserController {
   }
 
   // Note, that Keycloak (Feb, 2020) does not offer an endpoint to request all users that are
-  // assigned to a specific client role. Anyhow, pagination should be used here anyway, as to
-  // total amount of users is expected to be huge in real world projects. Then only the currently
-  // returned (paginated) users need to request their roles each by a single request, which can
-  // run simultaneously. That is why only realm Keycloak roles are added here to the Jpa users.
+  // assigned to a specific client role. Anyhow, pagination should be used here in the future
+  // anyway, as the total amount of users is expected to be huge in real world projects. Then only
+  // the currently returned (paginated) users need to request their roles, each by a single request,
+  // which can run simultaneously. This facts are the reason why only realm Keycloak roles are added
+  // here to the Jpa users.
   @GetMapping
   @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public List<UserDto> findAll(HttpServletRequest request) {
@@ -74,7 +75,7 @@ public class UserController {
     // time of the longest Mono.
     Mono<Pair<List<UserDto>, Set<String>>> resultPairMono = jpaUsersMono
         .zipWith(superAdminEmailAddressesMono)
-            .map(tuple -> Pair.of(tuple.getT1(), tuple.getT2()));
+        .map(tuple -> Pair.of(tuple.getT1(), tuple.getT2()));
     final List<UserDto> returnValue = new ArrayList<>();
     resultPairMono.subscribe(
         resultPair -> {
