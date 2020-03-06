@@ -2,6 +2,7 @@ package com.nilsign.springbootdemo.api.rest;
 
 import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
+import com.nilsign.springbootdemo.domain.role.service.RoleDtoService;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.service.LoggedInUserDtoService;
 import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
@@ -27,7 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,6 +45,9 @@ public class UserController {
 
   @Autowired
   private UserDtoService userDtoService;
+
+  @Autowired
+  private RoleDtoService roleDtoService;
 
   @Autowired
   private LoggedInUserDtoService loggedInUserDtoService;
@@ -102,10 +108,20 @@ public class UserController {
   }
 
   @PostMapping
-  public Optional<UserDto> save(@NotNull @Valid @RequestBody UserDto dto) {
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
+  public Optional<UserDto> save(
+      HttpServletRequest request,
+      @NotNull @Valid @RequestBody UserDto dto) {
+    Set<RoleDto> dbRoles = Collections.emptySet();
+    dto.getRoles().forEach(role -> roleDtoService
+        .findRoleByType(role.getRoleType())
+        .ifPresent(dbRoles::add));
+    dto.setRoles(dbRoles);
+    saveUserInKeycloak(request, dto);
     return userDtoService.save(dto);
   }
 
+  // TODO(nilsheumer): Introduce a keycloak service and move all keycloak RestAPI related code.
   private Keycloak getKeycloakClient(HttpServletRequest request) {
     return KeycloakBuilder.builder()
         .serverUrl(keycloakProperties.getAuthServerUrl())
@@ -119,5 +135,79 @@ public class UserController {
 
   private KeycloakSecurityContext getKeycloakSecurityContext(HttpServletRequest request) {
     return (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
+  }
+
+  private void saveUserInKeycloak(HttpServletRequest request, UserDto userDto) {
+    List<String> realmRoles = List.of(
+        "offline_access",
+        "uma_authorization"
+    );
+    Map<String, List<String>> clientToRoles = Map.of("account", List.of(
+        "manage-account",
+        "view-profile"
+    ));
+    userDto.getRoles()
+        .stream()
+        .map(RoleDto::getRoleType)
+        .forEach(roleType -> {
+            switch (roleType) {
+              case ROLE_REALM_SUPERADMIN:
+                realmRoles.add(RoleType.ROLE_REALM_SUPERADMIN.name());
+                addRoleToClient(
+                    clientToRoles,
+                    keycloakProperties.getClient(),
+                    List.of(RoleType.ROLE_REALM_CLIENT_ADMIN.name()));
+                addRoleToClient(
+                    clientToRoles,
+                    keycloakProperties.getAngularFrontEndClient(),
+                    List.of(RoleType.ROLE_REALM_CLIENT_ADMIN.name()));
+                addRoleToClient(
+                    clientToRoles,
+                   "realm-management",
+                    List.of(
+                        "manage-users",
+                        "realm-admin",
+                        "view-realm",
+                        "view-users"));
+                break;
+              case ROLE_REALM_CLIENT_ADMIN:
+              case ROLE_REALM_CLIENT_SELLER:
+              case ROLE_REALM_CLIENT_BUYER:
+                addRoleToClient(
+                    clientToRoles,
+                    keycloakProperties.getClient(),
+                    List.of(roleType.name()));
+                addRoleToClient(
+                    clientToRoles,
+                    keycloakProperties.getAngularFrontEndClient(),
+                    List.of(roleType.name()));
+                 break;
+            }
+        });
+
+    UserRepresentation userRepresentation = new UserRepresentation();
+    userRepresentation.setEnabled(true);
+    userRepresentation.setEmail(userDto.getEmail());
+    userRepresentation.setUsername(userDto.getFirstName());
+    userRepresentation.setFirstName(userDto.getFirstName());
+    userRepresentation.setLastName(userDto.getLastName());
+    userRepresentation.setRealmRoles(realmRoles);
+    userRepresentation.setClientRoles(clientToRoles);
+    Keycloak keycloak = getKeycloakClient(request);
+    keycloak.realm(keycloakProperties.getRealm()).users().create(userRepresentation);
+  }
+
+  private void addRoleToClient(
+      Map<String, List<String>> clientToRoles,
+      String clientName,
+      List<String> roleNames) {
+    if (clientToRoles.get(clientName) == null) {
+      clientToRoles.put(clientName, Collections.emptyList());
+    }
+    roleNames.forEach(roleName -> {
+      if (!clientToRoles.get(clientName).contains(roleName)) {
+        clientToRoles.get(clientName).add(roleName);
+      }
+    });
   }
 }

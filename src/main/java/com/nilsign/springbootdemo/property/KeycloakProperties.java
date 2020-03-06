@@ -21,5 +21,8 @@ public class KeycloakProperties {
   @Value( "${keycloak.resource}" )
   private String client;
 
+  private String angularFrontEndClient;
+
   private int connectionPoolSize;
+
 }

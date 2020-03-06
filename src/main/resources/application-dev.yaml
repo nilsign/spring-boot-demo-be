@@ -44,3 +44,5 @@ keycloak:
   resource: DemoProjectRestApiClient
   cors: true
   connection-pool-size: 100
+  angularFrontEndClient: DemoProjectAngularFrontendClient
+
