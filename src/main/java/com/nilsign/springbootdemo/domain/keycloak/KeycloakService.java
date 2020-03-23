@@ -134,55 +134,26 @@ public class KeycloakService {
     String realmManagementClientUuid = getRealmClientUuid(
         keycloak,
         keycloakProperties.getKeycloakRealmManagementClient());;
-    List<RoleRepresentation> realmManagementClientRoleRepresentationsToAdd = keycloak
-        .realm(keycloakProperties.getRealm())
-        .clients()
-        .get(realmManagementClientUuid)
-        .roles()
-        .list()
-        .stream()
-        .filter(roleRepresentation -> roleRepresentation.getName().equals("manage-users")
-            || roleRepresentation.getName().equals("realm-admin")
-            || roleRepresentation.getName().equals("view-realm"))
-        .collect(Collectors.toList());
     keycloak
         .realm(keycloakProperties.getRealm())
         .users()
         .get(userId)
         .roles()
         .clientLevel(realmManagementClientUuid)
-        .add(realmManagementClientRoleRepresentationsToAdd);
+        .add(getRealmClientRoleRepresentationsToAdd(
+            keycloak,
+            realmManagementClientUuid,
+            Set.of("manage-users", "realm-admin", "view-realm")));
   }
 
   private void saveRealmClientRolesOfUser(
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
       @NotNull @NotEmpty Set<String> roleNames) {
-
-    List<RoleRepresentation> backendClientRoleRepresentations;
-    List<RoleRepresentation> frontendClientRoleRepresentations;
-
     String backendClientUuid = getRealmClientUuid(
         keycloak, keycloakProperties.getKeycloakBackendClient());
     String frontendClientUuid = getRealmClientUuid(
         keycloak, keycloakProperties.getKeycloakAngularFrontendClient());
-
-    backendClientRoleRepresentations = getRealmClientRoleNamesToRoleRepresentationMap(
-        keycloak, backendClientUuid)
-            .entrySet()
-            .stream()
-            .filter(entry -> roleNames.contains(entry.getKey()))
-            .map(Map.Entry::getValue)
-            .collect(Collectors.toList());
-
-
-    frontendClientRoleRepresentations = getRealmClientRoleNamesToRoleRepresentationMap(
-        keycloak, frontendClientUuid)
-            .entrySet()
-            .stream()
-            .filter(entry -> roleNames.contains(entry.getKey()))
-            .map(Map.Entry::getValue)
-            .collect(Collectors.toList());
 
     // Note the backend Keycloak client and the frontend Keycloak client do have the same roles,
     // which are bound (just for demo purposes) together with according JPA roles (which can be
@@ -193,7 +164,7 @@ public class KeycloakService {
         .get(userId)
         .roles()
         .clientLevel(backendClientUuid)
-        .add(backendClientRoleRepresentations);
+        .add(getRealmClientRoleRepresentationsToAdd(keycloak, backendClientUuid, roleNames));
 
     keycloak
         .realm(keycloakProperties.getRealm())
@@ -201,7 +172,7 @@ public class KeycloakService {
         .get(userId)
         .roles()
         .clientLevel(frontendClientUuid)
-        .add(frontendClientRoleRepresentations);
+        .add(getRealmClientRoleRepresentationsToAdd(keycloak, frontendClientUuid, roleNames));
   }
 
   private Map<String, RoleRepresentation> getRealmRoleNamesToRoleRepresentationMap(
@@ -216,18 +187,25 @@ public class KeycloakService {
             roleRepresentation -> roleRepresentation));
   }
 
-  private Map<String, RoleRepresentation> getRealmClientRoleNamesToRoleRepresentationMap(
-      @NotNull Keycloak keycloak, @NotNull @NotBlank String realmClientUuid) {
+  private List<RoleRepresentation> getRealmClientRoleRepresentationsToAdd(
+      @NotNull Keycloak keycloak,
+      @NotNull @NotBlank String realmClientUuid,
+      @NotNull @NotEmpty Set<String> roleNamesToAdd) {
+    return getRealmClientRoleRepresentations(keycloak, realmClientUuid)
+        .stream()
+        .filter(roleRepresentation -> roleNamesToAdd.contains(roleRepresentation.getName()))
+        .collect(Collectors.toList());
+  }
+
+  private List<RoleRepresentation> getRealmClientRoleRepresentations(
+      @NotNull Keycloak keycloak,
+      @NotNull @NotBlank String realmClientUuid) {
     return keycloak
         .realm(keycloakProperties.getRealm())
         .clients()
         .get(realmClientUuid)
         .roles()
-        .list()
-        .stream()
-        .collect(Collectors.toMap(
-            RoleRepresentation::getName,
-            roleRepresentation -> roleRepresentation));
+        .list();
   }
 
   private String getRealmClientUuid(
