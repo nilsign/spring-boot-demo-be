@@ -1,6 +1,7 @@
 package com.nilsign.springbootdemo.domain.keycloak;
 
 import com.nilsign.springbootdemo.domain.role.RoleType;
+import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.property.KeycloakProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,27 +71,45 @@ public class KeycloakService {
           .realm(keycloakProperties.getRealm())
           .users()
           .create(userRepresentation);
+    } catch (Exception e) {
+      // TODO(nilsheumer): Add proper exception handling.
+      log.error(e.getMessage());
+      return;
+    }
+    saveRolesOfUser(request, userDto.getEmail(), userDto.getRoles());
+  }
 
-      userRepresentation = findUserByEmailAddress(request, userDto.getEmail());
+  public void saveRolesOfUser(
+      @NotNull HttpServletRequest request,
+      @NotNull @NotBlank @Email String emailAddress,
+      @NotNull Set<RoleDto> roleDtos) {
+    try (Keycloak keycloak = getKeycloakClient(request)) {
+      UserRepresentation userRepresentation = findUserByEmailAddress(request, emailAddress);
       if (userRepresentation == null || userRepresentation.getId() == null) {
         log.error(String.format(
             "Keycloak role mapping failed on the saved user. There is no user with the email '%s'.",
-            userDto.getEmail()));
+            emailAddress));
         return;
       }
-
       // If the save user has just a JPA role, but not the corresponding Keycloak managed role, the
       // missing Keycloak role is added here, before the actual Keycloak role mapping to the user
-      // happens.
+      // happens. Note that within a Keycloak realm role names must be unique.
       Set<String> realmRolesToAdd = new HashSet<>();
+      Set<String> realmManagementClientRolesToAdd = new HashSet<>();
       Set<String> realmClientRolesToAdd = new HashSet<>();
-      userDto.getRoles().forEach(roleDto -> {
+      roleDtos.forEach(roleDto -> {
         switch (roleDto.getRoleType()) {
           case ROLE_JPA_GLOBALADMIN:
             realmRolesToAdd.add(RoleType.ROLE_REALM_SUPERADMIN.name());
+            realmManagementClientRolesToAdd.clear();
+            realmManagementClientRolesToAdd.addAll(
+                Set.of("manage-users", "realm-admin", "view-realm"));
             break;
           case ROLE_JPA_ADMIN:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
+            if (realmManagementClientRolesToAdd.isEmpty()) {
+              realmManagementClientRolesToAdd.add("view-users");
+            }
             break;
           case ROLE_JPA_SELLER:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_SELLER.name());
@@ -102,24 +120,37 @@ public class KeycloakService {
         }
       });
       saveRealmRolesOfUser(keycloak, userRepresentation.getId(), realmRolesToAdd);
-      saveRealmClientRolesOfUser(keycloak, userRepresentation.getId(), realmClientRolesToAdd);
+      saveRealmManagementClientRolesOfUser(
+          keycloak, userRepresentation.getId(), realmManagementClientRolesToAdd);
+      saveRealmClientRolesOfUser(
+          keycloak,
+          getRealmClientUuid(keycloak, keycloakProperties.getKeycloakBackendClient()),
+          userRepresentation.getId(),
+          realmClientRolesToAdd);
+      saveRealmClientRolesOfUser(
+          keycloak,
+          getRealmClientUuid(keycloak, keycloakProperties.getKeycloakAngularFrontendClient()),
+          userRepresentation.getId(),
+          realmClientRolesToAdd);
     } catch (Exception e) {
       // TODO(nilsheumer): Add proper exception handling.
       log.error(e.getMessage());
     }
   }
 
-  public void saveRealmRolesOfUser(
+  private void saveRealmRolesOfUser(
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
-      @NotNull @NotEmpty Set<String> roleNames) {
-    // Adds the Keycloak realm roles to the newly created super/global admin user.
-    Map<String, RoleRepresentation> realmRoleNamesToRoleRepresentation
-        = getRealmRoleNamesToRoleRepresentationMap(keycloak);
-    List<RoleRepresentation> realmRoleRepresentationsToAdd = roleNames
+      @NotNull Set<String> roleNames) {
+    if (!roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name())) {
+      return;
+    }
+    List<RoleRepresentation> realmRoleRepresentationsToAdd = keycloak
+        .realm(keycloakProperties.getRealm())
+        .roles()
+        .list()
         .stream()
-        .filter(roleName -> realmRoleNamesToRoleRepresentation.containsKey(roleName))
-        .map(roleName -> realmRoleNamesToRoleRepresentation.get(roleName))
+        .filter(roleRepresentation -> roleNames.contains(roleRepresentation.getName()))
         .collect(Collectors.toList());
     keycloak
         .realm(keycloakProperties.getRealm())
@@ -128,12 +159,19 @@ public class KeycloakService {
         .roles()
         .realmLevel()
         .add(realmRoleRepresentationsToAdd);
+  }
 
-    // Adds the required internal Keycloak 'realm-management' client roles to the newly created
-    // super/global admin user.
+  private void saveRealmManagementClientRolesOfUser(
+      @NotNull Keycloak keycloak,
+      @NotNull @NotBlank  String userId,
+      @NotNull Set<String> roleNamesToAdd) {
+    if (!roleNamesToAdd.contains(RoleType.ROLE_REALM_SUPERADMIN.name())
+        && roleNamesToAdd.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name())) {
+      return;
+    }
     String realmManagementClientUuid = getRealmClientUuid(
         keycloak,
-        keycloakProperties.getKeycloakRealmManagementClient());;
+        keycloakProperties.getKeycloakRealmManagementClient());
     keycloak
         .realm(keycloakProperties.getRealm())
         .users()
@@ -143,48 +181,26 @@ public class KeycloakService {
         .add(getRealmClientRoleRepresentationsToAdd(
             keycloak,
             realmManagementClientUuid,
-            Set.of("manage-users", "realm-admin", "view-realm")));
+            roleNamesToAdd));
   }
 
   private void saveRealmClientRolesOfUser(
       @NotNull Keycloak keycloak,
-      @NotNull @NotBlank  String userId,
-      @NotNull @NotEmpty Set<String> roleNames) {
-    String backendClientUuid = getRealmClientUuid(
-        keycloak, keycloakProperties.getKeycloakBackendClient());
-    String frontendClientUuid = getRealmClientUuid(
-        keycloak, keycloakProperties.getKeycloakAngularFrontendClient());
-
-    // Note the backend Keycloak client and the frontend Keycloak client do have the same roles,
-    // which are bound (just for demo purposes) together with according JPA roles (which can be
-    // found in according the Postgres database table only, and not in Keycloak).
+      @NotNull @NotBlank String clientUuid,
+      @NotNull @NotBlank String userUuid,
+      @NotNull Set<String> roleNames) {
+    if (!roleNames.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name())
+        && !roleNames.contains(RoleType.ROLE_REALM_CLIENT_SELLER.name())
+        && !roleNames.contains(RoleType.ROLE_REALM_CLIENT_BUYER.name())) {
+      return;
+    }
     keycloak
         .realm(keycloakProperties.getRealm())
         .users()
-        .get(userId)
+        .get(userUuid)
         .roles()
-        .clientLevel(backendClientUuid)
-        .add(getRealmClientRoleRepresentationsToAdd(keycloak, backendClientUuid, roleNames));
-
-    keycloak
-        .realm(keycloakProperties.getRealm())
-        .users()
-        .get(userId)
-        .roles()
-        .clientLevel(frontendClientUuid)
-        .add(getRealmClientRoleRepresentationsToAdd(keycloak, frontendClientUuid, roleNames));
-  }
-
-  private Map<String, RoleRepresentation> getRealmRoleNamesToRoleRepresentationMap(
-      @NotNull Keycloak keycloak) {
-    return keycloak
-        .realm(keycloakProperties.getRealm())
-        .roles()
-        .list()
-        .stream()
-        .collect(Collectors.toMap(
-            RoleRepresentation::getName,
-            roleRepresentation -> roleRepresentation));
+        .clientLevel(clientUuid)
+        .add(getRealmClientRoleRepresentationsToAdd(keycloak, clientUuid, roleNames));
   }
 
   private List<RoleRepresentation> getRealmClientRoleRepresentationsToAdd(
@@ -215,7 +231,6 @@ public class KeycloakService {
         .realm(keycloakProperties.getRealm())
         .clients()
         .findByClientId(realmClientName);
-
     if (foundClientRepresentation.size() == 0) {
       log.error(String.format(
           "Keycloak role mapping failed. Could not find a client with name '%s'.",

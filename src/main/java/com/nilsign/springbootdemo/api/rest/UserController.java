@@ -60,7 +60,7 @@ public class UserController {
   // here to the Jpa users.
   @GetMapping
   @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
-  public List<UserDto> findAll(HttpServletRequest request) {
+  public List<UserDto> findAll(@NotNull HttpServletRequest request) {
     Mono<List<UserDto>> jpaUsersMono
         = Mono.fromCallable(() -> userDtoService.findAll());
     Mono<Set<String>> superAdminEmailAddressesMono
@@ -100,7 +100,7 @@ public class UserController {
   @PostMapping
   @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public Optional<UserDto> save(
-      HttpServletRequest request,
+      @NotNull HttpServletRequest request,
       @NotNull @Valid @RequestBody UserDto dto) {
     Set<RoleDto> dbRoles = new HashSet<>();
     dto.getRoles().forEach(role -> roleDtoService
