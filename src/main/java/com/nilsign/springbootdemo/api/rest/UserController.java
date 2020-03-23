@@ -1,18 +1,13 @@
 package com.nilsign.springbootdemo.api.rest;
 
+import com.nilsign.springbootdemo.domain.keycloak.KeycloakService;
 import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
 import com.nilsign.springbootdemo.domain.role.service.RoleDtoService;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.service.LoggedInUserDtoService;
 import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
-import com.nilsign.springbootdemo.property.KeycloakProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,12 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -41,7 +34,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
   @Autowired
-  private KeycloakProperties keycloakProperties;
+  private KeycloakService keycloakService;
 
   @Autowired
   private UserDtoService userDtoService;
@@ -51,6 +44,7 @@ public class UserController {
 
   @Autowired
   private LoggedInUserDtoService loggedInUserDtoService;
+
 
   @GetMapping("/logged-in-user")
   @PreAuthorize("isAuthenticated()")
@@ -67,15 +61,11 @@ public class UserController {
   @GetMapping
   @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public List<UserDto> findAll(HttpServletRequest request) {
-    Mono<List<UserDto>> jpaUsersMono = Mono.fromCallable(() -> userDtoService.findAll());
-    Mono<Set<String>> superAdminEmailAddressesMono = Mono.fromCallable(() ->
-        getKeycloakClient(request)
-            .realm(keycloakProperties.getRealm())
-            .roles().get(RoleType.ROLE_REALM_SUPERADMIN.name())
-            .getRoleUserMembers()
-            .stream()
-            .map(UserRepresentation::getEmail)
-            .collect(Collectors.toSet()));
+    Mono<List<UserDto>> jpaUsersMono
+        = Mono.fromCallable(() -> userDtoService.findAll());
+    Mono<Set<String>> superAdminEmailAddressesMono
+        = Mono.fromCallable(() -> keycloakService.findUserEmailAddressesByRealmRole(
+            request, RoleType.ROLE_REALM_SUPERADMIN));
     // The zip method allows to combine the results of many different Mono's with the advantage that
     // all combined Monos are executed parallelly. That means that the total run time equals the run
     // time of the longest Mono.
@@ -87,9 +77,9 @@ public class UserController {
         resultPair -> {
           resultPair.getFirst().forEach(userDto -> {
             if (resultPair.getSecond().contains(userDto.getEmail())) {
-              // Adds the realm super admin role to the UserDto, which is loaded via the JPA (and NOT
-              // via the Keycloak RestApi). User loaded via JPA lack all information which is stored
-              // in Keycloak.
+              // Adds the realm super admin role to the UserDto, which is loaded via the JPA (and
+              // NOT via the Keycloak RestApi). Users loaded via the JPA lack all the information
+              // that are stored in Keycloak, which includes the Keycloak managed roles.
               userDto.getRoles().add(RoleDto.builder()
                 .roleType(RoleType.ROLE_REALM_SUPERADMIN)
                 .build());
@@ -112,102 +102,12 @@ public class UserController {
   public Optional<UserDto> save(
       HttpServletRequest request,
       @NotNull @Valid @RequestBody UserDto dto) {
-    Set<RoleDto> dbRoles = Collections.emptySet();
+    Set<RoleDto> dbRoles = new HashSet<>();
     dto.getRoles().forEach(role -> roleDtoService
         .findRoleByType(role.getRoleType())
         .ifPresent(dbRoles::add));
     dto.setRoles(dbRoles);
-    saveUserInKeycloak(request, dto);
+    keycloakService.saveUser(request, dto);
     return userDtoService.save(dto);
-  }
-
-  // TODO(nilsheumer): Introduce a keycloak service and move all keycloak RestAPI related code.
-  private Keycloak getKeycloakClient(HttpServletRequest request) {
-    return KeycloakBuilder.builder()
-        .serverUrl(keycloakProperties.getAuthServerUrl())
-        .realm(keycloakProperties.getClient())
-        .authorization(getKeycloakSecurityContext(request).getTokenString())
-        .resteasyClient(new ResteasyClientBuilder()
-            .connectionPoolSize(keycloakProperties.getConnectionPoolSize())
-            .build())
-        .build();
-  }
-
-  private KeycloakSecurityContext getKeycloakSecurityContext(HttpServletRequest request) {
-    return (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-  }
-
-  private void saveUserInKeycloak(HttpServletRequest request, UserDto userDto) {
-    List<String> realmRoles = List.of(
-        "offline_access",
-        "uma_authorization"
-    );
-    Map<String, List<String>> clientToRoles = Map.of("account", List.of(
-        "manage-account",
-        "view-profile"
-    ));
-    userDto.getRoles()
-        .stream()
-        .map(RoleDto::getRoleType)
-        .forEach(roleType -> {
-            switch (roleType) {
-              case ROLE_REALM_SUPERADMIN:
-                realmRoles.add(RoleType.ROLE_REALM_SUPERADMIN.name());
-                addRoleToClient(
-                    clientToRoles,
-                    keycloakProperties.getClient(),
-                    List.of(RoleType.ROLE_REALM_CLIENT_ADMIN.name()));
-                addRoleToClient(
-                    clientToRoles,
-                    keycloakProperties.getAngularFrontEndClient(),
-                    List.of(RoleType.ROLE_REALM_CLIENT_ADMIN.name()));
-                addRoleToClient(
-                    clientToRoles,
-                   "realm-management",
-                    List.of(
-                        "manage-users",
-                        "realm-admin",
-                        "view-realm",
-                        "view-users"));
-                break;
-              case ROLE_REALM_CLIENT_ADMIN:
-              case ROLE_REALM_CLIENT_SELLER:
-              case ROLE_REALM_CLIENT_BUYER:
-                addRoleToClient(
-                    clientToRoles,
-                    keycloakProperties.getClient(),
-                    List.of(roleType.name()));
-                addRoleToClient(
-                    clientToRoles,
-                    keycloakProperties.getAngularFrontEndClient(),
-                    List.of(roleType.name()));
-                 break;
-            }
-        });
-
-    UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setEnabled(true);
-    userRepresentation.setEmail(userDto.getEmail());
-    userRepresentation.setUsername(userDto.getFirstName());
-    userRepresentation.setFirstName(userDto.getFirstName());
-    userRepresentation.setLastName(userDto.getLastName());
-    userRepresentation.setRealmRoles(realmRoles);
-    userRepresentation.setClientRoles(clientToRoles);
-    Keycloak keycloak = getKeycloakClient(request);
-    keycloak.realm(keycloakProperties.getRealm()).users().create(userRepresentation);
-  }
-
-  private void addRoleToClient(
-      Map<String, List<String>> clientToRoles,
-      String clientName,
-      List<String> roleNames) {
-    if (clientToRoles.get(clientName) == null) {
-      clientToRoles.put(clientName, Collections.emptyList());
-    }
-    roleNames.forEach(roleName -> {
-      if (!clientToRoles.get(clientName).contains(roleName)) {
-        clientToRoles.get(clientName).add(roleName);
-      }
-    });
   }
 }

@@ -179,7 +179,6 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
     Select role `manage-user` and press "Add selected"
     Select role `realm-admin` and press "Add selected"
     Select role `view-realm` and press "Add selected"
-    Select role `view-users` and press "Add selected"
 
     ... ada->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 

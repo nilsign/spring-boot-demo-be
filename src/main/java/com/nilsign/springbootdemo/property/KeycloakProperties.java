@@ -18,11 +18,14 @@ public class KeycloakProperties {
 
   private String realm;
 
-  @Value( "${keycloak.resource}" )
-  private String client;
+  @Value( "${keycloakRealmManagementClient}" )
+  private String keycloakRealmManagementClient;
 
-  private String angularFrontEndClient;
+  @Value( "${keycloak.resource}" )
+  private String keycloakBackendClient;
+
+  @Value( "${keycloakAngularFrontendClient}" )
+  private String keycloakAngularFrontendClient;
 
   private int connectionPoolSize;
-
 }
