@@ -98,7 +98,7 @@ public class UserController {
   }
 
   @PostMapping
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN')")
   public Optional<UserDto> save(
       @NotNull HttpServletRequest request,
       @NotNull @Valid @RequestBody UserDto dto) {

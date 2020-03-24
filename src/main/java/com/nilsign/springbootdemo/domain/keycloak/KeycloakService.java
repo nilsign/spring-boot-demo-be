@@ -10,6 +10,7 @@ import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class KeycloakService {
+
+  private static final Set<String> REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES
+      = Set.of("manage-users", "realm-admin", "view-realm");
+
+  private static final Set<String> REALM_MANAGEMENT_ADMIN_ROLE_NAMES
+      = Set.of("view-users");
 
   @Autowired
   private KeycloakProperties keycloakProperties;
@@ -61,12 +68,17 @@ public class KeycloakService {
 
   public void saveUser(@NotNull HttpServletRequest request, @NotNull UserDto userDto) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
+      CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+      credentialRepresentation.setTemporary(true);
+      credentialRepresentation.setValue("root");
       UserRepresentation userRepresentation = new UserRepresentation();
       userRepresentation.setEnabled(true);
       userRepresentation.setEmail(userDto.getEmail());
       userRepresentation.setUsername(userDto.getFirstName());
       userRepresentation.setFirstName(userDto.getFirstName());
       userRepresentation.setLastName(userDto.getLastName());
+      userRepresentation.setCredentials(List.of(credentialRepresentation));
+      userRepresentation.setRequiredActions(List.of("UPDATE_PASSWORD"));
       keycloak
           .realm(keycloakProperties.getRealm())
           .users()
@@ -103,14 +115,13 @@ public class KeycloakService {
         switch (roleDto.getRoleType()) {
           case ROLE_JPA_GLOBALADMIN:
             realmRolesToAdd.add(RoleType.ROLE_REALM_SUPERADMIN.name());
-            realmManagementClientRolesToAdd.clear();
-            realmManagementClientRolesToAdd.addAll(
-                Set.of("manage-users", "realm-admin", "view-realm"));
+            realmManagementClientRolesToAdd.remove(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES);
             break;
           case ROLE_JPA_ADMIN:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
             if (realmManagementClientRolesToAdd.isEmpty()) {
-              realmManagementClientRolesToAdd.add("view-users");
+              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
             }
             break;
           case ROLE_JPA_SELLER:
@@ -145,8 +156,8 @@ public class KeycloakService {
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
-    return roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name())
-        || roleNames.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
+    return roleNames.containsAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES)
+        || roleNames.containsAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
   }
 
   private boolean containsRealmClientRoles(@NotNull Set<String> roleNames) {
