@@ -176,15 +176,18 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
     ... nilsign->Role Mappings->Client Roles->"realm-management"
 
-    Select role `manage-user` and press "Add selected"
-    Select role `realm-admin` and press "Add selected"
+    Select role `manage-users` and press "Add selected"<br>
+    Select role `realm-admin` and press "Add selected"<br>
     Select role `view-realm` and press "Add selected"
-    Select role `view-users` and press "Add selected"
 
     ... ada->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
     Select role `ROLE_REALM_CLIENT_ADMIN` and press "Add selected"<br>
     Select role `ROLE_REALM_CLIENT_SELLER` and press "Add selected"
+
+    ... ada->Role Mappings->Client Roles->"realm-management"
+
+    Select role `view-users` and press "Add selected"
 
     ... selma->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 

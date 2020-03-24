@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInKeycloakUserAccessToken;
 
-
 @Slf4j
 @Service
 public class LoggedInUserDtoService {
@@ -64,8 +63,8 @@ public class LoggedInUserDtoService {
     return SecurityContextHolder.getContext().getAuthentication()
         .getAuthorities()
         .stream()
-        .filter(grantedAuthority -> grantedAuthority.getAuthority()
-            .startsWith(RoleType.ROLE_TYPE_NAME_PREFIX))
+        .filter(grantedAuthority
+            -> grantedAuthority.getAuthority().startsWith(RoleType.ROLE_TYPE_NAME_PREFIX))
         .map(grantedAuthority -> RoleType.valueOf(grantedAuthority.getAuthority()))
         .collect(Collectors.toSet());
   }

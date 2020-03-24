@@ -44,3 +44,6 @@ keycloak:
   resource: DemoProjectRestApiClient
   cors: true
   connection-pool-size: 100
+keycloakRealmManagementClient: realm-management
+keycloakAngularFrontendClient: DemoProjectAngularFrontendClient
+
