@@ -76,13 +76,15 @@ public class KeycloakService {
       log.error(e.getMessage());
       return;
     }
-    saveRolesOfUser(request, userDto.getEmail(), userDto.getRoles());
+    if (userDto.getRoles() != null && !userDto.getRoles().isEmpty()) {
+      saveRolesOfUser(request, userDto.getEmail(), userDto.getRoles());
+    }
   }
 
   public void saveRolesOfUser(
       @NotNull HttpServletRequest request,
       @NotNull @NotBlank @Email String emailAddress,
-      @NotNull Set<RoleDto> roleDtos) {
+      @NotNull @NotEmpty Set<RoleDto> roleDtos) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
       UserRepresentation userRepresentation = findUserByEmailAddress(request, emailAddress);
       if (userRepresentation == null || userRepresentation.getId() == null) {
@@ -138,11 +140,26 @@ public class KeycloakService {
     }
   }
 
+  private boolean containsRealmRoles(@NotNull Set<String> roleNames) {
+    return roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name());
+  }
+
+  private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
+    return roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name())
+        || roleNames.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
+  }
+
+  private boolean containsRealmClientRoles(@NotNull Set<String> roleNames) {
+    return roleNames.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name())
+        || roleNames.contains(RoleType.ROLE_REALM_CLIENT_SELLER.name())
+        || roleNames.contains(RoleType.ROLE_REALM_CLIENT_BUYER.name());
+  }
+
   private void saveRealmRolesOfUser(
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
       @NotNull Set<String> roleNames) {
-    if (!roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name())) {
+    if (!containsRealmRoles(roleNames)) {
       return;
     }
     List<RoleRepresentation> realmRoleRepresentationsToAdd = keycloak
@@ -165,8 +182,7 @@ public class KeycloakService {
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
       @NotNull Set<String> roleNamesToAdd) {
-    if (!roleNamesToAdd.contains(RoleType.ROLE_REALM_SUPERADMIN.name())
-        && roleNamesToAdd.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name())) {
+    if (!containsRealmManagementClientRoles(roleNamesToAdd)) {
       return;
     }
     String realmManagementClientUuid = getRealmClientUuid(
@@ -189,9 +205,7 @@ public class KeycloakService {
       @NotNull @NotBlank String clientUuid,
       @NotNull @NotBlank String userUuid,
       @NotNull Set<String> roleNames) {
-    if (!roleNames.contains(RoleType.ROLE_REALM_CLIENT_ADMIN.name())
-        && !roleNames.contains(RoleType.ROLE_REALM_CLIENT_SELLER.name())
-        && !roleNames.contains(RoleType.ROLE_REALM_CLIENT_BUYER.name())) {
+    if (!containsRealmClientRoles(roleNames)) {
       return;
     }
     keycloak
