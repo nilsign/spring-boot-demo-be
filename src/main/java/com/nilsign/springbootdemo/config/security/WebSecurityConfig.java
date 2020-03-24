@@ -35,9 +35,9 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     super.configure(http);
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and().antMatcher("/**").authorizeRequests().anyRequest().authenticated()
-        // TODO(nilsheumer): Should NOT be disabled in production. Find out why FE post do return a
-        // 403 when enabled. Find a solution to have it enabled in all environments.
-        .and().csrf(). disable();
+        // TODO(nilsheumer): Security issue! CSRF must be enabled in production. FE post requests
+        // need to send the required csrf token, otherwise a 403 will be returned.
+        .and().csrf().disable();
   }
 
   @Override
