@@ -24,12 +24,18 @@ representations.
 - Lombok
 - Flyway
 - REST Api
+- RESTEasy
+- WebFlux
 - JSP
 - Postgres
 - Docker
 - Swagger API Documentation
 - Sonarqube
 - Typescript DTO Generation
+
+## FRONTEND
+
+An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available within my GitHub account. 
 
 ## SETUP
 
@@ -62,7 +68,7 @@ following credentials
     Username: `nilsign@gmail.com`<br>
     Password: `root`
 
-Note, that the password for all other Keycloak Realm users is also `root`.
+    Note, that the password for all other Keycloak Realm users is also `root`.
 
 #### Manual Configuration of the Keycloak Docker Container
 
@@ -121,7 +127,7 @@ password and press "Set Password".
 4. Click to DemoProjectRealm->Configure->Manage->Users->nilsign->Role Mappings->"Realm Roles",
 select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
-##### Create a Keycloak Realm Client
+##### Create a Keycloak Realm Client (Backend)
 
 1. Click to DemoProjectRealm->Configure->Clients->"Create"<br>
 
@@ -202,7 +208,8 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 Open the `application.yaml(s)` in the project's 'resources' folder and set the correct (your)
 Keycloak's "client-secret".
 
-Note, that the correct client secret can be found at
+Note, that the (in case of manual setup) correct client secret can be found at<br>
+
 DemoProjectRealm->Configure->Clients->Account->"Credentials"
 
 #### Keycloak Docker Management
@@ -353,9 +360,8 @@ environment.
 
 - http://localhost:8080/swagger-ui.html
 
-## ROAD MAP
+## POTENTIAL ROAD MAP
 
-+ Angular Frontend (will be done in a separate repository)
 + RestAPI extensions depending on the concrete FE needs
 + RestAPI Request Error Handling
 + Unit tests
