@@ -1,4 +1,4 @@
-# SPRING BOOT DEMO
+# SPRING BOOT DEMO BACKEND
 
 This Spring Boot demo application demonstrates several aspects of Spring Boot and surrounding
 technologies. It might be a good starting point for Spring Boot projects with a similar technology
