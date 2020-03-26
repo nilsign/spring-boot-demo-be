@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -109,5 +110,13 @@ public class UserController {
     dto.setRoles(dbRoles);
     keycloakService.saveUser(request, dto);
     return userDtoService.save(dto);
+  }
+
+  @GetMapping(path = "search")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
+  public List<UserDto> search(
+      @NotNull HttpServletRequest request,
+      @NotNull @QueryParam("text") String text) {
+    return keycloakService.searchUsers(request, text);
   }
 }

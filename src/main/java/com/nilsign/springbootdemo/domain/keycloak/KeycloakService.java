@@ -66,6 +66,25 @@ public class KeycloakService {
     }
   }
 
+  public List<UserDto> searchUsers(
+      @NotNull HttpServletRequest request,
+      @NotNull @NotBlank String text) {
+    try (Keycloak keycloak = getKeycloakClient(request)) {
+      List<UserRepresentation> foundUsers = keycloak
+          .realm(keycloakProperties.getRealm())
+          .users()
+          .search(text, 0, 250);
+      return foundUsers
+          .stream()
+          .map(userRepresentation -> UserDto.builder()
+              .firstName(userRepresentation.getFirstName())
+              .lastName(userRepresentation.getLastName())
+              .email(userRepresentation.getEmail())
+              .build())
+          .collect(Collectors.toList());
+    }
+  }
+
   public void saveUser(@NotNull HttpServletRequest request, @NotNull UserDto userDto) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
       CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
