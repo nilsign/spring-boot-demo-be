@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class KeycloakService {
 
   // TODO(nilsheumer): Unused. Check whether this set can be used in a sensible way.
-  private static final Set<String> REALM_SUPERADMIN_ROLE_NAMES
+  private static final Set<String> REALM_ROLE_NAMES
       = Set.of(RoleType.ROLE_REALM_SUPERADMIN.name());
 
   // Set of roles for both none default Keycloak realm clients, DemoProjectRestApiClient and
@@ -45,11 +45,11 @@ public class KeycloakService {
           RoleType.ROLE_REALM_CLIENT_SELLER.name(),
           RoleType.ROLE_REALM_CLIENT_BUYER.name());
 
-  private static final Set<String> REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES
+  private static final Set<String> REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES
       = Set.of("manage-users", "realm-admin", "view-realm");
 
-  private static final Set<String> REALM_MANAGEMENT_ADMIN_ROLE_NAMES
-      = Set.of("view-users");
+  private static final Set<String> REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES
+      = Set.of("view-realm");
 
   @Autowired
   private KeycloakProperties keycloakProperties;
@@ -219,13 +219,13 @@ public class KeycloakService {
         switch (roleDto.getRoleType()) {
           case ROLE_JPA_GLOBALADMIN:
             realmRolesToAdd.add(RoleType.ROLE_REALM_SUPERADMIN.name());
-            realmManagementClientRolesToAdd.remove(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
-            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES);
+            realmManagementClientRolesToAdd.remove(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES);
             break;
           case ROLE_JPA_ADMIN:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
             if (realmManagementClientRolesToAdd.isEmpty()) {
-              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
             }
             break;
           case ROLE_JPA_SELLER:
@@ -260,8 +260,8 @@ public class KeycloakService {
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
-    return roleNames.containsAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES)
-        || roleNames.containsAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+    return roleNames.containsAll(REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES)
+        || roleNames.containsAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
   }
 
   private boolean containsRealmClientRoles(@NotNull Set<String> roleNames) {
@@ -313,8 +313,8 @@ public class KeycloakService {
         .roles()
         .clientLevel(realmManagementClientUuid);
     Set<String> roleNamesToRemove = new HashSet<>();
-    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES);
-    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES);
+    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
     roleScopeResource.remove(getRealmClientRoleRepresentations(
         keycloak,
         realmManagementClientUuid,
