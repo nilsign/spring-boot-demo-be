@@ -221,7 +221,9 @@ public class KeycloakService {
             break;
           case ROLE_JPA_ADMIN:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
-            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+            if (realmManagementClientRolesToAdd.isEmpty()) {
+              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+            }
             break;
           case ROLE_JPA_SELLER:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_SELLER.name());
@@ -267,8 +269,12 @@ public class KeycloakService {
     }
   }
 
-  private boolean containsRealmRoles(@NotNull Set<String> roleNames) {
-    return roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name());
+  private boolean hasIntersectionWithRealmRoles(@NotNull Set<String> roleNames) {
+    return roleNames
+        .stream()
+        .filter(roleName -> REALM_ROLE_NAMES.contains(roleName))
+        .findFirst()
+        .isPresent();
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
@@ -295,9 +301,10 @@ public class KeycloakService {
     // Deletes all existing realm role mappings of the user, except of the Keycloak default roles.
     roleScopeResource.remove(roleScopeResource.listEffective()
         .stream()
-        .filter(roleRepresentation -> containsRealmRoles(Set.of(roleRepresentation.getName())))
+        .filter(
+            roleRepresentation -> REALM_ROLE_NAMES.contains(roleRepresentation.getName()))
         .collect(Collectors.toList()));
-    if (!containsRealmRoles(roleNames)) {
+    if (!hasIntersectionWithRealmRoles(roleNames)) {
       // No roles to add, early exit.
       return;
     }
