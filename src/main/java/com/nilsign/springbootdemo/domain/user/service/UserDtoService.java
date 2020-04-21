@@ -1,13 +1,14 @@
 package com.nilsign.springbootdemo.domain.user.service;
 
+import com.nilsign.springbootdemo.domain.DtoService;
 import com.nilsign.springbootdemo.domain.customer.service.CustomerEntityService;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
-import com.nilsign.springbootdemo.domain.DtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 @Service
 public class UserDtoService extends DtoService<UserDto, UserEntity, Long> {
@@ -21,6 +22,13 @@ public class UserDtoService extends DtoService<UserDto, UserEntity, Long> {
   @Override
   protected UserEntityService getEntityService() {
     return this.userEntityService;
+  }
+
+  public Optional<UserDto> findByEmail(String email) {
+    Optional<UserEntity> result = getEntityService().findByEmail(email);
+    return result.isEmpty()
+        ? Optional.empty()
+        : Optional.of(toDto(result.get()));
   }
 
   @Override

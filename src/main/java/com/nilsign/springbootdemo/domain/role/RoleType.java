@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.domain.role;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -26,5 +27,17 @@ public enum RoleType {
 
   RoleType(@NotNull String name) {
     this.name = name;
+  }
+
+  public static RoleType from(@NotNull @NotEmpty String name) {
+    name = name.trim().toUpperCase();
+    if (!name.startsWith(ROLE_TYPE_NAME_PREFIX)) {
+      name = ROLE_TYPE_NAME_PREFIX + name;
+    }
+    try {
+      return RoleType.valueOf(name);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 }

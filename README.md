@@ -193,6 +193,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
     ... ada->Role Mappings->Client Roles->"realm-management"
 
+    Select role `view-realm` and press "Add selected"
     Select role `view-users` and press "Add selected"
 
     ... selma->Role Mappings->Client Roles->"DemoProjectRestApiClient"
@@ -229,6 +230,10 @@ container name or id.
         $ docker ps -a
         $ docker start demo-project-keycloak
         $ docker start [CONTAINER ID]
+
+5. (Optional) Get Keycloak Server logs
+
+        $ docker logs --timestamps --details --follow [CONTAINER ID]
 
 #### Test Keycloak DemoProjectRestApiClient with Postman
 
@@ -272,6 +277,9 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 
         $ docker ps -a  
 
+5. (Optional) Get postgres Server logs
+
+        $ docker logs --timestamps --details --follow [CONTAINER ID]
 
 ##### Access Postgres CLI from the inside of the container
 

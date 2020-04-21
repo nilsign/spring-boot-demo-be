@@ -31,15 +31,26 @@ public class UserEntityService extends EntityService<UserEntity, Long> {
 
   @Override
   public Optional<UserEntity> save(@NotNull UserEntity userEntity) {
+    Optional<UserEntity> userToUpdate = findByEmail(userEntity.getEmail());
+    if (userToUpdate.isPresent()) {
+      userToUpdate.get().setFirstName(userEntity.getFirstName());
+      userToUpdate.get().setLastName(userEntity.getLastName());
+      userToUpdate.get().setRoles(userEntity.getRoles());
+      // Updates user and role mapping.
+      return super.save(userToUpdate.get());
+    }
+    // Create and save a new entity.
     Set<RoleEntity> roleEntities = new HashSet<>();
     userEntity.getRoles().forEach(detachedRoleEntity -> roleRepository
         .findByRoleType(detachedRoleEntity.getRoleType())
         .ifPresent(roleEntities::add));
     userEntity.setRoles(roleEntities);
+    // Creates a new user and role mapping.
     return super.save(userEntity);
   }
 
   public Optional<UserEntity> findByEmail(@NotNull @NotBlank @Email String email) {
     return getRepository().findByEmail(email);
   }
+
 }

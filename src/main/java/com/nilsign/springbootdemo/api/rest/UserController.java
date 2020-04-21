@@ -7,6 +7,7 @@ import com.nilsign.springbootdemo.domain.role.service.RoleDtoService;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.service.LoggedInUserDtoService;
 import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
+import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -36,6 +37,9 @@ public class UserController {
 
   @Autowired
   private KeycloakService keycloakService;
+
+  @Autowired
+  private UserEntityService userEntityService;
 
   @Autowired
   private UserDtoService userDtoService;
@@ -96,6 +100,19 @@ public class UserController {
   @GetMapping(path = "{id}")
   public Optional<UserDto> findById(@NotNull @PathVariable Long id) {
     return userDtoService.findById(id);
+  }
+
+  @GetMapping(path = "email/{email}")
+  public Optional<UserDto> findByEmail(
+      @NotNull HttpServletRequest request,
+      @NotNull @PathVariable("email") String email) {
+    UserDto keycloakUserDto = keycloakService.findUserWithRolesByEmailAddress(request, email);
+    Optional<UserDto> jpaUserDto = userDtoService.findByEmail(email);
+    if (keycloakUserDto != null && jpaUserDto.isPresent()) {
+      jpaUserDto.get().getRoles().addAll(keycloakUserDto.getRoles());
+      return jpaUserDto;
+    }
+    return Optional.empty();
   }
 
   @PostMapping
