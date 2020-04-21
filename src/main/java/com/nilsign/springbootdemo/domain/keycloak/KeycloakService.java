@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// TODO(nilsheumer): Divide this class into a KeycloakUserService and KeycloakRoleService.
 @Slf4j
 @Service
 public class KeycloakService {
