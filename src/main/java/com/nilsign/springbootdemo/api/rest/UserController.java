@@ -7,7 +7,6 @@ import com.nilsign.springbootdemo.domain.role.service.RoleDtoService;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.service.LoggedInUserDtoService;
 import com.nilsign.springbootdemo.domain.user.service.UserDtoService;
-import com.nilsign.springbootdemo.domain.user.service.UserEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -22,6 +21,8 @@ import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
@@ -39,9 +40,6 @@ public class UserController {
   private KeycloakService keycloakService;
 
   @Autowired
-  private UserEntityService userEntityService;
-
-  @Autowired
   private UserDtoService userDtoService;
 
   @Autowired
@@ -49,7 +47,6 @@ public class UserController {
 
   @Autowired
   private LoggedInUserDtoService loggedInUserDtoService;
-
 
   @GetMapping("/logged-in-user")
   @PreAuthorize("isAuthenticated()")
@@ -98,21 +95,33 @@ public class UserController {
   }
 
   @GetMapping(path = "{id}")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public Optional<UserDto> findById(@NotNull @PathVariable Long id) {
     return userDtoService.findById(id);
   }
 
   @GetMapping(path = "email/{email}")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
   public Optional<UserDto> findByEmail(
       @NotNull HttpServletRequest request,
-      @NotNull @PathVariable("email") String email) {
-    UserDto keycloakUserDto = keycloakService.findUserWithRolesByEmailAddress(request, email);
-    Optional<UserDto> jpaUserDto = userDtoService.findByEmail(email);
-    if (keycloakUserDto != null && jpaUserDto.isPresent()) {
-      jpaUserDto.get().getRoles().addAll(keycloakUserDto.getRoles());
+      @NotNull @NotBlank @Email @PathVariable("email") String email) {
+    Optional<UserDto> keycloakUserDto
+        = keycloakService.findUserWithRolesByEmailAddress(request, email);
+    Optional<UserDto> jpaUserDto
+        = userDtoService.findByEmail(email);
+    if (keycloakUserDto.isPresent() && jpaUserDto.isPresent()) {
+      jpaUserDto.get().getRoles().addAll(keycloakUserDto.get().getRoles());
       return jpaUserDto;
     }
     return Optional.empty();
+  }
+
+  @GetMapping(path = "search")
+  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
+  public List<UserDto> search(
+      @NotNull HttpServletRequest request,
+      @NotNull @QueryParam("text") String text) {
+    return keycloakService.searchUsers(request, text);
   }
 
   @PostMapping
@@ -127,13 +136,5 @@ public class UserController {
     dto.setRoles(dbRoles);
     keycloakService.saveUser(request, dto);
     return userDtoService.save(dto);
-  }
-
-  @GetMapping(path = "search")
-  @PreAuthorize("hasRole('REALM_SUPERADMIN') OR hasRole('REALM_CLIENT_ADMIN')")
-  public List<UserDto> search(
-      @NotNull HttpServletRequest request,
-      @NotNull @QueryParam("text") String text) {
-    return keycloakService.searchUsers(request, text);
   }
 }

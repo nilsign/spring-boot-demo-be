@@ -26,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -68,7 +69,7 @@ public class KeycloakService {
     }
   }
 
-  public UserRepresentation findUserByEmailAddress(
+  public Optional<UserRepresentation> findUserByEmailAddress(
       @NotNull HttpServletRequest request,
       @NotNull @NotBlank @Email String email) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
@@ -76,22 +77,22 @@ public class KeycloakService {
           .realm(keycloakProperties.getRealm())
           .users().search(email, 0, 1);
       return foundUsers != null && foundUsers.size() == 1
-          ? foundUsers.get(0)
-          : null;
+          ? Optional.of(foundUsers.get(0))
+          : Optional.empty();
     }
   }
 
-  public UserDto findUserWithRolesByEmailAddress(
+  public Optional<UserDto> findUserWithRolesByEmailAddress(
       @NotNull HttpServletRequest request,
       @NotNull @NotBlank @Email String email) {
-    UserRepresentation userRepresentation = findUserByEmailAddress(request, email);
+    Optional<UserRepresentation> userRepresentation = findUserByEmailAddress(request, email);
     Set<RoleDto> roleDtos = new HashSet<>();
-    if (userRepresentation != null) {
+    if (userRepresentation.isPresent()) {
       try (Keycloak keycloak = getKeycloakClient(request)) {
         MappingsRepresentation roleMappingsRepresentation = keycloak
             .realm(keycloakProperties.getRealm())
             .users()
-            .get(userRepresentation.getId())
+            .get(userRepresentation.get().getId())
             .roles()
             .getAll();
         List<RoleRepresentation> roleRepresentations = new ArrayList<>();
@@ -122,14 +123,14 @@ public class KeycloakService {
       }
     }
 
-    return userRepresentation == null
-      ? null
-      : UserDto.builder()
-          .firstName(userRepresentation.getFirstName())
-          .lastName(userRepresentation.getLastName())
-          .email(userRepresentation.getEmail())
-          .roles(roleDtos)
-          .build();
+    return userRepresentation.isEmpty()
+        ? Optional.empty()
+        : Optional.of(UserDto.builder()
+            .firstName(userRepresentation.get().getFirstName())
+            .lastName(userRepresentation.get().getLastName())
+            .email(userRepresentation.get().getEmail())
+            .roles(roleDtos)
+            .build());
   }
 
   public List<UserDto> searchUsers(
@@ -155,36 +156,36 @@ public class KeycloakService {
       @NotNull HttpServletRequest request,
       @NotNull UserDto userDto) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
-      UserRepresentation userRepresentation = findUserByEmailAddress(
+      Optional<UserRepresentation> userRepresentation = findUserByEmailAddress(
           request, userDto.getEmail());
-      if (userRepresentation == null) {
+      if (userRepresentation.isEmpty()) {
         // Creates new user if not existing.
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setTemporary(true);
         credentialRepresentation.setValue("root");
-        userRepresentation = new UserRepresentation();
-        userRepresentation.setEnabled(true);
-        userRepresentation.setCredentials(List.of(credentialRepresentation));
-        userRepresentation.setRequiredActions(List.of("UPDATE_PASSWORD"));
-        userRepresentation.setEmail(userDto.getEmail());
-        userRepresentation.setUsername(userDto.getFirstName());
-        userRepresentation.setFirstName(userDto.getFirstName());
-        userRepresentation.setLastName(userDto.getLastName());
+        userRepresentation = Optional.of(new UserRepresentation());
+        userRepresentation.get().setEnabled(true);
+        userRepresentation.get().setCredentials(List.of(credentialRepresentation));
+        userRepresentation.get().setRequiredActions(List.of("UPDATE_PASSWORD"));
+        userRepresentation.get().setEmail(userDto.getEmail());
+        userRepresentation.get().setUsername(userDto.getFirstName());
+        userRepresentation.get().setFirstName(userDto.getFirstName());
+        userRepresentation.get().setLastName(userDto.getLastName());
         keycloak
           .realm(keycloakProperties.getRealm())
           .users()
-          .create(userRepresentation);
+          .create(userRepresentation.get());
       } else {
         // Updates existing user.
-        userRepresentation.setEmail(userDto.getEmail());
-        userRepresentation.setUsername(userDto.getFirstName());
-        userRepresentation.setFirstName(userDto.getFirstName());
-        userRepresentation.setLastName(userDto.getLastName());
+        userRepresentation.get().setEmail(userDto.getEmail());
+        userRepresentation.get().setUsername(userDto.getFirstName());
+        userRepresentation.get().setFirstName(userDto.getFirstName());
+        userRepresentation.get().setLastName(userDto.getLastName());
         keycloak
             .realm(keycloakProperties.getRealm())
             .users()
-            .get(userRepresentation.getId())
-            .update(userRepresentation);
+            .get(userRepresentation.get().getId())
+            .update(userRepresentation.get());
       }
 
     } catch (Exception e) {
@@ -202,8 +203,9 @@ public class KeycloakService {
       @NotNull @NotBlank @Email String emailAddress,
       @NotNull @NotEmpty Set<RoleDto> roleDtos) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
-      UserRepresentation userRepresentation = findUserByEmailAddress(request, emailAddress);
-      if (userRepresentation == null || userRepresentation.getId() == null) {
+      Optional<UserRepresentation> userRepresentation
+          = findUserByEmailAddress(request, emailAddress);
+      if (userRepresentation.isEmpty() || userRepresentation.get().getId() == null) {
         log.error(String.format(
             "Keycloak role mapping failed on the saved user. There is no user with the email '%s'.",
             emailAddress));
@@ -236,18 +238,18 @@ public class KeycloakService {
             break;
         }
       });
-      saveRealmRolesOfUser(keycloak, userRepresentation.getId(), realmRolesToAdd);
+      saveRealmRolesOfUser(keycloak, userRepresentation.get().getId(), realmRolesToAdd);
       saveRealmManagementClientRolesOfUser(
-          keycloak, userRepresentation.getId(), realmManagementClientRolesToAdd);
+          keycloak, userRepresentation.get().getId(), realmManagementClientRolesToAdd);
       saveRealmClientRolesOfUser(
           keycloak,
           getRealmClientUuid(keycloak, keycloakProperties.getKeycloakBackendClient()),
-          userRepresentation.getId(),
+          userRepresentation.get().getId(),
           realmClientRolesToAdd);
       saveRealmClientRolesOfUser(
           keycloak,
           getRealmClientUuid(keycloak, keycloakProperties.getKeycloakAngularFrontendClient()),
-          userRepresentation.getId(),
+          userRepresentation.get().getId(),
           realmClientRolesToAdd);
     } catch (Exception e) {
       // TODO(nilsheumer): Add proper exception handling.
