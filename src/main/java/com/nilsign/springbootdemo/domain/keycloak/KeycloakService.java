@@ -9,8 +9,10 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.RoleScopeResource;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.MappingsRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +23,38 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// TODO(nilsheumer): Divide this class into a KeycloakUserService and KeycloakRoleService, before
+// any new extension are done here.
 @Slf4j
 @Service
 public class KeycloakService {
 
-  private static final Set<String> REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES
+  // All none default realm roles, created for just this project.
+  private static final Set<String> REALM_ROLE_NAMES
+      = Set.of(RoleType.ROLE_REALM_SUPERADMIN.name());
+
+  // Set of roles for both none default Keycloak realm clients, DemoProjectRestApiClient and
+  // DemoProjectAngularFrontendClient.
+  private static final Set<String> REALM_CLIENT_ROLE_NAMES
+      = Set.of(
+          RoleType.ROLE_REALM_CLIENT_ADMIN.name(),
+          RoleType.ROLE_REALM_CLIENT_SELLER.name(),
+          RoleType.ROLE_REALM_CLIENT_BUYER.name());
+
+  // Keycloak internal roles that are required to view and modify users and roles.
+  private static final Set<String> REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES
       = Set.of("manage-users", "realm-admin", "view-realm");
 
-  private static final Set<String> REALM_MANAGEMENT_ADMIN_ROLE_NAMES
-      = Set.of("view-users");
+  // Keycloak internal roles that are required to view users and roles.
+  private static final Set<String> REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES
+      = Set.of("view-realm");
 
   @Autowired
   private KeycloakProperties keycloakProperties;
@@ -45,51 +65,132 @@ public class KeycloakService {
     try (Keycloak keycloak = getKeycloakClient(request)) {
       return keycloak
           .realm(keycloakProperties.getRealm())
-          .roles().get(realmRoleType.name())
+          .roles()
+          .get(realmRoleType.name())
           .getRoleUserMembers()
           .stream()
           .map(UserRepresentation::getEmail)
           .collect(Collectors.toSet());
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return Set.of();
     }
   }
 
-  public UserRepresentation findUserByEmailAddress(
+  public Optional<UserDto> findUserWithRolesByEmailAddress(
       @NotNull HttpServletRequest request,
       @NotNull @NotBlank @Email String email) {
+    Optional<UserRepresentation> userRepresentation
+        = findUserRepresentationByEmailAddress(request, email);
+    try (Keycloak keycloak = getKeycloakClient(request)) {
+      Set<RoleDto> roleDtos = new HashSet<>();
+      if (userRepresentation.isPresent()) {
+        MappingsRepresentation roleMappingsRepresentation = keycloak
+            .realm(keycloakProperties.getRealm())
+            .users()
+            .get(userRepresentation.get().getId())
+            .roles()
+            .getAll();
+        List<RoleRepresentation> roleRepresentations = new ArrayList<>();
+        roleRepresentations.addAll(roleMappingsRepresentation.getRealmMappings());
+        if (roleMappingsRepresentation.getClientMappings().containsKey(
+            keycloakProperties.getKeycloakBackendClient())) {
+          roleRepresentations.addAll(roleMappingsRepresentation
+              .getClientMappings()
+              .get(keycloakProperties.getKeycloakBackendClient())
+              .getMappings());
+        }
+        if (roleMappingsRepresentation.getClientMappings().containsKey(
+            keycloakProperties.getKeycloakAngularFrontendClient())) {
+          roleRepresentations.addAll(roleMappingsRepresentation
+              .getClientMappings()
+              .get(keycloakProperties.getKeycloakAngularFrontendClient())
+              .getMappings());
+        }
+        roleDtos = roleRepresentations
+            .stream()
+            .map(roleRepresentation ->
+                RoleDto.builder()
+                    .roleType(RoleType.from(roleRepresentation.getName()))
+                    .build())
+            .collect(Collectors.toSet());
+      }
+      return userRepresentation.isEmpty()
+          ? Optional.empty()
+          : Optional.of(UserDto.builder()
+              .firstName(userRepresentation.get().getFirstName())
+              .lastName(userRepresentation.get().getLastName())
+              .email(userRepresentation.get().getEmail())
+              .roles(roleDtos)
+              .build());
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return Optional.empty();
+    }
+  }
+
+  public List<UserDto> searchUsers(
+      @NotNull HttpServletRequest request,
+      @NotNull @NotBlank String text) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
       List<UserRepresentation> foundUsers = keycloak
           .realm(keycloakProperties.getRealm())
-          .users().search(email, 0, 1);
-      return foundUsers != null && foundUsers.size() == 1
-          ? foundUsers.get(0)
-          : null;
+          .users()
+          .search(text, 0, 250, true);
+      return foundUsers
+          .stream()
+          .map(userRepresentation -> UserDto.builder()
+              .firstName(userRepresentation.getFirstName())
+              .lastName(userRepresentation.getLastName())
+              .email(userRepresentation.getEmail())
+              .build())
+          .collect(Collectors.toList());
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return List.of();
     }
   }
 
-  public void saveUser(@NotNull HttpServletRequest request, @NotNull UserDto userDto) {
+  public void saveUser(
+      @NotNull HttpServletRequest request,
+      @NotNull UserDto userDto) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
-      CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-      credentialRepresentation.setTemporary(true);
-      credentialRepresentation.setValue("root");
-      UserRepresentation userRepresentation = new UserRepresentation();
-      userRepresentation.setEnabled(true);
-      userRepresentation.setEmail(userDto.getEmail());
-      userRepresentation.setUsername(userDto.getFirstName());
-      userRepresentation.setFirstName(userDto.getFirstName());
-      userRepresentation.setLastName(userDto.getLastName());
-      userRepresentation.setCredentials(List.of(credentialRepresentation));
-      userRepresentation.setRequiredActions(List.of("UPDATE_PASSWORD"));
-      keycloak
+      Optional<UserRepresentation> userRepresentation = findUserRepresentationByEmailAddress(
+          request, userDto.getEmail());
+      if (userRepresentation.isEmpty()) {
+        // Creates new user if not existing.
+        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+        credentialRepresentation.setTemporary(true);
+        credentialRepresentation.setValue("root");
+        userRepresentation = Optional.of(new UserRepresentation());
+        userRepresentation.get().setEnabled(true);
+        userRepresentation.get().setCredentials(List.of(credentialRepresentation));
+        userRepresentation.get().setRequiredActions(List.of("UPDATE_PASSWORD"));
+        userRepresentation.get().setEmail(userDto.getEmail());
+        userRepresentation.get().setUsername(userDto.getFirstName());
+        userRepresentation.get().setFirstName(userDto.getFirstName());
+        userRepresentation.get().setLastName(userDto.getLastName());
+        keycloak
           .realm(keycloakProperties.getRealm())
           .users()
-          .create(userRepresentation);
+          .create(userRepresentation.get());
+      } else {
+        // Updates existing user.
+        userRepresentation.get().setEmail(userDto.getEmail());
+        userRepresentation.get().setUsername(userDto.getFirstName());
+        userRepresentation.get().setFirstName(userDto.getFirstName());
+        userRepresentation.get().setLastName(userDto.getLastName());
+        keycloak
+            .realm(keycloakProperties.getRealm())
+            .users()
+            .get(userRepresentation.get().getId())
+            .update(userRepresentation.get());
+      }
+      if (userDto.getRoles() != null && !userDto.getRoles().isEmpty()) {
+        saveRolesOfUser(request, userDto.getEmail(), userDto.getRoles());
+      }
     } catch (Exception e) {
-      // TODO(nilsheumer): Add proper exception handling.
       log.error(e.getMessage());
-      return;
-    }
-    if (userDto.getRoles() != null && !userDto.getRoles().isEmpty()) {
-      saveRolesOfUser(request, userDto.getEmail(), userDto.getRoles());
     }
   }
 
@@ -98,30 +199,34 @@ public class KeycloakService {
       @NotNull @NotBlank @Email String emailAddress,
       @NotNull @NotEmpty Set<RoleDto> roleDtos) {
     try (Keycloak keycloak = getKeycloakClient(request)) {
-      UserRepresentation userRepresentation = findUserByEmailAddress(request, emailAddress);
-      if (userRepresentation == null || userRepresentation.getId() == null) {
+      Optional<UserRepresentation> userRepresentation
+          = findUserRepresentationByEmailAddress(request, emailAddress);
+      if (userRepresentation.isEmpty() || userRepresentation.get().getId() == null) {
         log.error(String.format(
             "Keycloak role mapping failed on the saved user. There is no user with the email '%s'.",
             emailAddress));
         return;
       }
-      // If the save user has just a JPA role, but not the corresponding Keycloak managed role, the
-      // missing Keycloak role is added here, before the actual Keycloak role mapping to the user
-      // happens. Note that within a Keycloak realm role names must be unique.
+      // If the given user has just a JPA role, but not the corresponding Keycloak managed role, the
+      // missing role collected here, before the actual Keycloak role mapping to the user occurs.
+      // Note that within a Keycloak realm role names must be unique.
       Set<String> realmRolesToAdd = new HashSet<>();
       Set<String> realmManagementClientRolesToAdd = new HashSet<>();
       Set<String> realmClientRolesToAdd = new HashSet<>();
       roleDtos.forEach(roleDto -> {
         switch (roleDto.getRoleType()) {
           case ROLE_JPA_GLOBALADMIN:
-            realmRolesToAdd.add(RoleType.ROLE_REALM_SUPERADMIN.name());
-            realmManagementClientRolesToAdd.remove(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
-            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES);
+            realmRolesToAdd.addAll(REALM_ROLE_NAMES);
+            // The set of Keycloak realm management client role(s) that are required for the
+            // ROLE_JPA_ADMIN role is/are a complete subset of the Keycloak realm management client
+            // roles that required for the ROLE_JPA_GLOBALADMIN role.
+            realmManagementClientRolesToAdd.removeAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+            realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES);
             break;
           case ROLE_JPA_ADMIN:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_ADMIN.name());
             if (realmManagementClientRolesToAdd.isEmpty()) {
-              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+              realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
             }
             break;
           case ROLE_JPA_SELLER:
@@ -130,20 +235,22 @@ public class KeycloakService {
           case ROLE_JPA_BUYER:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_BUYER.name());
             break;
+          default:
+            // Nothing to do here.
         }
       });
-      saveRealmRolesOfUser(keycloak, userRepresentation.getId(), realmRolesToAdd);
+      saveRealmRolesOfUser(keycloak, userRepresentation.get().getId(), realmRolesToAdd);
       saveRealmManagementClientRolesOfUser(
-          keycloak, userRepresentation.getId(), realmManagementClientRolesToAdd);
+          keycloak, userRepresentation.get().getId(), realmManagementClientRolesToAdd);
       saveRealmClientRolesOfUser(
           keycloak,
           getRealmClientUuid(keycloak, keycloakProperties.getKeycloakBackendClient()),
-          userRepresentation.getId(),
+          userRepresentation.get().getId(),
           realmClientRolesToAdd);
       saveRealmClientRolesOfUser(
           keycloak,
           getRealmClientUuid(keycloak, keycloakProperties.getKeycloakAngularFrontendClient()),
-          userRepresentation.getId(),
+          userRepresentation.get().getId(),
           realmClientRolesToAdd);
     } catch (Exception e) {
       // TODO(nilsheumer): Add proper exception handling.
@@ -151,13 +258,30 @@ public class KeycloakService {
     }
   }
 
-  private boolean containsRealmRoles(@NotNull Set<String> roleNames) {
-    return roleNames.contains(RoleType.ROLE_REALM_SUPERADMIN.name());
+  private Optional<UserRepresentation> findUserRepresentationByEmailAddress(
+      @NotNull HttpServletRequest request,
+      @NotNull @NotBlank @Email String email) {
+    try (Keycloak keycloak = getKeycloakClient(request)) {
+      List<UserRepresentation> foundUsers = keycloak
+          .realm(keycloakProperties.getRealm())
+          .users()
+          .search(email, 0, 1);
+      return foundUsers != null && foundUsers.size() == 1
+          ? Optional.of(foundUsers.get(0))
+          : Optional.empty();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return Optional.empty();
+    }
+  }
+
+  private boolean hasIntersectionWithRealmRoles(@NotNull Set<String> roleNames) {
+    return roleNames.stream().anyMatch(REALM_ROLE_NAMES::contains);
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
-    return roleNames.containsAll(REALM_MANAGEMENT_SUPER_ADMIN_ROLE_NAMES)
-        || roleNames.containsAll(REALM_MANAGEMENT_ADMIN_ROLE_NAMES);
+    return roleNames.containsAll(REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES)
+        || roleNames.containsAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
   }
 
   private boolean containsRealmClientRoles(@NotNull Set<String> roleNames) {
@@ -170,7 +294,20 @@ public class KeycloakService {
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
       @NotNull Set<String> roleNames) {
-    if (!containsRealmRoles(roleNames)) {
+    RoleScopeResource roleScopeResource = keycloak
+        .realm(keycloakProperties.getRealm())
+        .users()
+        .get(userId)
+        .roles()
+        .realmLevel();
+    // Deletes all existing realm role mappings of the user, except of the Keycloak default roles.
+    roleScopeResource.remove(roleScopeResource.listEffective()
+        .stream()
+        .filter(
+            roleRepresentation -> REALM_ROLE_NAMES.contains(roleRepresentation.getName()))
+        .collect(Collectors.toList()));
+    if (!hasIntersectionWithRealmRoles(roleNames)) {
+      // No roles to add, early exit.
       return;
     }
     List<RoleRepresentation> realmRoleRepresentationsToAdd = keycloak
@@ -180,35 +317,37 @@ public class KeycloakService {
         .stream()
         .filter(roleRepresentation -> roleNames.contains(roleRepresentation.getName()))
         .collect(Collectors.toList());
-    keycloak
-        .realm(keycloakProperties.getRealm())
-        .users()
-        .get(userId)
-        .roles()
-        .realmLevel()
-        .add(realmRoleRepresentationsToAdd);
+    roleScopeResource.add(realmRoleRepresentationsToAdd);
   }
 
   private void saveRealmManagementClientRolesOfUser(
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank  String userId,
       @NotNull Set<String> roleNamesToAdd) {
-    if (!containsRealmManagementClientRoles(roleNamesToAdd)) {
-      return;
-    }
     String realmManagementClientUuid = getRealmClientUuid(
         keycloak,
         keycloakProperties.getKeycloakRealmManagementClient());
-    keycloak
+    RoleScopeResource roleScopeResource = keycloak
         .realm(keycloakProperties.getRealm())
         .users()
         .get(userId)
         .roles()
-        .clientLevel(realmManagementClientUuid)
-        .add(getRealmClientRoleRepresentationsToAdd(
-            keycloak,
-            realmManagementClientUuid,
-            roleNamesToAdd));
+        .clientLevel(realmManagementClientUuid);
+    Set<String> roleNamesToRemove = new HashSet<>();
+    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES);
+    roleNamesToRemove.addAll(KeycloakService.REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+    roleScopeResource.remove(getRealmClientRoleRepresentations(
+        keycloak,
+        realmManagementClientUuid,
+        roleNamesToRemove
+    ));
+    if (containsRealmManagementClientRoles(roleNamesToAdd)) {
+      // Assign the additional and save the updated role mapping.
+      roleScopeResource.add(getRealmClientRoleRepresentations(
+          keycloak,
+          realmManagementClientUuid,
+          roleNamesToAdd));
+    }
   }
 
   private void saveRealmClientRolesOfUser(
@@ -216,25 +355,30 @@ public class KeycloakService {
       @NotNull @NotBlank String clientUuid,
       @NotNull @NotBlank String userUuid,
       @NotNull Set<String> roleNames) {
-    if (!containsRealmClientRoles(roleNames)) {
-      return;
-    }
-    keycloak
+    RoleScopeResource roleScopeResource =  keycloak
         .realm(keycloakProperties.getRealm())
         .users()
         .get(userUuid)
         .roles()
-        .clientLevel(clientUuid)
-        .add(getRealmClientRoleRepresentationsToAdd(keycloak, clientUuid, roleNames));
+        .clientLevel(clientUuid);
+    roleScopeResource.remove(getRealmClientRoleRepresentations(
+        keycloak,
+        clientUuid,
+        KeycloakService.REALM_CLIENT_ROLE_NAMES));
+
+    if (!containsRealmClientRoles(roleNames)) {
+      return;
+    }
+    roleScopeResource.add(getRealmClientRoleRepresentations(keycloak, clientUuid, roleNames));
   }
 
-  private List<RoleRepresentation> getRealmClientRoleRepresentationsToAdd(
+  private List<RoleRepresentation> getRealmClientRoleRepresentations(
       @NotNull Keycloak keycloak,
       @NotNull @NotBlank String realmClientUuid,
-      @NotNull @NotEmpty Set<String> roleNamesToAdd) {
+      @NotNull @NotEmpty Set<String> roleNames) {
     return getRealmClientRoleRepresentations(keycloak, realmClientUuid)
         .stream()
-        .filter(roleRepresentation -> roleNamesToAdd.contains(roleRepresentation.getName()))
+        .filter(roleRepresentation -> roleNames.contains(roleRepresentation.getName()))
         .collect(Collectors.toList());
   }
 
@@ -256,17 +400,17 @@ public class KeycloakService {
         .realm(keycloakProperties.getRealm())
         .clients()
         .findByClientId(realmClientName);
-    if (foundClientRepresentation.size() == 0) {
+    if (foundClientRepresentation.isEmpty()) {
       log.error(String.format(
-          "Keycloak role mapping failed. Could not find a client with name '%s'.",
+          "Could not find a Keycloak client with the name '%s'.",
           realmClientName));
-      return null;
+      return "";
     }
     if (foundClientRepresentation.size() > 1) {
       log.error(String.format(
-          "Keycloak role mapping failed. The Keycloak realm client name '%s' is not unique.",
+          "Count not find a single client. The Keycloak realm client name '%s' is not unique.",
           realmClientName));
-      return null;
+      return "";
     }
     return foundClientRepresentation.get(0).getId();
   }
