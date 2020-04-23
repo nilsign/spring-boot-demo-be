@@ -30,7 +30,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// TODO(nilsheumer): Divide this class into a KeycloakUserService and KeycloakRoleService.
+// Divide this class into a KeycloakUserService and KeycloakRoleService, before any new extension
+// are done here.
 @Slf4j
 @Service
 public class KeycloakService {
@@ -72,7 +73,7 @@ public class KeycloakService {
           .collect(Collectors.toSet());
     } catch (Exception e) {
       log.error(e.getMessage());
-      return null;
+      return Set.of();
     }
   }
 
@@ -124,7 +125,7 @@ public class KeycloakService {
               .build());
     } catch (Exception e) {
       log.error(e.getMessage());
-      return null;
+      return Optional.empty();
     }
   }
 
@@ -146,7 +147,7 @@ public class KeycloakService {
           .collect(Collectors.toList());
     } catch (Exception e) {
       log.error(e.getMessage());
-      return null;
+      return List.of();
     }
   }
 
@@ -190,7 +191,6 @@ public class KeycloakService {
       }
     } catch (Exception e) {
       log.error(e.getMessage());
-      return;
     }
   }
 
@@ -217,7 +217,10 @@ public class KeycloakService {
         switch (roleDto.getRoleType()) {
           case ROLE_JPA_GLOBALADMIN:
             realmRolesToAdd.addAll(REALM_ROLE_NAMES);
-            realmManagementClientRolesToAdd.remove(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
+            // The set of Keycloak realm management client role(s) that are required for the
+            // ROLE_JPA_ADMIN role is/are a complete subset of the Keycloak realm management client
+            // roles that required for the ROLE_JPA_GLOBALADMIN role.
+            realmManagementClientRolesToAdd.removeAll(REALM_MANAGEMENT_CLIENT_ADMIN_ROLE_NAMES);
             realmManagementClientRolesToAdd.addAll(REALM_MANAGEMENT_CLIENT_SUPERADMIN_ROLE_NAMES);
             break;
           case ROLE_JPA_ADMIN:
@@ -232,6 +235,8 @@ public class KeycloakService {
           case ROLE_JPA_BUYER:
             realmClientRolesToAdd.add(RoleType.ROLE_REALM_CLIENT_BUYER.name());
             break;
+          default:
+            // Nothing to do here.
         }
       });
       saveRealmRolesOfUser(keycloak, userRepresentation.get().getId(), realmRolesToAdd);
@@ -266,16 +271,14 @@ public class KeycloakService {
           : Optional.empty();
     } catch (Exception e) {
       log.error(e.getMessage());
-      return null;
+      return Optional.empty();
     }
   }
 
   private boolean hasIntersectionWithRealmRoles(@NotNull Set<String> roleNames) {
     return roleNames
         .stream()
-        .filter(roleName -> REALM_ROLE_NAMES.contains(roleName))
-        .findFirst()
-        .isPresent();
+        .anyMatch(roleName -> REALM_ROLE_NAMES.contains(roleName));
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
@@ -399,17 +402,17 @@ public class KeycloakService {
         .realm(keycloakProperties.getRealm())
         .clients()
         .findByClientId(realmClientName);
-    if (foundClientRepresentation.size() == 0) {
+    if (foundClientRepresentation.isEmpty()) {
       log.error(String.format(
-          "Keycloak role mapping failed. Could not find a client with name '%s'.",
+          "Could not find a Keycloak client with the name '%s'.",
           realmClientName));
-      return null;
+      return "";
     }
     if (foundClientRepresentation.size() > 1) {
       log.error(String.format(
-          "Keycloak role mapping failed. The Keycloak realm client name '%s' is not unique.",
+          "Count not find a single client. The Keycloak realm client name '%s' is not unique.",
           realmClientName));
-      return null;
+      return "";
     }
     return foundClientRepresentation.get(0).getId();
   }
