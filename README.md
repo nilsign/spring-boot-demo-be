@@ -18,12 +18,13 @@ database table relationships and the resulting Hibernate uni- and bi-directional
 representations.
 
 ### Major Tech-Stack
-- Spring Boot
-- OAuth2 with Keycloak
+- Spring Boot and
+- OAuth2
+- Keycloak
 - Hibernate
 - Lombok
+- Rest API
 - Flyway
-- REST Api
 - RESTEasy
 - WebFlux
 - JSP
@@ -35,7 +36,15 @@ representations.
 
 ## FRONTEND
 
-An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available within my GitHub account. 
+On localhost:8080 some JSP pages with brief user information can be found which are severed by a
+Spring Boot embedded Tomcat.
+
+An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available
+within my GitHub account. To be able to access most of the implemented features, which are mainly
+user and role management related, login as a user owning the super admin role.
+
+  Username: `nilsign`<br>
+  Password: `root`
 
 ## SETUP
 
@@ -366,6 +375,12 @@ A Swagger API documentation can be found here once the project is running (local
 environment.
 
 - http://localhost:8080/swagger-ui.html
+
+Note that only authenticated users can reach the Swagger API documentation. So, when there occurs a
+redirect from the URL above to the Keycloak login page use the usual credentials.
+
+  Username: `nilsign`<br>
+  Password: `root`
 
 ## POTENTIAL ROAD MAP
 
