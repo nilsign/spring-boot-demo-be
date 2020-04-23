@@ -30,8 +30,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// Divide this class into a KeycloakUserService and KeycloakRoleService, before any new extension
-// are done here.
+// TODO(nilsheumer): Divide this class into a KeycloakUserService and KeycloakRoleService, before
+// any new extension are done here.
 @Slf4j
 @Service
 public class KeycloakService {
@@ -276,9 +276,7 @@ public class KeycloakService {
   }
 
   private boolean hasIntersectionWithRealmRoles(@NotNull Set<String> roleNames) {
-    return roleNames
-        .stream()
-        .anyMatch(roleName -> REALM_ROLE_NAMES.contains(roleName));
+    return roleNames.stream().anyMatch(REALM_ROLE_NAMES::contains);
   }
 
   private boolean containsRealmManagementClientRoles(@NotNull Set<String> roleNames) {
