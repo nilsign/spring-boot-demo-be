@@ -10,7 +10,7 @@ One main focus is on Keycloak, which acts as authentication (OpenID Connect) and
 annotation based role and authority management framework. Be aware, that especially the
 authorization role model is not necessarily a typical real-world model. The core intention is here to
 restrict the REST Api to user roles provided by Keycloak and to roles provided by a JPA datasource
-(Postgres).
+(Postgres) and to provide user and role management functionality.
 
 As database a Postgres instance is running also (as Keycloak) in a local Docker container. Note,
 that the relational model might be as well a bit 'constructed' in order to reflect all relevant
@@ -41,8 +41,8 @@ Spring Boot embedded Tomcat.
 
 An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available
 within my GitHub account. To be able to access most of the implemented features, which are mainly
-user and role management related, navigate to http://localhost:4200 and login as a user with the
-super admin role.
+user and role management related, start the frontend locally, navigate to http://localhost:4200 and
+login as a user with the super admin role.
 
   Username: `nilsign`<br>
   Password: `root`
