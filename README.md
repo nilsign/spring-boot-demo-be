@@ -41,7 +41,8 @@ Spring Boot embedded Tomcat.
 
 An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available
 within my GitHub account. To be able to access most of the implemented features, which are mainly
-user and role management related, login as a user owning the super admin role.
+user and role management related, navigate to http://localhost:4200 and login as a user with the
+super admin role.
 
   Username: `nilsign`<br>
   Password: `root`
