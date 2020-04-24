@@ -10,7 +10,7 @@ One main focus is on Keycloak, which acts as authentication (OpenID Connect) and
 annotation based role and authority management framework. Be aware, that especially the
 authorization role model is not necessarily a typical real-world model. The core intention is here to
 restrict the REST Api to user roles provided by Keycloak and to roles provided by a JPA datasource
-(Postgres).
+(Postgres) and to provide user and role management functionality.
 
 As database a Postgres instance is running also (as Keycloak) in a local Docker container. Note,
 that the relational model might be as well a bit 'constructed' in order to reflect all relevant
@@ -19,11 +19,12 @@ representations.
 
 ### Major Tech-Stack
 - Spring Boot
-- OAuth2 with Keycloak
+- OAuth2
+- Keycloak
 - Hibernate
 - Lombok
+- Rest API
 - Flyway
-- REST Api
 - RESTEasy
 - WebFlux
 - JSP
@@ -35,7 +36,16 @@ representations.
 
 ## FRONTEND
 
-An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available within my GitHub account. 
+On localhost:8080 some JSP pages with brief user information can be found which are severed by a
+Spring Boot embedded Tomcat.
+
+An appropriate [Angular frontend client](https://github.com/nilsign/angular-demo-fe) is available
+within my GitHub account. To be able to access most of the implemented features, which are mainly
+user and role management related, start the frontend locally, navigate to http://localhost:4200 and
+login as a user with the super admin role.
+
+  Username: `nilsign`<br>
+  Password: `root`
 
 ## SETUP
 
@@ -53,7 +63,7 @@ To get more used to Keycloak and Docker the manual configuration option is recom
 For a manual setup of the docker container skip this chapter and instead follow the instructions of
 the manual configuration.
 
-1. [Download](https://drive.google.com/file/d/1Ovp6dMJ2ZbuEsO03lVeuuDIgr6wG6c_O/view?usp=sharing)
+1. [Download](https://drive.google.com/file/d/1Et3nCBDFk-qR39dUSnUlo3Sa1HeUyMFe/view?usp=sharing)
 a fully pre-configured Docker Keycloak image as tar.
 
 2. Load the tar and then just run it in a Docker container.
@@ -217,11 +227,11 @@ DemoProjectRealm->Configure->Clients->Account->"Credentials"
 1. (Optional) Commit the running Keycloak Docker container to a new Docker image.
 
         $ docker ps -a
-        $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v4
+        $ docker commit [CONTAINER ID] jboss/keycloak:demo-project-v8
 
-2. (Requires: 9) To start the new jboss/keycloak:demo-project-v4 Docker image execute
+2. (Requires: 9) To start the new jboss/keycloak:demo-project-v8 Docker image execute
 
-        $ docker run -p 8100:8080 jboss/keycloak:demo-project-v4
+        $ docker run -p 8100:8080 jboss/keycloak:demo-project-v8
 
 3. To start a stopped container (e.g. after reboot, docker update etc...) call start with the
 container name or id.
@@ -366,6 +376,12 @@ A Swagger API documentation can be found here once the project is running (local
 environment.
 
 - http://localhost:8080/swagger-ui.html
+
+Note that only authenticated users can reach the Swagger API documentation. So, when there occurs a
+redirect from the URL above to the Keycloak login page use the usual credentials.
+
+  Username: `nilsign`<br>
+  Password: `root`
 
 ## POTENTIAL ROAD MAP
 
