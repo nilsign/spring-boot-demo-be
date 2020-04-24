@@ -2,17 +2,20 @@ package com.nilsign.springbootdemo.domain.user.service;
 
 import com.nilsign.springbootdemo.domain.role.RoleType;
 import com.nilsign.springbootdemo.domain.role.dto.RoleDto;
+import com.nilsign.springbootdemo.domain.role.entity.RoleEntity;
 import com.nilsign.springbootdemo.domain.user.dto.UserDto;
 import com.nilsign.springbootdemo.domain.user.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.nilsign.springbootdemo.helper.KeycloakHelper.getLoggedInKeycloakUserAccessToken;
 
 @Slf4j
 @Service
@@ -22,26 +25,26 @@ public class LoggedInUserDtoService {
   private UserEntityService userEntityService;
 
   public UserDto getLoggedInUserDto() {
-    DefaultOidcUser loggedInUser = this.getLoggedInOidcUser();
-    UserEntity userEntity = userEntityService.findByEmail(loggedInUser.getUserInfo().getEmail())
+    AccessToken token = getLoggedInKeycloakUserAccessToken();
+    UserEntity userEntity = userEntityService.findByEmail(token.getEmail())
         .orElseThrow(() -> new IllegalStateException(String.format(
             "No user found with the email address '%s'.",
-            loggedInUser.getUserInfo().getEmail())));
-    if (!userEntity.getFirstName().equals(loggedInUser.getGivenName())) {
+            token.getEmail())));
+    if (!userEntity.getFirstName().equals(token.getGivenName())) {
       log.warn(String.format(
-          "The user's ('$s') given name in the OAuth2 provider ('%s') differs from the given name "
+          "The user's ('%s') given name in the OAuth2 provider ('%s') differs from the given name "
               + "in JPA datasource ('%s').",
-          loggedInUser.getUserInfo().getEmail()),
-          loggedInUser.getGivenName(),
-          userEntity.getFirstName());
+          token.getEmail(),
+          token.getGivenName(),
+          userEntity.getFirstName()));
     }
-    if (!userEntity.getLastName().equals(loggedInUser.getFamilyName())) {
+    if (!userEntity.getLastName().equals(token.getFamilyName())) {
       log.warn(String.format(
-          "The user's ('$s') family name in the OAuth2 provider ('%s') differs from the family name"
+          "The user's ('%s') family name in the OAuth2 provider ('%s') differs from the family name"
               + " in JPA datasource ('%s').",
-          loggedInUser.getUserInfo().getEmail()),
-          loggedInUser.getFamilyName(),
-          userEntity.getLastName());
+          token.getEmail(),
+          token.getFamilyName(),
+          userEntity.getLastName()));
     }
     Set<RoleDto> combinedRoleDtos = combineJpaRolesAndOAuth2ProviderRoles(userEntity);
     return UserDto.builder()
@@ -56,16 +59,12 @@ public class LoggedInUserDtoService {
         .build();
   }
 
-  private DefaultOidcUser getLoggedInOidcUser() {
-    return (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-  }
-
   private Set<RoleType> getLoggedInUserRoleTypes() {
     return SecurityContextHolder.getContext().getAuthentication()
         .getAuthorities()
         .stream()
-        .filter(grantedAuthority -> grantedAuthority.getAuthority()
-            .startsWith(RoleType.ROLE_TYPE_NAME_PREFIX))
+        .filter(grantedAuthority
+            -> grantedAuthority.getAuthority().startsWith(RoleType.ROLE_TYPE_NAME_PREFIX))
         .map(grantedAuthority -> RoleType.valueOf(grantedAuthority.getAuthority()))
         .collect(Collectors.toSet());
   }
@@ -73,10 +72,7 @@ public class LoggedInUserDtoService {
   private Set<RoleDto> combineJpaRolesAndOAuth2ProviderRoles(UserEntity userEntity) {
     Set<RoleType> jpaRoles = userEntity.getRoles()
         .stream()
-        .map(RoleDto::create)
-        .collect(Collectors.toSet())
-        .stream()
-        .map(roleDto -> RoleType.valueOf(roleDto.getRoleType().name()))
+        .map(RoleEntity::getRoleType)
         .collect(Collectors.toSet());
     Set<RoleDto> combinedRoleDtos = userEntity.getRoles()
         .stream()

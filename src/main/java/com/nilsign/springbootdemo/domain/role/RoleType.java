@@ -1,5 +1,6 @@
 package com.nilsign.springbootdemo.domain.role;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -15,7 +16,7 @@ public enum RoleType {
   ROLE_REALM_CLIENT_ADMIN("ROLE_REALM_CLIENT_ADMIN"),
   ROLE_REALM_CLIENT_SELLER("ROLE_REALM_CLIENT_SELLER"),
   ROLE_REALM_CLIENT_BUYER("ROLE_REALM_CLIENT_BUYER"),
-  // Default Keycloak realm roles.
+  // Default Keycloak realm roles, which are here listed for the sake of completeness.
   ROLE_USER("ROLE_USER"),
   ROLE_OFFLINE_ACCESS("ROLE_OFFLINE_ACCESS"),
   ROLE_UMA_AUTHORIZATION("ROLE_UMA_AUTHORIZATION");
@@ -26,5 +27,17 @@ public enum RoleType {
 
   RoleType(@NotNull String name) {
     this.name = name;
+  }
+
+  public static RoleType from(@NotNull @NotBlank String name) {
+    name = name.trim().toUpperCase();
+    if (!name.startsWith(ROLE_TYPE_NAME_PREFIX)) {
+      name = ROLE_TYPE_NAME_PREFIX + name;
+    }
+    try {
+      return RoleType.valueOf(name);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 }

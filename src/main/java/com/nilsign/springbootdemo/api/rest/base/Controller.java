@@ -1,8 +1,8 @@
 package com.nilsign.springbootdemo.api.rest.base;
 
 import com.nilsign.springbootdemo.domain.Dto;
-import com.nilsign.springbootdemo.domain.SequencedEntity;
 import com.nilsign.springbootdemo.domain.DtoService;
+import com.nilsign.springbootdemo.domain.SequencedEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,6 @@ public abstract class Controller<T1 extends Dto, T2 extends SequencedEntity, T3>
     return getDtoService().findAll();
   }
 
-  @PreAuthorize("hasRole('JPA_GLOBALADMIN') OR hasRole('JPA_ADMIN')")
   @GetMapping(path = "{id}")
   public Optional<T1> findById(@NotNull @PathVariable T3 id) {
     return getDtoService().findById(id);

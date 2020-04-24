@@ -1,5 +1,7 @@
 environment:
   name: DEV
+server:
+  port: 8080
 log4j:
   appender:
     stdout: org.apache.log4j.ConsoleAppender
@@ -35,21 +37,13 @@ spring:
           descriptor:
             sql: trace
     show-sql: true
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            authorization-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/auth
-            jwk-set-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/certs
-            token-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/token
-            user-info-uri: http://localhost:8100/auth/realms/DemoProjectRealm/protocol/openid-connect/userinfo
-            user-name-attribute: preferred_username
-        registration:
-          keycloak:
-            authorization-grant-type: authorization_code
-            client-id: DemoProjectRestApiClient
-            client-secret: 6a06b69f-8108-4d40-af64-ed1325385c5d
-            clientName: DemoProjectRestApiClient
-            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
-            scope: email,openid,profile
+keycloak:
+  credentials.secret: 6a06b69f-8108-4d40-af64-ed1325385c5d
+  auth-server-url: http://localhost:8100/auth
+  realm: DemoProjectRealm
+  resource: DemoProjectRestApiClient
+  cors: true
+  connection-pool-size: 100
+keycloakRealmManagementClient: realm-management
+keycloakAngularFrontendClient: DemoProjectAngularFrontendClient
+
