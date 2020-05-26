@@ -28,6 +28,7 @@ representations.
 - RESTEasy
 - WebFlux
 - JSP
+- Maven
 - Postgres
 - Docker
 - Swagger API Documentation
