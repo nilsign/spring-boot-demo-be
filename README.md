@@ -2,7 +2,7 @@
 
 This Spring Boot demo application demonstrates several aspects of Spring Boot and surrounding
 technologies. It might be a good starting point for Spring Boot projects with a similar technology
-stack, or just can be used as a quickstart to test new technologies or potential solution for
+stack, or just can be used as a quickstart to test new technologies or potential solutions for
 certain Spring Boot related problems.
 
 One main focus is on Keycloak, which acts as authentication (OpenID Connect) and authorization
