@@ -9,7 +9,7 @@ CREATE SEQUENCE public.hibernate_sequence
     NO MAXVALUE
     CACHE 1;
 
--- Creates all tables and initializes tables the required indices.
+-- Creates all tables and the required indices.
 CREATE TABLE IF NOT EXISTS public.tbl_role (
     id BIGINT CONSTRAINT cstr_role_pk PRIMARY KEY,
     role_type VARCHAR(64) CONSTRAINT cstr_role_unique_role_type UNIQUE,
