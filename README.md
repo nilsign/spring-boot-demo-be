@@ -273,8 +273,8 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
         $ docker pull postgres:11-alpine
 
 2. Run the image named "postgres:11.0-alpine" in detached mode in a container named
-"demo-project-postgres" with "root" as Postgres password for the Postgres super admin user (named
-"postgres"). 
+"demo-project-postgres" with `root` as Postgres password for the Postgres super admin user named
+`postgres`. 
 
         $ docker images
         $ docker run --name demo-project-postgres -e POSTGRES_PASSWORD=root -d -p 5432:5432 postgres:11-alpine
