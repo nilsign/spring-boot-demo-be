@@ -55,7 +55,7 @@ login as a user with the super admin role.
 There are two options to setup a Keycloak instance running in a Docker container. The easy one is
 the pre-configured option. Here the creation of the Keycloak realm, clients, secrets, users, roles
 and all the other configuration work is already done and out of the box available. Also, there is
-no need to exchange the client secret in the source code, as they are correct already.
+no need to exchange the client secret in the source code, as it is correct already.
 
 To get more used to Keycloak and Docker the manual configuration option is recommended.
 
