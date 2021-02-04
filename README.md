@@ -74,7 +74,7 @@ a fully pre-configured Docker Keycloak image as tar.
 
 
 3. To access the Keycloak Administration Console navigate to http://localhost:8100 and enter the
-following credentials
+following credentials.
 
     Username: `nilsign@gmail.com`<br>
     Password: `root`
@@ -85,7 +85,7 @@ following credentials
 
 ##### Get a Keycloak Image and start a Container
 
-1. Get a virgin Keycloak Docker image
+1. Get a virgin Keycloak Docker image.
 
         $ docker pull jboss/keycloak
 
@@ -109,11 +109,11 @@ web browsers Incognito-Mode. If required, there will be a prompt to enter a perm
 
 1. Navigate to http://localhost:8100/auth/admin/master/console
 
-2. Press Realm "Master" -> Add Realm<br>
+2. Press Realm "Master" -> Add Realm.<br>
 
     Name: `DemoProjectRealm`
 
-3. Click to DemoProjectRealm->Configure->Clients->"Account"
+3. Navigate to DemoProjectRealm->Configure->Clients->"Account".
    http://localhost:8100/auth/realms/DemoProjectRealm/account
 
    Enable Service Accounts: ON<br>
@@ -121,30 +121,30 @@ web browsers Incognito-Mode. If required, there will be a prompt to enter a perm
 
 ##### Create a Keycloak Realm Roles and Users
 
-1. Click to DemoProjectRealm->Configure->Roles->Realm Roles->"Add roles"<br>
+1. Navigate to DemoProjectRealm->Configure->Roles->Realm Roles->"Add roles".<br>
 
     Role Name: `ROLE_REALM_GLOBALADMIN`
 
-2. Click to DemoProjectRealm->Configure->Manage->Users->"Add user"<br>
+2. Navigate to DemoProjectRealm->Configure->Manage->Users->"Add user".<br>
 
     Username: `nilsign`<br>
     Email: `nilsign@nilsign.com`
 
     Do NOT mix up this user with "nilsign@gmail.com", which is administrator of Keycloak itself.
 
-3. Click to DemoProjectRealm->Configure->Manage->Users->nilsign->"Credentials", enter temporary
+3. Navigate to DemoProjectRealm->Configure->Manage->Users->nilsign->"Credentials", enter temporary
 password and press "Set Password".
 
-4. Click to DemoProjectRealm->Configure->Manage->Users->nilsign->Role Mappings->"Realm Roles",
+4. Navigate to DemoProjectRealm->Configure->Manage->Users->nilsign->Role Mappings->"Realm Roles",
 select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 ##### Create a Keycloak Realm Client (Backend)
 
-1. Click to DemoProjectRealm->Configure->Clients->"Create"<br>
+1. Navigate to DemoProjectRealm->Configure->Clients->"Create".<br>
 
     Client ID: `DemoProjectRestApiClient`
 
-2. Click to DemoProjectRealm->Configure->Clients->"DemoProjectRestApiClient"<br>
+2. Navigate to DemoProjectRealm->Configure->Clients->"DemoProjectRestApiClient".<br>
 
     Enabled: ON<br>
     Valid Redirect URIs: `http://localhost:8080/*`<br>
@@ -152,14 +152,14 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
 
 ##### Create a Keycloak DemoProjectRealm Client Roles and Users
 
-1. Click to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->Roles->"Add Role"<br>
+1. Navigate to DemoProjectRealm->Configure->Clients->DemoProjectRestApiClient->Roles->"Add Role".<br>
 
     Role Name: `ROLE_REALM_CLIENT_ADMIN`
 
     Repeat 1. with Role Name: `ROLE_REALM_CLIENT_SELLER`<br>
     Repeat 1. with the Role Name: `ROLE_REALM_CLIENT_BUYER`<br>
 
-2.  Click to DemoProjectRealm->Configure->Manage->Users->"Add user"
+2.  Navigate to DemoProjectRealm->Configure->Manage->Users->"Add user".
 
     Username: `nilsign`<br>
     Email: `nilsign@nilsign.com`<br>
@@ -185,7 +185,7 @@ select `ROLE_REALM_GLOBALADMIN` and press "Add selected".
     Email: `mad.allistoles@nilsign.com`<br>
     Temporary Password: `root`<br>
 
-3. Click to DemoProjectRealm->Manage->Users-> ...
+3. Navigate to DemoProjectRealm->Manage->Users-> ...
 
     ... nilsign->Role Mappings->Client Roles->"DemoProjectRestApiClient"
 
@@ -274,20 +274,25 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
 
 2. Run the image named "postgres:11.0-alpine" in detached mode in a container named
 "demo-project-postgres" with `root` as Postgres password for the Postgres super admin user named
-`postgres`. 
+`postgres`.
 
         $ docker images
         $ docker run --name demo-project-postgres -e POSTGRES_PASSWORD=root -d -p 5432:5432 postgres:11-alpine
+        
+ Start and stop a Docker container.
+        
+        $ docker stop [CONTAINER ID]
+        $ docker start [CONTAINER ID]
 
-3. (Optional) List all running Docker containers
+3. (Optional) List all running Docker containers.
 
         $ docker ps
 
-4. (Optional) List all containers (including the stopped containers)
+4. (Optional) List all containers (including the stopped containers).
 
         $ docker ps -a  
 
-5. (Optional) Get postgres Server logs
+5. (Optional) Get postgres Server logs.
 
         $ docker logs --timestamps --details --follow [CONTAINER ID]
 
@@ -299,39 +304,39 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
         $ docker exec -it demo-project-postgres bash
         $ winpty docker exec -it demo-project-postgres bash
 
-2. Switch into the Postgres CLI (psql) within the Docker container with the default user "postgres"
+2. Switch into the Postgres CLI (psql) within the Docker container with the default user "postgres".
 
         $ psql -U postgres
 
-3. (Use 2. xor 3.) Switch into the Postgres CLI (psql) from the outside of the Docker container
+3. (Use 2. xor 3.) Switch into the Postgres CLI (psql) from the outside of the Docker container.
 
         $ psql -h localhost -p 5432 -U postgres
 
 ##### Create project database with psql
 
-1. (Optional) List all postgres servers users
+1. (Optional) List all postgres servers users.
 
         postgres=# \du
 
-2. Create a the Demo Project Postgres database (Do not forget the semicolon!)
+2. Create a the Demo Project Postgres database (Do not forget the semicolon!).
 
         postgres=# CREATE DATABASE demoprojectdb;
 
-3. (Optional) List all databases
+3. (Optional) List all databases.
 
         postgres=# \l
 
-4. (Optional) Connect to database "demoprojectdb"
+4. (Optional) Connect to database "demoprojectdb".
 
         postgres=# \c demoprojectdb;
 
-5. (Optional) Disconnect from database "demoprojectdb"
+5. (Optional) Disconnect from database "demoprojectdb".
 
         postgres=# \q
 
 ### Setup Sonarqube
 
-Get Sonarqube Docker image and run it in a Docker container
+Get Sonarqube Docker image and run it in a Docker container.
 
         $ docker pull sonarqube
         $ docker run -d --name sonarqube -p 9000:9000 sonarqube
@@ -363,7 +368,7 @@ DTO model generation.
 
         $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login="admin" -Dsonar.password="admin"
 
-2. Navigate to the to http://localhost:9000 and enter the default credentials to inspect the results
+2. Navigate to the to http://localhost:9000 and enter the default credentials to inspect the results.
 
     Username: `admin`<br>
     Password: `admin`
