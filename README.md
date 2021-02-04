@@ -279,7 +279,7 @@ DemoProjectRealm->Configure->Clients->Account->Credentials
         $ docker images
         $ docker run --name demo-project-postgres -e POSTGRES_PASSWORD=root -d -p 5432:5432 postgres:11-alpine
         
- Start and stop a Docker container.
+    Start and stop a Docker container.
         
         $ docker stop [CONTAINER ID]
         $ docker start [CONTAINER ID]
