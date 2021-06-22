@@ -9,8 +9,8 @@ One main focus is on Keycloak, which acts as authentication (OpenID Connect) and
 (OAuth2) provider. Keycloak's authorization is combined with Spring Security's controller function
 annotations based on the role and authority management framework. Be aware, that especially the
 authorization role model is not necessarily a typical real-world model. The core intention here is to
-restrict the REST Api to user roles provided by Keycloak or by a JPA datasource (Postgres) and 
-demonstrat the user and role management functionality on both sides.
+restrict the REST Api to user roles provided by Keycloak or by a JPA datasource (Postgres) and to
+demonstrate the user and role management functionality on both sides.
 
 As database a Postgres instance is running also (as Keycloak) in a local Docker container. Note,
 that the relational model might be as well a bit 'constructed' in order to reflect all relevant
