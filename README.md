@@ -383,8 +383,8 @@ environment.
 
 - http://localhost:8080/swagger-ui.html
 
-Note that only authenticated users can reach the Swagger API documentation. So, when there occurs a
-redirect from the URL above to the Keycloak login page use the usual credentials.
+Note that only authenticated users can reach the Swagger API documentation. So, when a redirect from the swagger
+URL above to the Keycloak login page occurs, use the usual credentials.
 
   Username: `nilsign`<br>
   Password: `root`
